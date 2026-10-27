@@ -1,0 +1,736 @@
+---
+ca:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} només admet propietats residencials ubicades al Regne Unit."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: El número de referència de propietat únic (fins a 12 dígits) identifica totes les adreces del Regne Unit. Trobeu-lo a findmyaddress.co.uk de GeoPlace o pregunteu-ho al vostre ajuntament. %{provider} l'utilitza per valorar la propietat de forma gratuïta.
+      avm_county_label: Comtat (opcional)
+      avm_town_label: Ciutat o ciutat
+      avm_postcode_label: Codi postal
+      avm_preview_uprn: UPRN
+      avm_preview_range: Interval estimat
+      avm_preview_confidence: Confiança
+      avm_confidence:
+        medium: Mitjà
+        low: Baix
+      avm_attribution_chimnie: Dades de valoració de Chimnie. Conté dades OS © Copyright de Crown i dret de base de dades, dades Royal Mail © Royal Mail drets d'autor i base de dades, i dades HM Land Registry © Copyright de Crown i dret de base de dades, amb llicència de llicència de govern obert v3.0.
+    tabs:
+      overview:
+        refresh_valuation: Actualitza la valoració
+        valuation_source: Valorat per %{provider}, darrera actualització %{date}
+        link_valuation: Actualitza el valor automàticament amb %{provider}
+        link_valuation_description: El valor d'aquesta propietat només s'actualitza manualment.
+    refresh_valuation:
+      queued: S'ha iniciat l'actualització de la valoració. El nou valor apareixerà en breu.
+      not_linked: Aquesta propietat no està enllaçada amb un proveïdor de taxació.
+      not_configured: "%{provider} no està configurat. Afegiu la seva clau API a Configuració → Allotjament automàtic per actualitzar aquesta valoració."
+    link_valuation:
+      linked: S'ha enllaçat a %{provider} i s'ha actualitzat el valor de la propietat.
+      link_failed: "%{provider} no ha pogut valorar aquesta propietat, de manera que no estava enllaçada. Comproveu que l'adreça sigui correcta i torneu-ho a provar."
+      not_linkable: Aquesta propietat no es pot enllaçar amb aquest proveïdor. Comproveu que la seva adreça estigui completa i estigui en un país admès, i que la moneda del compte coincideixi amb la del proveïdor.
+  settings:
+    classifiers:
+      account:
+        account_field: Inclou el compte com a testimoni
+        account_field_hint: 'En quin compte es troba una transacció compta com a prova. Mai decideix sol: una transacció necessita una paraula o comerciant conegut.'
+      amount:
+        amount_by_direction: Inclou la direcció, els diners entrant o sortint
+        amount_by_direction_hint: Cada categoria aprèn de quina manera van els seus diners, i els reemborsaments i les compres a la mateixa botiga es mantenen al marge.
+        amount_field: Incloeu l'import
+        amount_field_hint: Compara l'import amb els imports habituals de cada categoria en la mateixa moneda, en una escala de registre.
+      category_training:
+        categories: Categories
+        categories_hint: Les categories no marcades, amb les seves subcategories, queden fora de la formació, de manera que Bayes mai les tria.
+        categories_some: "%{count} de les categories %{total}"
+        skip_self_labels: No apreneu de les pròpies conjectures de Bayes fins que no es confirmin o tants dies d'antiguitat
+        skip_self_labels_hint: Confirmat significa que l'heu canviat o bloquejat. Una conjectura errònia no es retroalimenta i es reforça; un que es deixa sol aquest temps compta com a acceptat.
+      add_rule:
+        success: La regla %{name} s'ha afegit a la part superior de les vostres regles.
+      classifier:
+        lock_results: Bloqueja les categories que defineix el classificador
+        lock_results_hint: Atura les regles que canvien les eleccions de Bayes, tret que feu clic a Aplica a una regla. AI mai canvia les opcions de Bayes, bloquejades o no.
+        rule: Categoritzar amb el classificador
+        rule_hint: La regla del classificador de categories, activada i desactivada amb ella a Regles. Classifica les transaccions no categoritzades en l'ordre de la regla, després de cada sincronització; el que no està segur es deixa per a una regla de categorització automàtica.
+        threshold: Llindar
+        threshold_hint: La puntuació mínima requerida per Bayes per classificar una transacció (0.05–0.99). Els llindars més baixos classifiquen més transaccions però també cometen més errors.
+      clear_locks:
+        success: Els panys de Bayes s'estan esborrant. Això pot trigar uns quants moments.
+      evaluation:
+        apply_best: Apliqueu aquests paràmetres
+        best: Millor trobat
+        best_changes: 'Millor trobat, canviat del vostre:'
+        best_no_changes: No hi ha res millor que la vostra configuració.
+        buttons_hint: 'Prova la meva configuració puntua la teva configuració. Troba la millor configuració cerca el %{tuning} mesos abans que els que es mostren, de manera que el que troba es puntua en mesos que no ha vist. Es jutja per ROC-AUC: com les puntuacions classifiquen les transaccions de cada categoria per sobre de la resta, en qualsevol llindar, mantenint un canvi només quan sigui més alt en general i en tots els mesos d''aquests %{tuning}, excepte en un. Primer tria les entrades (cada combinació del testimoni del comerciant, l''import i el compte; després, separa el comerciant i el compte; després el nom del comerciant i les notes com a paraules), després prova un canvi a la vegada a la resta de paràmetres i, per últim, a la puntuació. Els valors per defecte són els del classificador original, amb les categories que escolliu; Restableix als valors predeterminats els canvia i els prova.'
+        categories_heading: Classificador de categoria
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'Errors més comuns: %{column} a %{threshold}'
+        current: La meva configuració
+        defaults: Per defecte
+        description: Cada columna es puntua en els darrers mesos %{months} com a transaccions noves, cada mes s'entrena amb l'historial anterior i després es compara amb les vostres categories. La prova no canvia cap categoria de transacció i la configuració del classificador només canvia quan apliqueu o restableixis.
+        find_best: Trobeu la millor configuració
+        matcher_confusions: 'Errors comercials més comuns: %{column} a %{similarity}'
+        matcher_description: 'Comerciants que el comparador omple els mateixos mesos %{months}: %{count} transaccions amb un comerciant, cadascuna comparada amb l''historial anterior al seu mes amb el seu comerciant ocult; dret és el comerciant que té. Es puntua cada tall i nombre de comerciants; El millor trobat és el que té la millor cel·la pel cost d''un error, que estableix l''aplicació. Les proves no inclouen comerciants.'
+        merchants_heading: Coincidència de comerciants
+        no_confusions: No hi ha errors en aquest llindar.
+        no_matcher_confusions: No hi ha errors de comerciant en aquesta similitud.
+        no_uncategorized: No hi ha res sense classificar en aquest llindar.
+        no_unfilled: No queda res sense comerciant en aquesta semblança.
+        none: Encara no s'ha provat.
+        ran_at: Va obtenir %{time} fa en transaccions %{count} (%{months}).
+        reset: Restableix els valors predeterminats
+        reset_confirm: Restablir tots els paràmetres de classificador al seu valor predeterminat i provar-los?
+        right_wrong: Cada cel·la és correcta / incorrecta.
+        run: Prova la meva configuració
+        running: Proves... aquesta secció s'actualitza quan s'ha acabat.
+        short_history: Encara no hi ha prou historial per ajustar el classificador de categories. Això necessita uns %{months} mesos de transaccions categoritzades, de manera que Apply deixa la seva configuració sols de moment.
+        similarity: Similitud
+        stale: La configuració ha canviat des d'aquesta prova.
+        threshold: Llindar
+        trying: S'està provant %{changes}...
+        uncategorized: 'No categoritzat més comú: %{column} a %{threshold}'
+        unfilled: 'No emplenat més habitual: %{column} a %{similarity}'
+        weight: Un error costa
+        weight_hint: 'Tria el que estableix Apply: les cel·les en negreta, on les respostes correctes menys aquestes per error són més altes. Llindar de millor trobat per a categories; el tall, la similitud i el nombre de comerciants per al matcher.'
+        weight_option:
+          one: 1 resposta correcta
+          other: "%{count} respostes correctes"
+      matcher:
+        lock_similar_merchants: Bloqueja els comerciants que estableix el comparador
+        lock_similar_merchants_hint: Atura les regles, AI i sincronitza canviant-les, tret que feu clic a Aplica a una regla. Els seus propis panys no compten com a confirmats (ajustament de la combinació de comerciants).
+        rule: Empleneu els comerciants que falten dels gairebé duplicats
+        rule_hint: La regla de comparació de comerciants, activada i desactivada amb ella a Regles. A la vostra comanda de regla, una transacció sense comerciant obté la que tenen gairebé els seus duplicats, com ara "NETFLIX.COM 8812" i "Netflix com". Les transferències queden fora.
+        similar_threshold: Similitud
+        similar_threshold_hint: Semblança més baixa de les descripcions, ignorant els números i els codis de referència (0,5–0,99). La part inferior s'omple més, amb més errors. L'aplicació de l'ajust automàtic també ho estableix.
+      matcher_tuning:
+        similar_common_share: Tall
+        similar_common_share_hint: Una paraula o una peça de 3 lletres en més d'aquesta part de les transaccions de les quals copia (0,01–1) i en almenys 50 d'elles, és massa habitual per diferenciar-les, com ara "targeta" o "pagament", de manera que s'ignora. Més alt en compta més. L'aplicació de l'ajust automàtic també ho estableix.
+        similar_min_neighbours: Els comerciants accepten
+        similar_min_neighbours_hint: Quants gairebé duplicats ha de tenir el comerciant, sense que cap en tingui un altre. 1 copia una única transacció, errors també.
+        similar_min_neighbours_option:
+          one: 1 comerciant
+          other: "%{count} comerciants"
+        similar_skip_self: No copieu dels propis comerciants de l'aparellador fins que no es confirmi o tants dies d'antiguitat
+        similar_skip_self_hint: Confirmat significa que l'heu canviat o bloquejat. No es difon una còpia incorrecta; un que es deixa sol aquest temps compta com a acceptat.
+      merchant:
+        merchant_field: Inclou el comerciant com a testimoni, quan s'estableixi
+        merchant_field_hint: Compta per identitat, de manera que un comerciant amb canvi de nom conserva el seu historial.
+        merchant_name_words: Inclou el nom del comerciant com a paraules
+        merchant_name_words_hint: Llegiu com la descripció, com ho fa l'original, de manera que noms similars comparteixen proves. Se superposa amb el testimoni de sota.
+      run:
+        success: Bayes està categoritzant transaccions no categoritzades. Això pot trigar uns quants moments.
+      scoring:
+        complement: Utilitzeu complement ingenu Bayes
+        complement_hint: Puntua cada categoria segons com de poc s'ajusta la transacció a les altres. Això gestiona millor les categories de mides molt diferents. Si es desactiva, s'utilitza el model multinomial original.
+        prior: Inclou la freqüència amb què s'utilitza cada categoria
+        prior_hint: Afavoreix les categories que utilitzeu més sovint. Si es desactiva, tracta totes les categories igual, com el model original.
+        separate_fields: Puntueu el comerciant i el compte a part de les paraules
+        separate_fields_hint: Cadascun té la seva pròpia distribució, de manera que una descripció llarga no els supera. Necessita el comerciant o el compte inclòs; la quantitat sempre es puntua per si sola.
+        smoothing: Suavització
+        smoothing_hint: S'ha afegit a cada recompte perquè una paraula no vista no descarti una categoria (0,001–10). 1 és l'original; menys confia en el que s'ha vist més.
+      show:
+        add_rule_body: No hi ha cap regla %{name} a les vostres regles, així que no hi ha res a activar. Vols afegir-lo a la part superior de les teves regles?
+        add_rule_cancel: 'No'
+        add_rule_confirm: Afegeix una regla
+        add_rule_title: Vols afegir la regla %{name}?
+        account: Ajust del compte
+        amount: Ajust de la quantitat
+        auto_tune: Sintonitza automàticament
+        category_training: Afinació del classificador de categoria
+        clear_locks: Esborra els panys Bayes
+        clear_locks_confirm_body: Desbloqueja les categories Bayes bloquejades i els comerciants bloquejats que segueixen sent el que han establert, de manera que les regles i AI poden canviar-les de nou. Es queden les categories i els comerciants.
+        clear_locks_confirm_button: Netegeu els panys
+        clear_locks_confirm_title: Esborrar els panys Bayes?
+        description: El classificador de categories Bayes aprèn de les vostres transaccions categoritzades i en classifica les noves abans que qualsevol proveïdor AI. Els canvis a aquests paràmetres tenen efecte a partir de la següent execució de categorització; les transaccions ja categoritzades mantenen les seves categories.
+        matcher: Matcher
+        matcher_description: Omple els comerciants que falten dels gairebé duplicats, segons la regla del comparador de comerciants (després de cada sincronització) i en Execució. Canvia els comerciants emmagatzemats.
+        matcher_tuning: Ajustació de la combinació de comerciants
+        merchant: Afinació del comerciant
+        run: Executeu
+        scoring: Puntuació
+        title: Classificador
+        training: Formació
+        words: Ajust de transacció
+      training:
+        max_training_transactions: Transaccions de formació
+        max_training_transactions_hint: 'Quantes de les transaccions més noves s''han d''utilitzar (100-20.000): les categoritzades de les quals aprèn el classificador i les amb un comerciant des del qual copia el comparador.'
+      words:
+        bigrams: Inclou parells de paraules
+        bigrams_hint: Les paraules veïnes també compten juntes, com ara "pagament amb targeta".
+        binary: Exclou les paraules repetides
+        binary_hint: Cada paraula compta una vegada per transacció.
+        drop_codes: Exclou els codis de referència
+        drop_codes_hint: Paraules que barregen lletres amb 2 o més dígits, com ara 2k4l19.
+        drop_numbers: Exclou els números
+        drop_numbers_hint: Emmagatzema números, dates i imports a la descripció.
+        include_notes: Inclou notes
+        include_notes_hint: Llegeix les notes així com el nom.
+        keep_single_chars: Inclou paraules d'un caràcter
+        keep_single_chars_hint: Queden lletres i dígits senzills després de dividir-los, com la "s" de mcdonald's.
+        spread_filter: Exclou paraules que totes les categories utilitzen igual
+        spread_filter_hint: No diuen res sobre la categoria. El nombre és fins a quin punt ha d'estar per sobre d'una quota parell l'ús d'una categoria.
+        word_split: Les paraules estan fetes de
+        word_split_ascii: a–z i 0–9
+        word_split_hint: Tots els altres caràcters separen les paraules. Les lletres de qualsevol escriptura mantenen paraules com Geschäft o Кофейня senceres; amb símbols interns, les lletres unides per un símbol també es mantenen una paraula, com mcdonald's, s/o i m&s (un símbol en qualsevol dels extrems, com a *netflix, encara es deixa caure).
+        word_split_symbols: Lletres, dígits, símbols interiors
+        word_split_unicode: Lletres i dígits, qualsevol script
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Anàlisi en profunditat
+          subtitle: Primer missatge de xat quan aprofundeixes en una visió amb AI
+          label: Exploreu el missatge
+    preferences:
+      show:
+        default_account_order_hint: Amb Manual, arrossegueu els comptes a la barra lateral per establir-ne l'ordre.
+        investment_contributions_as_spending: Compteu la inversió com a despesa
+        investment_contributions_as_spending_hint: Els diners traslladats als comptes d'inversió es compten com a despesa als pressupostos, als informes i al gràfic de flux de caixa. Apagueu-lo per mostrar-lo com a invertit.
+    securities:
+      show:
+        disable_mfa_password_label: Confirmeu amb la vostra contrasenya
+        disable_mfa_password_placeholder: Introdueix la teva contrasenya
+        mfa_sso_only: L'autenticació de dos factors es gestiona mitjançant el vostre proveïdor d'identitat.
+    settings_nav:
+      classifier_label: Classificador
+    hostings:
+      show:
+        instance_settings_restricted: Les credencials del proveïdor, la configuració de connexió i sincronització compartida de AI s'apliquen a totes les famílies en aquesta instància, de manera que només un superadministrador pot canviar-les. L'assistent que utilitza la teva família encara es defineix per família. Algú amb accés al servidor pot promoure un usuari a superadministrador; la guia d'allotjament automàtic Docker mostra l'ordre a les seves notes d'actualització.
+      assistant_settings:
+        type_mcp_only: Cap a l'aplicació (connecteu el vostre propi agent mitjançant MCP)
+        mcp_only_help: Per a tothom d'aquesta llar, l'assistent dins de l'aplicació està deshabilitat. Les dreceres AI per a factures i el text d'informació escrit en AI també s'aturen. MCP i la categorització de fons continuen disponibles. Connecta agents externs a Arranjament > MCP.
+      openai_settings:
+        ai_health_probe_timeout_label: Temps d'espera de la comprovació de l'estat en segons (opcional)
+        ai_health_probe_timeout_help: 'Per defecte: 5. S''aplica només a les comprovacions AI en directe a Configuració → Estat del sistema, mai a les trucades AI reals. Augmenteu-lo si les comprovacions PDF informen d''un temps d''espera amb un model de núvol. AI_HEALTH_PROBE_TIMEOUT anul·la aquest camp.'
+      chimnie_settings:
+        title: Chimnie
+        description: Introduïu la vostra clau Chimnie API per valorar les propietats residencials del Regne Unit amb la seva UPRN. Creeu una clau gratuïta a dashboard.chimnie.com (la inscripció requereix una adreça de correu electrònic d'empresa o de domini personalitzat; no s'accepten adreces Gmail, Outlook i similars). Les valoracions de UPRN són gratuïtes i s'actualitzen mensualment; Sure els limita a 1.000 sol·licituds al mes, que podeu canviar amb la variable d'entorn CHIMNIE_MAX_REQUESTS_PER_MONTH.
+        env_configured_message: S'ha configurat correctament mitjançant la variable d'entorn CHIMNIE_API_KEY.
+        label: Clau API
+        placeholder: Introduïu aquí la vostra clau Chimnie API
+      sync_settings:
+        market_data_sync_label: Habilita la importació diària de dades de mercat
+        market_data_sync_description: Quan està activat, els preus dels valors s'importen automàticament un cop al dia, de dilluns a divendres, a l'hora indicada.
+        market_data_sync_time_label: Hora d'importació de dades de mercat (HH:MM)
+        market_data_sync_time_description: Indiqueu l'hora d'importació diària dels preus dels valors, per exemple poc després del tancament de la vostra borsa principal.
+  shared:
+    money_field:
+      above_max: Introduïu un import com a màxim %{max}.
+      below_min: Introduïu una quantitat d'almenys %{min}.
+      invalid_amount: Introduïu una quantitat o expressió vàlida.
+      operator_add: Afegeix
+      operator_subtract: Resta
+      operator_multiply: Multiplica
+      operator_divide: Dividiu
+    require_non_guest: Els convidats no poden realitzar aquesta acció
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: Cap treballador està processant les cues AI (xat, detecció de comerciants, categorització). Comproveu que el treballador carregui config/sidekiq.yml.
+  loans:
+    form:
+      day_count_convention: Base d'interès
+      day_count_convention_actual_365: Actual/365
+      day_count_convention_actual_actual: Real/real
+      day_count_convention_hint: Això determina com el vostre prestador mesura cada període d'interès contra un any. Actual/365 utilitza el nombre real de dies en cada mes i és estàndard per a les hipoteques del Regne Unit i Austràlia. 30/360 utilitza un dotzè fix d'un any per a cada mes, com Sure sempre ha fet.
+      day_count_convention_thirty_360: 30/360 (una dotzena part plana)
+  breadcrumbs:
+    classifier: Classificador
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Encara no hi ha cap tipus de canvi disponible per a un dels comptes d'aquest objectiu, de manera que no es pot completar.
+        rule:
+          split_not_alone: Una regla dividida no pot tenir altres accions
+        rule/action:
+          attributes:
+            value:
+              invalid_config: ha de ser una configuració dividida vàlida
+              invalid_split_count: ha de tenir entre %{min} i %{max} divisions
+              split_name_required: 'split #%{index} no té un nom'
+              split_name_too_long: 'el nom de la divisió #%{index} és massa llarg (màx. caràcters 255)'
+              split_name_invalid: 'split #%{index} el nom conté caràcters no vàlids'
+              split_type_invalid: 'split #%{index} el tipus ha de ser fix o percentatge'
+              split_share_invalid: 'dividir #%{index} la part ha de ser un nombre positiu'
+              split_category_invalid: 'la categoria #%{index} no pertany a aquesta família'
+              split_merchant_invalid: 'split #%{index} el comerciant no pertany a aquesta família'
+              split_tags_invalid: 'split #%{index} té una etiqueta que no pertany a aquesta família'
+              percentages_must_total_100: els percentatges han de sumar fins a 100 (he obtingut %{total})
+              fixed_requires_exact_amount_condition: les divisions de quantitat fixa requereixen una condició de regla que coincideixi amb una quantitat exacta de transacció (p. ex. Quantia = 42.00), d'altra manera les comparticions no es poden sumar de manera fiable al total de cada transacció coincident
+              fixed_shares_must_equal_condition_amount: la suma de les parts ha de ser %{amount}, l'import exacte requerit per la condició d'aquesta regla
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: no és una expressió regular vàlida
+              regex_too_complex: és massa complex per executar- se de manera segura
+              regex_too_long: és massa llarg (el màxim és de %{count} caràcters)
+              regex_backreference: no es poden usar referències enrere (\ 1 a \ 9)
+  rules:
+    form:
+      stop_processing_label: Atura el processament de més regles
+      stop_processing_description: Les regles més avall de la llista no canvien les transaccions que coincideixen amb aquesta regla.
+    condition_filters:
+      operators:
+        starts_with: Comença amb
+        ends_with: Acaba amb
+        matches_regex: Coincideix amb l'expressió regular
+    notification_baseline_timed_out: Aquesta regla continua desactivada. La comprovació de les transaccions que ja coincideixen ha trigat massa. Activar-la sense aquesta comprovació enviaria un correu per cadascuna de les transaccions coincidents. Simplifiqueu les condicions i torneu-la a activar.
+    classifier_rules:
+      category_classifier: Classificador de categoria
+      merchant_matcher: Coincidència de comerciants
+    rule:
+      stop_processing: Atura
+      stop_processing_hint: Les regles més avall no canvien les transaccions coincidents amb aquesta regla.
+    index:
+      order_hint: Les regles corren de dalt a baix. Una vegada que una regla estableix un camp en una transacció, les regles més avall no canvien aquest camp. S' afegiran etiquetes per cada regla coincident. Arrossegueu les regles per canviar l'ordre.
+      reorder_rule: Mou la regla %{name}. Premeu Intro o Espai per agafar- la, llavors useu les tecles de fletxa per moure- la.
+    confirm:
+      rules_above_notice:
+        one: La regla activa a sobre s' executa primer, de manera que el resultat és el mateix que en l'execució completa.
+        other: Les regles actives %{count} sobre ell s' executen primer, de manera que el resultat és el mateix que en l'execució completa.
+    actions:
+      split:
+        type_fixed: Quantitat fixa
+        type_percentage: Percentatge
+        type_label: Tipus de divisió
+        share_label: Divideix la quantitat o el percentatge
+        category_label: No s' ha pogut trobar el fitxer% 1Split category
+        merchant_label: Comerç de la divisió
+        tags_label: Divideix les etiquetes
+        remove_split: Elimina la divisió
+        hint: Les divisions fixes es sotmeten primer, com a quantitats exactes. El percentatge es divideix i després es divideix el que quedi. Si cada divisió aquí usa una quantitat fixa, també afegiu una condició que coincideixi amb una quantitat exacta de transacció (p. ex. Quantia = 42.00), ja que cada transacció coincident necessita el mateix total per a les quantitats fixes per sumar. Una regla de divisió no pot tenir altres accions.
+        fixed_summary_label: fixat
+        summary:
+          one: "%{count} divisió"
+          other: "%{count} divisions"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Aquesta connexió Binance no està disponible. Escolliu- ne un a Arranjament del proveïdor.
+      no_credentials_configured: Connecteu Binance a l'arranjament del proveïdor abans d'afegir els seus comptes.
+      select_connection: Escolliu una connexió Binance a Arranjament del proveïdor.
+  reports:
+    index:
+      sections_aria: Seccions d'informes
+    spending_vs_normal:
+      title: Despesa vs normal
+      summary_html: "%{total} gastat en aquest període. Normal per a un període d'aquesta durada és %{normal}, basat en %{baseline_start} a %{baseline_end}."
+      summary_so_far_html: "%{total} gastat fins ara. Normal per a aquests molts dies és %{normal}, basat en %{baseline_start} a %{baseline_end}."
+      no_history_html: "%{total} gastat en aquest període. Encara no hi ha prou història anterior per dir què és normal."
+      no_history_short: No hi ha prou història anterior per comparar-la encara.
+      no_spending: Sense despesa en aquest període.
+      no_changes: La despesa va coincidir amb la normal en totes les categories.
+      treemap_title: On ha anat
+      changes_title: Què ha canviat
+      direct: "%{category} (sense subcategoria)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normal: %{amount}'
+        more: "%{amount} més del normal (%{percent})"
+        less: "%{amount} menys del normal (%{percent})"
+        more_no_percent: "%{amount} més del normal"
+        less_no_percent: "%{amount} menys del normal"
+        no_normal: No hi ha cap historial anterior contra el qual comparar
+        open: Seleccioneu per veure aquestes transaccions
+      legend:
+        less: Entre un 50% i un 100% menys
+        slightly_less: Entre un 15% i un 50% menys
+        normal: Sobre el normal
+        slightly_more: Entre un 15% i un 50% més
+        more: Entre un 50% i un 100% més
+        much_more: Més del 100%
+  account_order:
+    manual:
+      label: Manual (arrossega per reordenar)
+      label_short: Manual
+  providers:
+    property_valuation:
+      missing_fields_gb: Si us plau, proporcioneu un nom, l'adreça i el codi postal, i el UPRN de la propietat.
+      entry_name: Valoració %{provider}
+    chimnie:
+      errors:
+        invalid_uprn: Un UPRN és un nombre de fins a 12 dígits. Si us plau, comproveu el UPRN i torneu a provar.
+        no_estimate: Chimnie no té un valor estimat per a aquesta propietat.
+        not_found: Chimnie no ha pogut trobar una propietat amb aquest UPRN.
+        unsupported_property: Chimnie només valora propietats residencials; aquest UPRN pertany a una propietat d'ús comercial o mixt.
+        unauthorized: Chimnie ha rebutjat la clau API. Comproveu la clau a Arranjaments → Autoallotjament.
+        insufficient_balance: El saldo del vostre compte Chimnie és massa baix per a aquesta petició.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: l'import complet d'aquesta transacció ja s' ha aplicat a altres pagaments vençuts
+      already_allocated: aquesta transacció ja s' ha aplicat a aquesta factura
+    new:
+      covered_title: Aquesta transacció ja pertany a una factura
+      covered_body: "%{name} ja fa el seguiment d'aquest pagament, així que una nova factura el comptaria dues vegades."
+      covered_open: Obre factura
+      covered_suggested_title: Sure ja ha suggerit una factura per aquest pagament
+      covered_suggested_body: "%{name} està esperant els teus suggeriments. Confirmeu- ho per començar a fer- ne el seguiment, de manera que una nova factura no compti aquest pagament dues vegades. Els pagaments coincidents s' enllacen automàticament, i podeu enllaçar aquest des de la factura."
+      covered_confirm: Confirma la factura
+      covered_create_anyway: Crea una factura separada igualment
+      covered_income_title: Aquest dipòsit ja pertany a una renda
+      covered_income_body: "%{name} ja fa un seguiment d'aquest dipòsit, així que afegir-lo de nou el comptaria dues vegades."
+      covered_income_open: Ingressos oberts
+      covered_income_suggested_title: Sure ja ha suggerit aquesta entrada
+      covered_income_suggested_body: "%{name} està esperant els teus suggeriments. Afegiu- lo per començar a seguir- lo, de manera que aquest dipòsit no es compti dues vegades. Els dipòsits coincidents s' enllacen automàticament, i podeu enllaçar aquest des dels ingressos."
+      covered_income_confirm: Afegeix ingressos
+      covered_income_create_anyway: Afegeix una renda separada igualment
+    create:
+      category_invalid: Seleccioneu una de les vostres categories, o deixeu- la en blanc
+    already_covered: Aquesta transacció ja coincideix amb una transacció recurrent
+    suggested_income:
+      title: Possibles nous ingressos
+      confirm: Afegeix ingressos
+      dismiss: No són ingressos
+    confirmed_income: Ingressos afegits a les vostres transaccions recurrents
+  transfers:
+    show:
+      investment_contribution_subtitle: Compta aquesta transferència com a despesa en pressupostos i informes. Desactiva- ho quan el corredor o el compte criptogràfic només converteixi els diners en una altra moneda.
+      investment_contribution_title: Contribució d'inversió
+  transactions:
+    transaction_category:
+      set_on_outflow: La categoria pertany al costat de sortida d'aquesta transferència i només es pot canviar allà
+    show:
+      category_set_on_hidden_outflow: Aquest és el costat d'entrada d'una transferència. La seva categoria pertany al costat de sortida, en un compte al que no podeu accedir, i només es pot canviar allà.
+      category_set_on_outflow: Aquest és el costat d'entrada d'una transferència. La seva categoria pertany al costat de sortida i només es pot canviar allà, de manera que els pressupostos la compten una vegada.
+    search:
+      filters:
+        attachment: Adjunt
+    searches:
+      filters:
+        badge:
+          attachment_with: Amb adjunt
+          attachment_without: Sense adjunt
+        attachment_filter:
+          with: Amb adjunt
+          without: Sense adjunt
+  accounts:
+    sidebar:
+      reorder_account: Mou %{account}
+      reorder_hint: Arrossegueu per reordenar. Amb el teclat, premeu Retorn i després les tecles de fletxa.
+      sort_mode:
+        start: Ordena els comptes
+        hint: Arrossegueu els comptes per la seva nansa per a reordenar- los.
+  admin:
+    system_health:
+      optional_services:
+        title: Serveis opcionals
+        description: Integracions opcionals d'operadors. Els serveis no configurats són informatius. Aquestes comprovacions només inspeccionen l'arranjament; no comproven la connectivitat, no envien esdeveniments de prova, ni canvien el consentiment analític. Expandeix un servei per als detalls de configuració.
+        missing_settings: 'Arranjaments que falten: %{settings}'
+        statuses:
+          incomplete: Configuració incompleta
+          disabled: Desactivat en aquest procés
+        notes:
+          environment_disabled: La integració carregada està deshabilitada per a aquest entorn Rails.
+          explicitly_disabled: SKYLIGHT_ENABLED desactiva explícitament la instrumentació.
+          self_hosted_checkout_disabled: La sortida de la subscripció i el portal de facturació estan deshabilitats en mode autoallotjat. Els webhooks Stripe encara es poden configurar; aquí no es requereixen ID de preus de pagament.
+          browser_analytics_disabled: L'anàlisi del navegador està deshabilitat per a aquest entorn. Això no deshabilita el client del servidor configurat per separat.
+          shared_feedback_configured: Els comentaris auto- allotjats tenen un projecte agrupat separat i està habilitat per la seva configuració. No requereix un operador POSTHOG_KEY. No s' han comprovat la desactivació del navegador i la disponibilitat de SDK.
+          shared_feedback_disabled: El projecte de retroalimentació autoallotjat separat està deshabilitat per la seva configuració de retroalimentació o entorn. Això no deshabilita l'anàlisi propietat de l'operador.
+          production_only: Aquesta integració només s' usa en producció per la configuració actual de l'aplicació.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Opcional AI seguiment i avaluació d'informes. Aquesta comprovació no envia cap traça o petició d'avaluació.
+            guidance: Posa LANGFUSE_PUBLIC_KEY i LANGFUSE_SECRET_KEY junts. LANGFUSE_HOST és opcional. Reinicia els serveis afectats després de canviar aquests valors.
+          sentry:
+            title: Sentry
+            description: Informe opcional d'errors i rendiment. L'inicialitzador actual habilita l'informe només en producció.
+            guidance: Estableix SENTRY_DSN i reinicia els serveis afectats. Això comprova la configuració SDK carregada sense capturar un error o enviar un esdeveniment.
+          skylight:
+            title: Skylight
+            description: Instrumentació opcional del rendiment de l'aplicació. La presència de configuració no confirma que l'agent s' estigui executant o informant.
+            guidance: Estableix SKYLIGHT_AUTHENTICATION i assegura' t que Skylight està carregat en l'entorn Rails desitjat. SKYLIGHT_ENABLED=false deshabilita la instrumentació; la bandera sola no carrega la gemma. Reinicia després dels canvis.
+          stripe:
+            title: Stripe
+            description: Facturació de subscripció opcional i webhooks de pagament. Aquesta comprovació no crea un client Stripe, valida les credencials, o fa peticions de pagament.
+            guidance: Posa STRIPE_SECRET_KEY i STRIPE_WEBHOOK_SECRET junts. La gestió de la subscripció també necessita STRIPE_MONTHLY_PRICE_ID i STRIPE_ANNUAL_PRICE_ID.
+          posthog:
+            title: PostHog
+            description: Anàlisi opcional propietat de l'operador, usant la configuració carregada en arrencar. Configurat no vol dir que un usuari hagi consentit l'anàlisi.
+            guidance: Estableix POSTHOG_KEY i un POSTHOG_HOST no buit, o deixa la màquina sense establir per usar l'omissió. L'anàlisi del navegador requereix producció o POSTHOG_DEVELOPMENT_ENABLED en desenvolupament. POSTHOG_FEEDBACK_ENABLED controla la retroalimentació auto-allotjada separada, no l'anàlisi de l'operador.
+          logtail:
+            title: Logtail
+            description: Reenviament opcional del registre de producció. Quan no està configurat, l'aplicació continua registrant a la sortida estàndard.
+            guidance: Estableix LOGTAIL_API_KEY i LOGTAIL_INGESTING_HOST junts i reengega els serveis afectats. Aquesta comprovació no emet cap registre de prova.
+      configuration:
+        description: Configuració visible per a aquest procés web. Aquestes comprovacions no envien correus electrònics, contacten amb proveïdors, o pugen o baixen fitxers. Configurat vol dir que els paràmetres estan presents, no que s' hagi verificat l'entrega, l'accés del proveïdor o l'accés a l'emmagatzematge.
+        statuses:
+          incomplete: Configuració incompleta
+        settings_needed: Arranjaments a revisar
+        unknown_provider: Selecció de proveïdor no reconeguda
+        provider_statuses:
+          not_configured: Falta la clau API
+          invalid: Selecció no vàlida
+        configure_providers: Obre els paràmetres d'autoallotjament
+        storage_backend: 'Emmagatzematge seleccionat: %{backend}'
+        storage_backends:
+          local: Disc local
+          test: Disc de prova
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: Emmagatzematge compatible amb S3
+          google: Emmagatzematge Google Cloud
+          other: Dorsal personalitzat o no reconegut
+        checks:
+          smtp:
+            title: Correu (SMTP)
+            statuses:
+              configured: Els paràmetres SMTP estan presents.
+              not_configured: SMTP no està configurat. Els reinicialitzacions de contrasenyes, invitacions i altres correus del sistema no es poden enviar a través de SMTP.
+              incomplete: Falten algunes opcions de correu o estan incompletes. Els correus del sistema o els enllaços que contenen poden no funcionar.
+              disabled: La entrega de correu està deshabilitada en la configuració del programa de correu en execució.
+              not_checked: Aquest procés usa un mètode de lliurament diferent del SMTP, com ara una vista prèvia de desenvolupament. La entrega de SMTP no està avaluada.
+            guidance: No es pot configurar SMTP a la interfície d'administració. Establiu les variables d'entorn de correu tant per al servei web com per al servei de treball, i després reinicieu- los. SMTP_USERNAME i SMTP_PASSWORD es poden ometre per a un relé no autenticat.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (un número des de 1 fins a 65535)
+              sender: EMAIL_SENDER (substitueix el sender@sure.local per omissió)
+              app_domain: APP_DOMAIN (usat en enllaços de correu)
+              authentication: SMTP_USERNAME i SMTP_PASSWORD (provin ambdós o cap)
+          securities:
+            title: Preus de mercat
+            statuses:
+              configured: Tots els proveïdors de preus de mercat habilitats tenen configuració.
+              not_configured: Als proveïdors de preus de mercat activats els falten les claus API. No es poden cercar valors ni consultar preus automàticament mitjançant aquests proveïdors.
+              incomplete: Almenys un proveïdor de preus de mercat activat té una configuració incompleta o una selecció no vàlida. És possible que els valors assignats a aquest proveïdor no rebin actualitzacions de preu.
+              disabled: No hi ha cap proveïdor de preus de mercat activat. No es poden cercar valors ni consultar preus automàticament.
+            guidance: Escolliu proveïdors i afegiu les claus API requerides en els arranjaments d'autoallotjament, o configureu- les en l'entorn de desplegament. Les sobreescriptures de l'entorn tenen prioritat. Els proveïdors públics no necessiten una clau API.
+          exchange_rates:
+            title: Tipus de canvi
+            statuses:
+              configured: El proveïdor de tipus de canvi seleccionat té configuració.
+              not_configured: No s' ha configurat cap proveïdor de tipus de canvi utilitzable. La conversió automàtica de moneda pot no estar disponible quan falti una taxa desada.
+            guidance: Escolliu un proveïdor de tipus de canvi i afegiu la seva clau API si es requereix en la configuració d'autoallotjament, o configureu- la en l'entorn de desplegament. Les sobreescriptures de l'entorn de la clau EXCHANGE_RATE_PROVIDER i del proveïdor API tenen prioritat.
+            issues:
+              invalid_provider: No es reconeix el proveïdor de tipus de canvi seleccionat. Les cerques automàtiques de taxes fracassen fins que no se selecciona un proveïdor acceptat.
+          storage:
+            title: Pujades i emmagatzematge de fitxers
+            statuses:
+              configured: Els paràmetres d'emmagatzematge estan presents; el disc local no necessita credencials de núvol.
+              not_configured: El dorsal d'emmagatzematge seleccionat no té cap configuració coincident. Les pujades de fitxers poden no estar disponibles.
+              incomplete: Falten o són incomplets els paràmetres d'emmagatzematge requerits. Les pujades o recuperacions de fitxers poden no funcionar.
+              not_checked: Aquest dorsal usa el descobriment de credencials extern o una configuració personalitzada. El seu accés no es pot determinar només a partir d'aquests paràmetres.
+            guidance: Revisa ACTIVE_STORAGE_SERVICE i els paràmetres de desplegament del dorsal seleccionat. El disc local necessita emmagatzematge persistents compartit pels serveis web i de treball. Canviar els dorsals no migra els fitxers existents; planifiqueu qualsevol migració per separat.
+            issues:
+              root: Arrel de l'emmagatzematge local
+              bucket: Cubeta d'emmagatzematge
+              region: Regió d'emmagatzematge
+              credentials: Clau d'accés a l'emmagatzematge i clau secreta (proveïu- les ambdues o useu el descobriment de credencials extern)
+              endpoint: Punt final d'emmagatzematge (i CLOUDFLARE_ACCOUNT_ID per a R2)
+      show:
+        tabs:
+          configuration: Configuració
+  bills:
+    detail:
+      rule_detected: Coincideix amb les transaccions anomenades %{name}
+    match:
+      same_transfer: Transfereix al mateix compte
+  budgets:
+    available_cash:
+      currency_warning: No s' inclouen els saldos %{currencies} perquè encara no hi ha cap tipus de canvi disponible per a %{currency}.
+  categories:
+    locked: Les categories estan bloquejades. Desbloqueu- les per afegir una nova categoria.
+    toggle_lock:
+      locked: Categories bloquejades
+      unlocked: Categories desbloquejades
+    index:
+      lock_categories: Bloqueja la creació de categories
+      locked_message: La creació de categories està bloquejada. Les importacions i sincronitzacions de banc encara poden afegir categories.
+      unlock_categories: Desbloqueja la creació de categories
+  category:
+    dropdowns:
+      show:
+        assign_error: S' ha creat la categoria però no s' ha pogut assignar. Escolliu Crea una altra vegada per tornar- ho a provar.
+        back: Enrere
+        create_error: No s' ha pogut crear aquesta categoria. Si us plau, torneu a provar.
+  chats:
+    ai_busy: Acabo una tasca de fons, després aniré directament al teu missatge.
+    reservation:
+      ready_html: He ajornat algunes tasques en segon pla per poder atendre el teu missatge de seguida. Es reprendran d'aquí a %{countdown} s, així que continua escrivint!
+      busy: Acabo una tasca de fons, llavors sóc tot teu. Segueix escrivint!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: Aquesta connexió Coinbase no està disponible. Escolliu- ne un a Arranjament del proveïdor.
+      no_credentials_configured: Connecteu Coinbase a l'arranjament del proveïdor abans d'afegir les seves carteres.
+      select_connection: Escolliu una connexió Coinbase a Arranjament del proveïdor.
+  credit_cards:
+    due:
+      in_days:
+        zero: S' expira avui
+        one: Venç demà
+        other: Venciment en %{count} dies
+      overdue:
+        one: Venciment ahir
+        other: "%{count} dies vençuts"
+    form:
+      due_day: Data de venciment del pagament
+      statement_close_day: La sentència es tanca a
+      statement_cycle_description: El dia del mes en què es tanca l'extracte i el dia en què venç el pagament. Si els configureu, la pestanya Resum mostra l'import de l'últim extracte i el que s'acumula per al següent. Una targeta vinculada els emplena automàticament i conserva els valors que heu introduït a mà.
+      sophtron_balance_sign_description: Usa una sobreescriptura només quan Sophtron informe un signe ambigu. L'automàtic continua negant els saldos de la targeta de crèdit.
+      sophtron_balance_sign_label: Significat del saldo de Sophtron
+    tabs:
+      overview:
+        above_minimum: El total de l'estat de compte de la vostra targeta de crèdit és %{balance}, que és més gran que el pagament mínim de %{minimum}. Pagar només el mínim deixa el saldo restant a la targeta, subjecte a aquest APR.
+        closes_on: La següent instrucció tanca %{date}
+        credit_toward_next: Crèdit cap al següent resum
+        due_on: Deu %{date}
+        edit_card_details: Edita els detalls de la targeta
+        since_last_statement: Des de la darrera instrucció
+        statement_balance: Balanç de la declaració
+        multi_currency_unavailable: Aquesta declaració suma les entrades registrades en més d'una moneda, que no es poden sumar aquí sense una taxa per a cadascuna d'elles. Els saldos es deixen en blanc en lloc d'endevinar.
+        no_cycle_description: Establiu el dia en què es tanca el vostre resum i el dia en què s' ha de fer el pagament, i aquesta pestanya us mostrarà el que ha arribat el vostre últim resum i el que es prepara per al següent. Una targeta enllaçada normalment les emplena per vostè.
+        no_cycle_title: No s' ha establert cap cicle d'instrucció
+    update:
+      sophtron_balance_sign_error: No s' ha pogut aplicar el significat de balanç Sophtron. S' ha mantingut l'arranjament anterior. Si us plau, torneu a provar.
+  demo_family_refresh_mailer:
+    completed:
+      subject: S' ha completat l'actualització de la família de demostració
+      activity_heading: Activitat durant aquest període
+      sessions_label: Sessions d'accés úniques per a la família de demostració anterior
+      families_label: S' han creat nous comptes familiars
+      period_heading: Període d'informe (UTC)
+      from_label: 'Des de:'
+      to_label: 'A:'
+      time_format: "%b %-d, %Y at %H:%M:%S UTC"
+      family_heading: Família de demostració anterior
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Alguns saldos no es compten
+      body:
+        one: El tipus de canvi de %{from} → %{to} encara no està disponible, per tant els saldos de %{from} queden fora d'aquest total.
+        other: Encara no hi ha tipus de canvi disponibles de %{from} a %{to}, per tant aquests saldos es deixen fora d'aquest total.
+      settings_link: Arranjament del proveïdor de tipus de canvi
+    consume:
+      goal_currency_hint: Introduïu la quantitat en %{currency}. Per a un compte en una altra moneda, es converteix al tipus d'avui abans que surti de l'assignació d'aquest compte.
+      errors:
+        missing_exchange_rate: Encara no hi ha cap tipus de canvi disponible per a la moneda d'aquest compte, de manera que aquesta despesa no es pot registrar.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Encara no hi ha tipus de canvi, així que aquest compte no es compta.
+    goal_card:
+      partial_total: Alguns saldos no es compten (encara no hi ha tipus de canvi)
+    form:
+      earmark:
+        converted: Aquesta destinació ≈ {amount}.
+      fields:
+        currency_conversion_hint: Els comptes poden usar diferents monedes. Els totals es converteixen a %{currency}; els comptes es mantenen en la moneda de cada compte.
+  imports:
+    publish:
+      guest_new_categories_or_tags: Els convidats no poden crear categories ni etiquetes. Assigneu- les a les existents o deixeu- les buides.
+    create:
+      missing_upload: No hem rebut el seu expedient. Torneu a provar de pujar- lo.
+  insights:
+    card:
+      dig_in: Cava amb AI
+    dig_in:
+      prompt: |-
+        Ajuda'm a cavar en aquesta visió.
+
+        Insight: %{title}
+        What Sure found: %{body}
+        Period: %{period}
+        Figures:
+        %{facts}
+
+        What's behind it, and is there anything I should do?
+  mfa:
+    local_password_required: L'autenticació de dos factors necessita una contrasenya local. El vostre es gestiona a través del proveïdor d'identitat.
+    create:
+      invalid_password: Contrasenya incorrecta. Si us plau, torneu a provar.
+    disable:
+      invalid_password: Contrasenya incorrecta. Si us plau, torneu a provar.
+    new:
+      password_label: Confirmeu amb la vostra contrasenya
+      password_placeholder: Introdueix la teva contrasenya
+  pages:
+    dashboard:
+      customize:
+        start: Personalitza
+        hide: Oculta %{title}
+        hidden_title: Estris ocults
+        hidden_description: Afegeix un estri al tauler.
+        none_hidden: Es mostren tots els estris. Oculta'n un amb el seu botó d'ull.
+        all_hidden_title: Tots els estris estan ocults
+        all_hidden_description: Personalitzeu el tauler per afegir estris.
+      cashflow_preview:
+        node_labels:
+          invested: Invertit
+        group_by_label: Mostra els fluxos per
+        sort_label: Ordena els fluxos
+        sort_auto: Auto
+        sort_ascending: Primer el més petit
+        sort_descending: El més gran primer
+      spending_trend:
+        filter_categories: Categories de filtre (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: No s' ha pogut confirmar que s' hagi afegit aquesta connexió. Torneu a carregar la pàgina per comprovar- ho abans de tornar- ho a provar.
+    create:
+      already_connected: Ja teniu una connexió per a aquesta institució, així que aquesta no s' ha afegit.
+      exchange_failed: No hem pogut afegir aquesta connexió. Torneu- ho a provar, i si el problema persisteix, comproveu els registres del servidor.
+      token_expired: Aquesta connexió ha caducat abans d'afegir- la. Torneu a connectar la institució.
+    duplicate_warning:
+      confirm: Confirma aquesta connexió
+      connected_by: Connectat per %{name}
+      eu_no_add_accounts: El Plaid no permet afegir comptes a una connexió EU existent. Per a canviar quins comptes estan connectats, elimineu aquest i afegiu- lo de nou.
+      linked_on: Enllaçat %{date}
+      manage_connection: Vés als comptes
+      mask: "****%{mask}"
+      no_accounts: Encara no s' ha sincronitzat cap compte des d'aquesta connexió.
+      overlap:
+        all_connected:
+          one: El compte que heu provat d'afegir ja està connectat, de manera que afegir- lo de nou només crearia un duplicat.
+          other: Els comptes %{count} que heu intentat afegir ja estan connectats, de manera que afegir-los de nou només crearia duplicats.
+        different_login: Per a connectar un altre nom d'usuari %{institution}, escolliu Nou compte una altra vegada, i accediu amb aquest nom d'usuari a través de Plaid.
+        more_accounts: Per afegir més comptes a aquesta connexió, tanqueu- la i escolliu Afegeix comptes a la connexió %{institution}.
+        others_connected:
+          one: Sure ja té aquest compte a través de la connexió de %{name}, de manera que afegir el vostre només crearia un duplicat.
+          other: Sure ja té aquests comptes a través de la connexió de %{name}, de manera que afegir el vostre només crearia duplicats.
+        others_connected_several:
+          one: Sure ja té aquest compte a través de connexions d'altres membres, de manera que afegir el vostre només crearia un duplicat.
+          other: Sure ja té aquests comptes a través de connexions d'altres membres, de manera que afegir el vostre només crearia duplicats.
+        none_connected: Cap dels comptes que heu provat d'afegir encara està connectat, de manera que és probable que sigui un accés diferent. Afegir-la només compta com una altra connexió Plaid.
+        some_connected:
+          connected:
+            one: L'altra ja està connectada, de manera que afegir aquesta connexió la duplicaria i comptaria com una altra connexió Plaid.
+            other: Els altres %{count} ja estan connectats, de manera que afegir aquesta connexió els duplicaria i comptaria com una altra connexió Plaid.
+          unconnected:
+            one: 'Un compte que heu provat d''afegir encara no està connectat:'
+            other: 'Els comptes %{count} que heu provat d''afegir encara no estan connectats:'
+        unknown:
+          one: Aquests comptes no es poden comprovar contra la vostra connexió existent. Si són els mateixos comptes, afegir aquesta connexió els duplicaria i comptaria com una altra connexió Plaid.
+          other: Aquests comptes no es poden comparar amb les connexions existents. Si són els mateixos comptes, afegir aquesta connexió els duplicaria i comptaria com una altra connexió Plaid.
+      title:
+        one: Ja teniu una connexió per a aquesta institució
+        other: Ja teniu connexions %{count} per a aquesta institució
+      title_all_connected: Ja heu establert aquesta connexió
+      title_others_connected:
+        one: Aquest compte ja està connectat
+        other: Aquests comptes ja estan connectats
+      update_existing: Actualitza la connexió existent
+  plans:
+    goals_card:
+      currency_warning:
+        one: L'objectiu 1 deixa de banda els saldos %{currencies} (encara no hi ha tipus de canvi).
+        other: Els objectius %{count} deixen de banda els saldos %{currencies} (encara no hi ha tipus de canvi).
+  recurring_allocations:
+    entry_exhausted: L'import complet d'aquesta transacció ja s' ha aplicat a altres pagaments vençuts
+  valuations:
+    names:
+      current_account_value: Valor del compte actual
+      current_balance: Balanç actual
+      current_loan_balance: Saldo actual del préstec
+      current_market_value: Valor de mercat actual
+      manual_balance_update: Actualització manual del balanç
+      manual_principal_update: Actualització principal manual
+      manual_value_update: Actualització manual del valor
+      opening_account_value: Valor del compte d'obertura
+      opening_balance: Balanç d'obertura
+      original_purchase_price: Preu de compra original

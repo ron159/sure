@@ -1,0 +1,736 @@
+---
+tr:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} yalnızca Birleşik Krallık'ta bulunan konut mülklerini destekler."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Benzersiz Mülk Referans Numarası (12 haneye kadar) her Birleşik Krallık adresini tanımlar. Bunu GeoPlace'nin findmyaddress.co.uk adresinde bulabilirsiniz veya yerel belediyenize sorun. %{provider} bunu mülkün değerini ücretsiz olarak belirlemek için kullanır.
+      avm_county_label: İlçe (isteğe bağlı)
+      avm_town_label: Kasaba veya şehir
+      avm_postcode_label: Posta kodu
+      avm_preview_uprn: UPRN
+      avm_preview_range: Tahmin aralığı
+      avm_preview_confidence: Güven
+      avm_confidence:
+        medium: Orta
+        low: Düşük
+      avm_attribution_chimnie: Chimnie'den değerleme verileri. OS verilerini içerir © Crown telif hakkı ve veritabanı hakkı, Royal Mail verileri © Royal Mail telif hakkı ve veritabanı hakkı ve HM Land Registry verileri © Crown telif hakkı ve veritabanı hakkı, Açık Hükümet Lisansı v3.0 kapsamında lisanslanmıştır.
+    tabs:
+      overview:
+        refresh_valuation: Değerlemeyi yenile
+        valuation_source: "%{provider} tarafından değerlendi, en son güncellendi %{date}"
+        link_valuation: "%{provider} ile değeri otomatik olarak güncelleyin"
+        link_valuation_description: Bu özelliğin değeri yalnızca manuel olarak güncellenir.
+    refresh_valuation:
+      queued: Değerleme yenilemesi başladı. Yeni değer kısa süre içinde görünecektir.
+      not_linked: Bu mülk bir değerleme sağlayıcısına bağlı değil.
+      not_configured: "%{provider} yapılandırılmamış. Bu değerlendirmeyi yenilemek için Ayarlar → Kendi Kendine Barındırma bölümüne API anahtarını ekleyin."
+    link_valuation:
+      linked: "%{provider}'ye bağlandı ve özelliğin değeri güncellendi."
+      link_failed: "%{provider} bu özelliğe değer veremediğinden bağlantılı değildi. Adresin doğruluğunu kontrol edip tekrar deneyin."
+      not_linkable: Bu özellik söz konusu sağlayıcıya bağlanamaz. Adresinin eksiksiz olduğunu, desteklenen bir ülkede olduğunu ve hesap para biriminin sağlayıcıyla eşleştiğini kontrol edin.
+  settings:
+    classifiers:
+      account:
+        account_field: Hesabı tek bir jeton olarak ekleyin
+        account_field_hint: 'Bir işlemin hangi hesapta olduğu kanıt olarak sayılır. Hiçbir zaman tek başına karar vermez: Bir işlemin bilinen bir kelimeye veya tüccara ihtiyacı vardır.'
+      amount:
+        amount_by_direction: Yönü ve parayı giriş veya çıkışını dahil edin
+        amount_by_direction_hint: Her kategori, parasının hangi yöne gittiğini öğrenir ve aynı mağazadaki geri ödemeler ve satın alma işlemleri birbirinden ayrı kalır.
+        amount_field: Tutarı dahil et
+        amount_field_hint: Tutarı, günlük ölçeğinde her bir kategorinin aynı para birimindeki olağan tutarlarıyla karşılaştırır.
+      category_training:
+        categories_hint: İşaretlenmeyen kategoriler alt kategorileriyle birlikte eğitimin dışında bırakılır, dolayısıyla Bayes bunları asla seçmez.
+        categories_some: "%{count} / %{total} kategorileri"
+        skip_self_labels: Onaylanana veya bu kadar eski olana kadar Bayes'nin kendi tahminlerinden öğrenmeyin
+        skip_self_labels_hint: Onaylandı, onu değiştirdiğiniz veya kilitlediğiniz anlamına gelir. Yanlış bir tahmin geri bildirilmez ve pekiştirilmez; bu kadar uzun süre yalnız bırakılan kişi kabul edilmiş sayılır.
+      add_rule:
+        success: "%{name} kuralı, kurallarınızın en üstüne eklendi."
+      classifier:
+        lock_results: Sınıflandırıcının ayarladığı kategorileri kilitleyin
+        lock_results_hint: Bir kural üzerinde Uygula'yı tıklamadığınız sürece, Bayes'nin seçimlerini değiştiren kuralları durdurur. AI, Bayes'nin seçimlerini kilitli olsun veya olmasın asla değiştirmez.
+        rule: Sınıflandırıcıyla kategorilere ayırın
+        rule_hint: Kurallar'da onunla birlikte açılıp kapanan Kategori sınıflandırıcı kuralı. Her senkronizasyondan sonra, kategorize edilmemiş işlemleri kural sıranıza göre kategorilere ayırır; hakkında emin olmadığı şey Otomatik Kategorize etme kuralına kalmıştır.
+        threshold: Eşik
+        threshold_hint: Bir işlemi (0.05–0.99) sınıflandırmak için Bayes kriterine göre gerekli olan asgari puan. Daha düşük eşikler daha fazla işlemi sınıflandırır ancak aynı zamanda daha fazla hata yapılmasına neden olur.
+      clear_locks:
+        success: Bayes' kilitleri temizleniyor. Bu birkaç dakika sürebilir.
+      evaluation:
+        apply_best: Bu ayarları uygulayın
+        best: En iyi bulunanlar
+        best_changes: 'En iyi bulunan, sizinkiyle değiştirilen:'
+        best_no_changes: Hiçbir şey ayarlarınızdan daha iyi puan alamadı.
+        buttons_hint: 'Ayarlarımı test et, ayarlarınızı puanlar. En iyi ayarları bul, %{tuning}''de gösterilenlerden aylar önce arama yapar, böylece bulduğu şeyler görmediği aylara göre puanlanır. ROC-AUC''ye göre karar verir: puanların her bir kategorinin işlemlerini herhangi bir eşik değerde diğerlerinin üzerinde ne kadar iyi sıraladığını, yalnızca genel olarak daha yüksek olduğunda ve yalnızca %{tuning} aylarından biri hariç tümünde bir değişikliği korur. İlk önce girdileri seçer (tüccar jetonunun, miktarının ve hesabının her kombinasyonu; ardından tüccar ve hesabın ayrı ayrı puanlanması; ardından satıcının adı ve notlar kelime olarak), ardından diğer ayarlarda her seferinde bir değişiklik yapmayı dener ve son olarak Puanlama''ya geçer. Varsayılanlar, seçtiğiniz kategorilerle birlikte orijinal sınıflandırıcılardır; Varsayılanlara sıfırla bunlara geçiş yapar ve bunları test eder.'
+        categories_heading: Kategori sınıflandırıcı
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'En yaygın hatalar: %{column} ve %{threshold}'
+        current: Ayarlarım
+        defaults: Varsayılanlar
+        description: Her sütun, son %{months} ayda yeni işlemler olarak puanlanır, her ay kendisinden önceki geçmişe göre eğitilir ve ardından kategorilerinizle karşılaştırılır. Test, hiçbir işlemin kategorisini değiştirmez ve sınıflandırıcı ayarları yalnızca uyguladığınızda veya sıfırladığınızda değişir.
+        find_best: En iyi ayarları bulun
+        matcher_confusions: 'En yaygın satıcı hataları: %{column} ve %{similarity}'
+        matcher_description: 'Eşleştiricinin aynı %{months} aylarını doldurduğu tüccarlar: Bir satıcıyla yapılan %{count} işlemleri, her biri satıcısı gizlenmiş olarak kendi ayından önceki geçmişle eşleştirilir; sahip olduğu tüccar haklıdır. Her kesinti ve tüccar sayısı puanlanır; En iyi bulunan, Apply''ın ayarladığı hatanın maliyeti açısından en iyi hücreye sahip olandır. Testler hiçbir satıcıyı doldurmaz.'
+        merchants_heading: Satıcı eşleştirici
+        no_confusions: Bu eşikte hata yok.
+        no_matcher_confusions: Bu benzerlikte satıcı hatası yok.
+        no_uncategorized: Bu eşikte kategorize edilmemiş hiçbir şey kalmadı.
+        no_unfilled: Bu benzerlikte tüccarsız hiçbir şey kalmadı.
+        none: Henüz test edilmedi.
+        ran_at: "%{count} işlemlerinde (%{months}) önce %{time} puan aldı."
+        reset: Varsayılanlara sıfırla
+        reset_confirm: Her sınıflandırıcı ayarı varsayılana sıfırlanıp test edilsin mi?
+        right_wrong: Her hücre doğru/yanlıştır.
+        run: Ayarlarımı test et
+        running: Test Ediliyor… bu bölüm, işlem tamamlandığında güncellenir.
+        short_history: Henüz kategori sınıflandırıcıyı ayarlamak için yeterli geçmiş yok. Bunun için yaklaşık %{months} ay boyunca kategorize edilmiş işlemlere ihtiyaç vardır, bu nedenle Uygula şimdilik ayarlarını olduğu gibi bırakıyor.
+        similarity: Benzerlik
+        stale: Bu testten bu yana ayarlar değişti.
+        threshold: Eşik
+        trying: "%{changes} deneniyor…"
+        uncategorized: 'En yaygın kategorize edilmemiş: %{column} ve %{threshold}'
+        unfilled: 'En yaygın doldurulmamış: %{column} ve %{similarity}'
+        weight: Bir hatanın maliyeti
+        weight_hint: 'Hangi Uygulama setlerini seçer: doğru cevapların eksi hata başına bu sayıda en yüksek olduğu kalın hücreler. Kategoriler için en iyi bulunan eşiği; Eşleştirici için kesim, benzerlik ve tüccar sayısı.'
+        weight_option:
+          one: 1 doğru cevap
+          other: "%{count} doğru cevaplar"
+      matcher:
+        lock_similar_merchants: Eşleştiricinin ayarladığı satıcıları kilitleyin
+        lock_similar_merchants_hint: Kuralları durdurur, AI ve bir kural üzerinde Uygula'yı tıklamadığınız sürece bunları değiştirerek senkronize eder. Kendi kilitleri onaylanmış olarak sayılmaz (Merchant matcher tuning).
+        rule: Neredeyse kopyalardan gelen eksik satıcıları doldurun
+        rule_hint: Satıcı eşleştirici kuralı, Kurallar'da açılıp kapatılıyor. Kural sıranızda, satıcısı olmayan bir işlem, "NETFLIX.COM 8812" ve "Netflix com" gibi neredeyse kopyalarının sahip olduğu işlemi alır. Transferler dışarıda bırakıldı.
+        similar_threshold: Benzerlik
+        similar_threshold_hint: Açıklamaların en düşük benzerliği, sayılar ve referans kodları göz ardı edilir (0,5–0,99). Daha düşük, daha fazla hatayla daha fazla doldurur. Otomatik ayarlamanın Uygula seçeneği de bunu ayarlar.
+      matcher_tuning:
+        similar_common_share: Kesim
+        similar_common_share_hint: Kopyaladığı işlemlerin bu payından (0,01–1) daha fazlasında ve en az 50'sinde bulunan bir kelime veya 3 harfli parça, "kart" veya "ödeme" gibi, bunları birbirinden ayıramayacak kadar yaygındır, dolayısıyla göz ardı edilir. Daha yüksek, daha fazlasını sayar. Otomatik ayarlamanın Uygula seçeneği de bunu ayarlar.
+        similar_min_neighbours: Satıcılar kabul ediyor
+        similar_min_neighbours_hint: Kaç kopyanın satıcıya sahip olması gerektiği ve hiçbirinin başka bir kopyası olmaması. 1 tek bir işlemi kopyalar, hatalar da olur.
+        similar_min_neighbours_option:
+          one: 1 satıcı
+          other: "%{count} tüccarlar"
+        similar_skip_self: Onaylanana veya bu kadar eski olana kadar eşleştiricinin kendi satıcılarından kopyalamayın
+        similar_skip_self_hint: Onaylandı, onu değiştirdiğiniz veya kilitlediğiniz anlamına gelir. Yanlış bir kopya yayılmaz; bu kadar uzun süre yalnız bırakılan kişi kabul edilmiş sayılır.
+      merchant:
+        merchant_field: Ayarlandığında satıcıyı tek bir jeton olarak dahil edin
+        merchant_field_hint: Kimliğe göre sayar, böylece yeniden adlandırılan satıcı geçmişini korur.
+        merchant_name_words: Satıcının adını kelime olarak ekleyin
+        merchant_name_words_hint: Açıklamayı orijinali gibi okuyun, böylece benzer isimler kanıt paylaşır. Aşağıdaki jetonla çakışıyor.
+      run:
+        success: Bayes, kategorize edilmemiş işlemleri kategorilere ayırıyor. Bu birkaç dakika sürebilir.
+      scoring:
+        complement: Tamamlayıcı saf kullanın Bayes
+        complement_hint: Her kategoriyi, işlemin diğerlerine ne kadar kötü uyduğuna göre puanlar; bu, çok farklı boyutlardaki kategorilerle daha iyi başa çıkabilir. Kapalı orijinal çok terimlidir.
+        prior: Her kategorinin ne sıklıkta kullanıldığını ekleyin
+        prior_hint: En sık kullandığınız kategorileri tercih eder. Kapalıyken, orijinal modelde olduğu gibi tüm kategorileri eşit değerlendirir.
+        separate_fields: Kelimelerden ayrı olarak hem işletmeyi hem de banka hesabını ayrı ayrı puanlandırır.
+        separate_fields_hint: Her biri kendi dağılımını kazanır; bu sayede uzun açıklamalar diğerlerini gölgede bırakmaz. İşletmenin veya banka hesabının dahil edilmesi gerekir; tutar her zaman ayrı olarak puanlanır.
+        smoothing: Düzleştirme işlemi
+        smoothing_hint: Görülmemiş bir kelimenin bir kategoriyi dışlamasını engellemek için her sayıma eklenir (0.001–10). 1 ise orijinal sistemin yaklaşımıdır ve daha önce görülenlere daha fazla güvenir.
+      show:
+        add_rule_body: Kurallarınızda %{name} kuralı bulunmamaktadır, bu yüzden etkinleştirecek bir şey yok. Bunu kurallarınızın en üstüne ekleyin.
+        add_rule_confirm: Kural ekle
+        add_rule_title: "%{name} kuralını ekleyin?"
+        account: Hesap ayarı
+        amount: Tutar ayarı
+        auto_tune: Otomatik ayarlama
+        category_training: Kategori sınıflandırıcı ayarlarının optimize edilmesi
+        clear_locks: Bayes kilitlerinin kaldırılması
+        clear_locks_confirm_body: Hâlâ belirlenen durumda olan ve eşleştirici tarafından kilitlenmiş olan Bayes kategorilerini ve işletmelerini kilidinden açar; böylece kurallar ve AI onları tekrar değiştirebilir. Kategoriler ve işletmeler aynı kalır.
+        clear_locks_confirm_button: Kilitlerin kaldırılması
+        clear_locks_confirm_title: Bayes kilitlerinin kaldırılması mı?
+        description: Bayes kategori sınıflandırıcısı, sizin kategorilendirdiğiniz işlemlerden öğrenir ve herhangi bir AI sağlayıcısından önce yeni işlemleri kategorilendirir. Bu ayarlardaki değişiklikler bir sonraki kategorilendirme işleminden itibaren yürürlüğe girer; zaten kategorilendirilmiş işlemler kategorilerini korur.
+        matcher: Eşleştirici
+        matcher_description: Neredeyse aynı kayıtlardan eksik olan işletmeleri, her senkronizasyondan sonra ve 'Çalıştır' işlemi sırasında uygulanan İşletme eşleştirici kuralıyla doldurur. Bu işlem, saklanan işletme bilgilerini değiştirir.
+        matcher_tuning: İşletme eşleştirici ayarlaması
+        merchant: İşletme ayarlaması
+        run: Çalıştır
+        scoring: Puanlama
+        title: Sınıflandırıcı
+        training: Eğitim
+        words: İşlem ayarı
+      training:
+        max_training_transactions: Eğitim işlemleri
+        max_training_transactions_hint: 'Kullanılacak en yeni işlemlerin sayısı (100–20,000): Sınıflandırıcının öğrendiği kategorilendirilmiş işlemler ve eşleştiricinin kopyaladığı işletme bulunan işlemler.'
+      words:
+        bigrams: Kelime çiftlerini dahil et
+        bigrams_hint: Bitişik kelimeler de birlikte sayılır, örneğin "kart ödemesi" gibi.
+        binary: Tekrar eden kelimeler hariç tutulur.
+        binary_hint: Her işlemde her kelime yalnızca bir kez sayılır.
+        drop_codes: Referans kodları hariç tutulur.
+        drop_codes_hint: 2 veya daha fazla rakam içeren harf-rakam karışımı kelimeler, örneğin 2k4l19 gibi.
+        drop_numbers: Rakamlar hariç tutulur.
+        drop_numbers_hint: Açıklamada sayıları, tarihleri ve tutarları saklayın.
+        include_notes: Notlar ekleyin.
+        include_notes_hint: İsmin yanı sıra notları da okur.
+        keep_single_chars: Tek karakterli kelimeler ekleyin.
+        keep_single_chars_hint: Ayrıştırıldıktan sonra kalan tek harf ve rakamlar, örneğin mcdonald's'deki "s" gibi.
+        spread_filter: Her kategorinin ortak kullandığı kelimeleri hariç tutun.
+        spread_filter_hint: Kategoriler hakkında herhangi bir bilgi verilmemektedir. Bu sayı, bir kategorinin kullanım oranının eşit paydan ne kadar yüksek olması gerektiğini gösterir.
+        word_split: Kelimeler
+        word_split_ascii: a–z ve 0–9'den oluşur
+        word_split_hint: Diğer tüm karakterler kelimeleri ayırır. Herhangi bir alfabeden gelen harfler, Geschäft veya Кофейня gibi kelimeleri bütün halinde tutar; içinde sembol bulunan ve tek bir sembolle birleşmiş harfler de mcdonald's, s/o ve m&s gibi tek bir kelime olarak kalır (*netflix örneğindeki gibi baştaki veya sondaki bir sembol yine de kaldırılır).
+        word_split_symbols: Harfler, rakamlar, iç semboller
+        word_split_unicode: Harfler ve rakamlar, herhangi bir alfabeden gelenler
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: İçgörülere Derinlemesine Bakış
+          subtitle: AI ile bir içgörüye derinlemesine baktığınızda görünen ilk sohbet mesajı
+          label: Derinlemesine inceleme mesajı
+    preferences:
+      show:
+        default_account_order_hint: Manuel modda, sıralamayı belirlemek için kenar çubuğundaki banka hesaplarını sürükleyin.
+        investment_contributions_as_spending: Yatırımları harcama olarak sayma
+        investment_contributions_as_spending_hint: Yatırım hesaplarına aktarılan para, bütçelerde, raporlarda ve nakit akışı grafiğinde harcama olarak sayılır. Bunun yerine yatırım olarak göstermek için bu özelliği kapatın.
+    securities:
+      show:
+        disable_mfa_password_label: Şifrenizle onaylayın
+        disable_mfa_password_placeholder: Şifrenizi girin
+        mfa_sso_only: İki faktörlü kimlik doğrulama, kimlik sağlayıcınız aracılığıyla yönetilir.
+    settings_nav:
+      classifier_label: Sınıflandırıcı
+    hostings:
+      show:
+        instance_settings_restricted: Sağlayıcı kimlik bilgileri, paylaşılan AI bağlantısı ve eşitleme ayarları bu örnekteki her aile için geçerlidir; bu yüzden bunları yalnızca süper yönetici değiştirebilir. Ailenizin hangi asistanı kullandığı ise hâlâ her aile için ayrı ayrı belirlenir. Sunucuya erişimi olan bir kişi bir kullanıcıyı süper yöneticiye yükseltebilir; Docker kendi sunucunuzu barındırma kılavuzunda yükseltme notlarında ilgili komut yer almaktadır.
+      assistant_settings:
+        type_mcp_only: Uygulamada yok (MCP aracılığıyla kendi temsilcinizi bağlayın)
+        mcp_only_help: Bu hanehalkındaki herkes için uygulama içindeki asistan devre dışı bırakılmıştır. Faturalar için AI kısayolları ve AI ile yazılan analiz metinleri de çalışmayacaktır. MCP ve arka plan sınıflandırma özellikleri ise hâlâ kullanılabilir durumdadır. Harici araçları Ayarlar > MCP üzerinden bağlayın.
+      openai_settings:
+        ai_health_probe_timeout_label: Saniyeler cinsinden Sağlık Kontrolü Zaman Aşımı (İsteğe bağlı)
+        ai_health_probe_timeout_help: 'Varsayılan: 5. Yalnızca Ayarlar > → > Sistem sağlığı bölümündeki canlı AI kontrolleri için geçerlidir; gerçek AI çağrıları için geçerli değildir. Bir bulut modeliyle yapılan PDF kontrolleri zaman aşımı bildirdiğinde bu değeri yükseltin. AI_HEALTH_PROBE_TIMEOUT bu alanı geçersiz kılar.'
+      chimnie_settings:
+        title: Chimnie
+        description: UK'daki konut mülklerini onların UPRN değerlerine göre sıralamak için kendi Chimnie API anahtarınızı girin. Ücretsiz bir anahtar oluşturmak için dashboard.chimnie.com adresini kullanın (kayıt için işletme veya özel alan adına sahip bir e-posta adresi gereklidir; Gmail, Outlook ve benzeri adresler kabul edilmez). UPRN ile yapılan değerlendirmeler ücretsizdir ve her ay güncellenir; Sure ise ayda yapılabilecek 1,000 kadar isteği sınırlar ve bunu CHIMNIE_MAX_REQUESTS_PER_MONTH ortam değişkeni ile değiştirebilirsiniz.
+        env_configured_message: CHIMNIE_API_KEY ortam değişkeni aracılığıyla başarıyla yapılandırıldı.
+        label: API Anahtarı
+        placeholder: Lütfen Chimnie API anahtarınızı buraya girin
+      sync_settings:
+        market_data_sync_label: Günlük piyasa verisi ithalatını etkinleştirin
+        market_data_sync_description: Etkinleştirildiğinde, finansal menkul kıymetlerin fiyatları Pazartesiden Cuma'ya kadar belirtilen saatte, günde bir kez otomatik olarak ithal edilir.
+        market_data_sync_time_label: Piyasa verisi ithalat zamanı (HH:MM)
+        market_data_sync_time_description: Finansal menkul kıymetlerin fiyatlarının ithal edileceği günün saatinizi seçin; örneğin ana borsanızın kapanışından kısa bir süre sonra.
+  shared:
+    money_field:
+      above_max: En fazla %{max} tutarında bir miktar girin.
+      below_min: En az %{min} tutarında bir miktar girin.
+      invalid_amount: Geçerli bir miktar veya ifade girin.
+      operator_add: Topla
+      operator_subtract: Çıkar
+      operator_multiply: Çarp
+      operator_divide: Böl
+    require_non_guest: Misafirler bu işlemi gerçekleştiremez.
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: AI kuyruklarını (sohbet, işletme tespiti, sınıflandırma) işleyen hiçbir işçi bulunmamaktadır. İşçinin config/sidekiq.yml dosyasını yüklediğinden emin olun.
+  loans:
+    form:
+      day_count_convention: Faiz hesaplama temeli
+      day_count_convention_actual_365: Gerçek/365
+      day_count_convention_actual_actual: Gerçek/gerçek
+      day_count_convention_hint: Bu, borç vereninizin her faiz dönemini bir yılla nasıl karşılaştırdığını belirler. 365, her ayın gerçek gün sayısını kullanır ve Birleşik Krallık ile Avustralya’daki konut kredileri için standarttır. 30/360 ise her ay için sabit olarak yılın on ikide birini kullanır; tıpkı Sure’in her zaman yaptığı gibi.
+      day_count_convention_thirty_360: 30/360 (sabit on ikinci kısım)
+  breadcrumbs:
+    classifier: Sınıflandırıcı
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Bu hedefin banka hesaplarından biri için henüz döviz kuru mevcut değil, bu yüzden işlem tamamlanamaz.
+        rule:
+          split_not_alone: Bir bölme kuralında başka eylemler bulunamaz
+        rule/action:
+          attributes:
+            value:
+              invalid_config: geçerli bir bölme yapılandırması olmalıdır
+              invalid_split_count: "%{min} ve %{max} arasında bölünmeler olmalıdır"
+              split_name_required: 'Bölünme #%{index}''in adı eksik.'
+              split_name_too_long: 'Bölünme #%{index}''in adı çok uzun (maksimum 255 karakteri).'
+              split_name_invalid: 'Bölünme #%{index}''in adında geçersiz karakterler bulunuyor.'
+              split_type_invalid: 'Bölünme #%{index}''in türü sabit veya yüzde olmalıdır.'
+              split_share_invalid: 'Bölünme #%{index}''deki pay değeri pozitif bir sayı olmalıdır.'
+              split_category_invalid: 'Bölünme #%{index}''in kategorisi bu gruba ait değil.'
+              split_merchant_invalid: 'Bölme #%{index}: İlgili işletme bu kategoriye ait değil'
+              split_tags_invalid: 'Bölme #%{index}: Bu kategoriye ait olmayan bir etikete sahip'
+              percentages_must_total_100: Yüzdelerin toplamı 100 değerine eşit olmalıdır (elde edilen değer %{total}'dir)
+              fixed_requires_exact_amount_condition: 'Sabit tutarlı bölme işlemleri için, işlem tutarına tam olarak eşleşen bir kural koşulu gereklidir (örneğin: Tutar = 42.00); aksi takdirde paylar, her eşleşen işlemin toplamına güvenilir bir şekilde ulaşamaz'
+              fixed_shares_must_equal_condition_amount: Bölme sonucundaki payların toplamı, bu kuralın koşulu tarafından belirlenen tam tutar olan %{amount} değerine eşit olmalıdır
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: Geçerli bir düzenli ifade değildir
+              regex_too_complex: Güvenli bir şekilde çalıştırılması için çok karmaşıktır
+              regex_too_long: Çok uzundur (maksimum uzunluk %{count} karakterdir)
+              regex_backreference: Geri referanslar kullanılamaz (\1'den \9'ye)
+  rules:
+    form:
+      stop_processing_label: Daha fazla kuralın işlenmesini durdurun
+      stop_processing_description: Listedeki daha sonraki kurallar, bu kurala uyan işlemleri değiştirmez.
+    condition_filters:
+      operators:
+        starts_with: Başlangıcıdır
+        ends_with: "... ile sona erer"
+        matches_regex: Regex ile eşleşir
+    notification_baseline_timed_out: Bu kural hâlâ devre dışıdır. Mevcut işlemlerden hangilerinin zaten eşleştiğini kontrol etmek çok uzun sürdü. Bu kontrol olmadan kuralı etkinleştirmek, her eşleşen işlem hakkında bir e-posta gönderir. Koşulları basitleştirin ve ardından kuralı tekrar etkinleştirin.
+    classifier_rules:
+      category_classifier: Kategori sınıflandırıcı
+      merchant_matcher: Satıcı eşleştirici
+    rule:
+      stop_processing: Durdur
+      stop_processing_hint: Daha aşağıdaki kurallar, bu kural tarafından eşleştirilen işlemleri değiştirmez.
+    index:
+      order_hint: Kurallar yukarıdan aşağıya doğru çalışır. Bir kural bir işlemin belirli bir alanını değiştirdikten sonra, daha aşağıdaki kurallar o alanı değiştiremez. Etiketler her eşleşen kural tarafından eklenir. Sırayı değiştirmek için kuralları sürükleyin.
+      reorder_rule: "%{name} hareket kuralı. Bunu seçmek için Enter veya Boşluk tuşuna basın, ardından onu taşımak için ok tuşlarını kullanın."
+    confirm:
+      rules_above_notice:
+        one: Üstündeki aktif kural önce çalışır, bu yüzden sonuç tam çalıştırma durumundakine eşittir.
+        other: Üstündeki %{count} aktif kurallar önce çalışır, bu yüzden sonuç tam çalıştırma durumundakine eşittir.
+    actions:
+      split:
+        type_fixed: Sabit tutar
+        type_percentage: Yüzde
+        type_label: Bölünme türü
+        share_label: Tutarı veya yüzde oranını bölme
+        category_label: Kategoriyi bölme
+        merchant_label: İşletmeyi bölme
+        tags_label: Etiketleri bölme
+        remove_split: Bölme işlemini kaldırma
+        hint: 'Öncelikle tam tutarlar olarak sabit bölümler çıkarılır. Daha sonra yüzde bazlı bölümler, kalan miktarı bölür. Eğer buradaki her bölüm sabit bir tutar kullanıyorsa, sabit tutarların toplanabilmesi için her bir eşleşen işlemin aynı toplam tutara sahip olması gerektiğinden, bir işlem tutarıyla eşleşen bir koşul da eklenmelidir (örneğin: Tutar = 42.00). Bir bölme kuralında başka eylemler bulunamaz.'
+        fixed_summary_label: sabit
+        summary:
+          one: "%{count} bölünmüş"
+          other: "%{count} bölünmeleri"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Bu Binance bağlantısı kullanılamıyor. Sağlayıcı Ayarları'ndan bir tane seçin.
+      no_credentials_configured: Hesaplarını eklemekten önce Sağlayıcı Ayarları'nda Binance'ye bağlanın.
+      select_connection: Sağlayıcı Ayarları'ndan bir Binance bağlantısı seçin.
+  reports:
+    index:
+      sections_aria: Rapor bölümleri
+    spending_vs_normal:
+      title: Harcamalar vs. normal seviye
+      summary_html: Bu dönemde %{total} tutarında harcama yapıldı. %{baseline_start}'den %{baseline_end}'ye olan verilere dayanarak, bu kadar uzun bir süre için normal değer %{normal}'dir.
+      summary_so_far_html: Şu ana kadar %{total} tutarında harcama yapıldı. %{baseline_start}'den %{baseline_end}'ye olan verilere dayanarak, bu kadar gün için normal değer %{normal}'dir.
+      no_history_html: Bu dönemde %{total} tutarında harcama yapıldı. Normal değerin ne olduğunu söyleyebilmek için yeterli önceki veri bulunmamaktadır.
+      no_history_short: Karşılaştırma yapabilmek için yeterli önceki veri mevcut değil.
+      no_spending: Bu dönemde harcama yapılmadı.
+      no_changes: Her kategorideki harcamalar normal seviyede.
+      treemap_title: Harcamalar nereye gitti?
+      changes_title: Neler değişti?
+      direct: "%{category} (alt kategori yok)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normal: %{amount}'
+        more: "%{amount} normalin üzerinde (%{percent})"
+        less: "%{amount} normalin altında (%{percent})"
+        more_no_percent: "%{amount} normalin üzerinde"
+        less_no_percent: "%{amount} normalin altında"
+        no_normal: Karşılaştırılacak önceki bir kayıt bulunmamaktadır
+        open: Bu işlemleri görmek için seçin
+      legend:
+        less: 50–100% daha az
+        slightly_less: 15–50% daha az
+        normal: Nispeten normal
+        slightly_more: 15–50% daha fazla
+        more: 50–100% daha fazla
+        much_more: 100%+ daha fazla
+  account_order:
+    manual:
+      label: Manuel (sıralamayı değiştirmek için sürükleyin)
+  providers:
+    property_valuation:
+      missing_fields_gb: Lütfen bir isim, sokak adresi ve posta kodu ile mülkün UPRN bilgisini sağlayın.
+      entry_name: "%{provider} değerlendirmesi"
+    chimnie:
+      errors:
+        invalid_uprn: Bir UPRN, 12 basamağa kadar olan bir sayıdır. Lütfen UPRN’yi kontrol edin ve tekrar deneyin.
+        no_estimate: Bu mülk için Chimnie’ye dayalı bir değer tahmini mevcut değildir.
+        not_found: Chimnie, bu UPRN değerine sahip bir mülk bulamadı.
+        unsupported_property: Chimnie yalnızca konut mülkleri için geçerlidir; bu UPRN ise ticari veya karma kullanımlı mülklere aittir.
+        unauthorized: Chimnie, API anahtarını reddetti. Ayarlar bölümündeki → Kendi Sunucunuzu Kullanma seçeneğindeki anahtarı kontrol edin.
+        insufficient_balance: Bu işlem için Chimnie banka hesabınızın bakiyesi yetersizdir.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: Bu işlemin toplam tutarı zaten ödenmesi gereken diğer ödemelere dahil edilmiştir.
+      already_allocated: Bu işlem zaten bu faturaya dahil edilmiştir.
+    new:
+      covered_title: Bu işlem zaten bir faturaya aittir.
+      covered_body: "%{name} zaten bu ödemeyi takip ediyor, bu yüzden yeni bir fatura bu ödemeyi iki kez sayacaktır."
+      covered_open: Yeni fatura aç
+      covered_suggested_title: Sure bu ödeme için zaten bir fatura önerdi
+      covered_suggested_body: "%{name} önerileriniz arasında bekliyor. Onu onaylayarak takibine başlayın; böylece yeni bir fatura bu ödemeyi iki kez saymaz. Eşleşen ödemeler otomatik olarak bağlanır ve siz de bu ödemeyi faturadan bağlayabilirsiniz."
+      covered_confirm: Faturayı onayla
+      covered_create_anyway: Yine de ayrı bir fatura oluştur
+      covered_income_title: Bu mevduat zaten bir gelire aittir.
+      covered_income_body: "%{name} bu mevduatu zaten takip etmektedir; bu yüzden tekrar eklemek onu iki kez sayacaktır."
+      covered_income_open: Geliri açın.
+      covered_income_suggested_title: Sure zaten bu geliri önermiştir.
+      covered_income_suggested_body: "%{name} önerileriniz arasında beklemektedir. Bu mevduatın iki kez sayılmaması için onu ekleyin ve takibine başlayın. Eşleşen mevduatlar otomatik olarak bağlanır ve siz de bunu gelir kaynağından bağlayabilirsiniz."
+      covered_income_confirm: Geliri ekleyin.
+      covered_income_create_anyway: Yine de ayrı bir gelir ekleyin.
+    create:
+      category_invalid: Kategorilerinizden birini seçin veya boş bırakın.
+    already_covered: Bu işlem zaten tekrarlayan bir işlemle eşleşiyor.
+    suggested_income:
+      title: Yeni bir gelir olasılığı.
+      confirm: Gelir ekleyin.
+      dismiss: Gelir değil.
+    confirmed_income: Düzenli işlemlerinize eklenen gelir
+  transfers:
+    show:
+      investment_contribution_subtitle: Bu hesaplar arası transferi bütçelerde ve raporlarda harcama olarak sayın. Aracı kurum veya kripto para banka hesabı paranın yalnızca başka bir para birimine dönüştürdüğünde bunu kapatın.
+      investment_contribution_title: Yatırım katkısı
+  transactions:
+    transaction_category:
+      set_on_outflow: Bu kategori, bu hesaplar arası transferin giden tarafına aittir ve yalnızca orada değiştirilebilir
+    show:
+      category_set_on_hidden_outflow: Bu, bir hesaplar arası transferin gelen tarafıdır. Kategorisi, erişemeyeceğiniz bir banka hesabındaki giden tarafa aittir ve yalnızca orada değiştirilebilir.
+      category_set_on_outflow: Bu, bir hesaplar arası transferin gelen tarafıdır. Kategorisi giden tarafa aittir ve yalnızca orada değiştirilebilir; bu yüzden bütçeler bunu bir kez sayar.
+    search:
+      filters:
+        attachment: Ekli
+    searches:
+      filters:
+        badge:
+          attachment_with: Ekli olarak
+          attachment_without: Ekli olmadan
+        attachment_filter:
+          with: Ekli olarak
+          without: Ekli olmadan
+  accounts:
+    sidebar:
+      reorder_account: "%{account}'yi taşıyın"
+      reorder_hint: Yeniden sıralamak için sürükleyin. Klavye kullanıyorsanız, önce Enter tuşuna, ardından yön tuşlarına basın.
+      sort_mode:
+        start: Banka hesaplarını sırala
+        hint: Banka hesaplarını yeniden sıralamak için bunların kimlik bilgilerine göre sürükleyin.
+        done: Tamam
+  admin:
+    system_health:
+      optional_services:
+        title: İsteğe bağlı hizmetler
+        description: İsteğe bağlı operatör entegrasyonları. Ayarlanmamış hizmetler yalnızca bilgilendirme amaçlıdır. Bu kontroller yalnızca ayarları inceler; bağlantıyı test etmez, test olayları göndermez veya analitik onaylarını değiştirmez. Ayar detayları için bir hizmeti genişletin.
+        missing_settings: 'Ayarlar eksik: %{settings}'
+        statuses:
+          incomplete: Konfigürasyon tamamlanmamış
+          disabled: Bu işlemde devre dışı bırakılmış
+        notes:
+          environment_disabled: Yüklenen entegrasyon, bu Rails ortamı için devre dışı durumda.
+          explicitly_disabled: SKYLIGHT_ENABLED, ölçümleme özelliğini açıkça devre dışı bırakmaktadır.
+          self_hosted_checkout_disabled: Kendi sunucunuzda barındırma modunda abonelik ödeme işlemleri ve fatura portalı devre dışıdır. Stripe webhook'ları hâlâ yapılandırılabilir; burada ödeme fiyatı kimlikleri gereklidir.
+          browser_analytics_disabled: Bu ortam için tarayıcı analitiği devre dışı bırakılmıştır. Bu durum, ayrı olarak yapılandırılmış sunucu istemcisini etkilemez.
+          shared_feedback_configured: Kendi sunucunuzda barındırılan geri bildirim özelliği, ayrı bir projeyi kapsar ve kendi yapılandırması aracılığıyla etkinleştirilir. Bu özellik için POSTHOG_KEY adlı bir operatöre ihtiyaç duyulmaz. Tarayıcıdan çıkış işlemleri ve SDK'nin kullanılabilirliği kontrol edilmez.
+          shared_feedback_disabled: Ayrı olarak kendi sunucunuzda barındırılan geri bildirim projesi, ilgili geri bildirim veya ortam ayarları nedeniyle devre dışı bırakılmıştır. Bu durum, operatör tarafından yönetilen analitik özellikleri etkilemez.
+          production_only: Bu entegrasyon, uygulamanın mevcut yapılandırması gereği yalnızca üretim ortamında kullanılır.
+        services:
+          langfuse:
+            title: Langfuse
+            description: İsteğe bağlı olarak AI ile izleme ve değerlendirme raporlaması yapılabilir. Bu kontrol işlemi sırasında herhangi bir iz veya değerlendirme isteği gönderilmez.
+            guidance: LANGFUSE_PUBLIC_KEY ve LANGFUSE_SECRET_KEY ayarlarını birlikte belirleyin. LANGFUSE_HOST isteğe bağlıdır. Bu ayarları değiştirdikten sonra ilgili hizmetleri yeniden başlatın.
+          sentry:
+            title: Sentry
+            description: İsteğe bağlı hata ve performans raporlaması. Mevcut başlatıcı yalnızca üretim ortamında raporlama yapılmasını sağlar.
+            guidance: SENTRY_DSN değerini ayarlayın ve ilgili hizmetleri yeniden başlatın. Bu işlem, herhangi bir hata oluşturmadan veya olay göndermeden yüklenen SDK yapılandırmasını kontrol eder.
+          skylight:
+            title: Skylight
+            description: İsteğe bağlı uygulama performansı izleme özelliği. Yapılandırmanın mevcut olması, aracın çalıştığını veya raporlama yaptığını garanti etmez.
+            guidance: SKYLIGHT_AUTHENTICATION değerini ayarlayın ve Skylight’in hedeflenen Rails ortamında yüklü olduğundan emin olun. SKYLIGHT_ENABLED=false değeri izleme özelliğini devre dışı bırakır; bu ayar tek başına ilgili bileşeni yüklemeye yetmez. Değişikliklerden sonra uygulamayı yeniden başlatın.
+          stripe:
+            title: Stripe
+            description: İsteğe bağlı abonelik faturalandırma ve ödeme webhook’leri. Bu kontrol işlemi, Stripe istemcisi oluşturmaz, kimlik bilgilerini doğrulamaz veya ödeme isteklerinde bulunmaz.
+            guidance: STRIPE_SECRET_KEY ve STRIPE_WEBHOOK_SECRET değerlerini birlikte ayarlayın. Yönetilen abonelik ödeme işlemleri için ayrıca STRIPE_MONTHLY_PRICE_ID ve STRIPE_ANNUAL_PRICE_ID değerlerine de ihtiyaç vardır.
+          posthog:
+            title: PostHog
+            description: Başlangıçta yüklenen yapılandırmayı kullanan, isteğe bağlı olarak operatör tarafından yönetilen analizler. Yapılandırmanın ayarlanmış olması, kullanıcının bu analizlere onay verdiği anlamına gelmez.
+            guidance: POSTHOG_KEY ve boş olmayan bir POSTHOG_HOST değeri ayarlayın; veya varsayılan değerleri kullanmak için bu ayarları boş bırakın. Tarayıcı tabanlı analizler için üretim ortamı veya geliştirme ortamında POSTHOG_DEVELOPMENT_ENABLED gereklidir. POSTHOG_FEEDBACK_ENABLED, operatör analizleri yerine ayrı bir şekilde kendiniz barındırdığınız geri bildirimleri kontrol eder.
+          logtail:
+            title: Logtail
+            description: İsteğe bağlı olarak üretim ortamındaki günlük kayıtlarının başka bir yere gönderilmesi. Bu özellik yapılandırılmamış olduğunda, uygulama standart çıktıya kayıt yapmaya devam eder.
+            guidance: LOGTAIL_API_KEY ve LOGTAIL_INGESTING_HOST değerlerini birlikte ayarlayın ve ilgili hizmetleri yeniden başlatın. Bu kontrol işlemi sırasında herhangi bir test günlüğü üretilmez.
+      configuration:
+        description: Bu web işlemi tarafından görülebilen yapılandırmalar. Bu kontroller e-posta göndermez, sağlayıcılarla iletişime geçmez ve dosya yüklemez veya indirmez. Ayarların mevcut olması, bu bilgilerin ulaştırıldığının, sağlayıcılara erişimin veya depolama alanlarına erişimin doğrulandığı anlamına gelmez.
+        statuses:
+          incomplete: Eksik yapılandırma
+        settings_needed: Gözden geçirilecek ayarlar
+        unknown_provider: Tanınmayan sağlayıcı seçimi
+        provider_statuses:
+          not_configured: API anahtarı eksik
+          invalid: Geçersiz seçim
+        configure_providers: Kendi sunucunuzu kullanma ayarlarını açın
+        storage_backend: 'Seçilen depolama alanı: %{backend}'
+        storage_backends:
+          local: Yerel disk
+          test: Test diski
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: S3 ile uyumlu depolama
+          google: Google Cloud Depolama
+          other: Özel veya tanınmayan arka uç
+        checks:
+          smtp:
+            title: E-posta (SMTP)
+            statuses:
+              configured: SMTP ayarları mevcuttur.
+              not_configured: SMTP yapılandırılmamıştır. Şifre sıfırlama işlemleri, davetler ve diğer sistem e-postaları SMTP aracılığıyla gönderilemez.
+              incomplete: Bazı e-posta ayarları eksik veya tamamlanmamıştır. Sistem e-postaları veya içerdikleri bağlantılar çalışmayabilir.
+              disabled: Çalışan posta gönderici konfigürasyonunda e-posta teslimatı devre dışı bırakılmıştır.
+              not_checked: Bu işlem, geliştirme önizlemesi gibi SMTP dışındaki bir dağıtım yöntemi kullanmaktadır. SMTP dağıtımı değerlendirilmemektedir.
+            guidance: SMTP, yönetim arayüzünde yapılandırılamaz. Hem web hem de işçi hizmetleri için e-posta ortam değişkenlerini ayarlayın ve ardından her ikisini de yeniden başlatın. Kimlik doğrulamasız bir iletim için SMTP_USERNAME ve SMTP_PASSWORD'nin her ikisi de göz ardı edilebilir.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (1'den 65535'ye kadar olan bir sayı)
+              sender: EMAIL_SENDER (varsayılan sender@sure.local yerine kullanılır)
+              app_domain: APP_DOMAIN (e-posta bağlantılarında kullanılır)
+              authentication: SMTP_USERNAME ve SMTP_PASSWORD (ikisi de veya hiçbiri kullanılabilir)
+          securities:
+            title: Piyasa fiyatları
+            statuses:
+              configured: Etkinleştirilmiş tüm piyasa fiyatı sağlayıcılarının yapılandırması mevcuttur.
+              not_configured: Etkinleştirilmiş piyasa fiyatı sağlayıcılarının API anahtarları eksiktir. Bu sağlayıcılar aracılığıyla finansal menkul kıymetler için otomatik aramalar ve fiyat sorgulamaları yapılamamaktadır.
+              incomplete: En az bir etkinleştirilmiş piyasa fiyatı sağlayıcısında yapılandırma eksikliği veya geçersiz bir seçim bulunmaktadır. Bu sağlayıcıya atanmış menkul kıymetler fiyat güncellemeleri alamayabilir.
+              disabled: Hiçbir piyasa fiyatı sağlayıcısı etkinleştirilmemiştir. Finansal menkul kıymetler için otomatik aramalar ve fiyat sorgulamaları mümkün değildir.
+            guidance: Kendi sunucunuzda ayarlamalar yaparak sağlayıcıları seçin ve gerekli API anahtarlarını ekleyin veya dağıtım ortamında bunları yapılandırın. Ortam ayarları önceliklidir. Kamu sağlayıcılarının API anahtarına ihtiyacı yoktur.
+          exchange_rates:
+            title: Döviz kurları
+            statuses:
+              configured: Seçilen döviz kuru sağlayıcısının ayarları bulunmaktadır.
+              not_configured: Kullanılabilir bir döviz kuru sağlayıcısı yapılandırılmamıştır. Kayıtlı bir kurlar listesi bulunmadığında otomatik para birimi dönüşümü kullanılamayabilir.
+            guidance: Bir döviz kuru sağlayıcısı seçin ve self-hosting ayarlarında gerekirse API anahtarını ekleyin veya dağıtım ortamında bunu yapılandırın. EXCHANGE_RATE_PROVIDER ve sağlayıcıya ait API anahtarına dayalı ortam öncelikleri geçerlidir.
+            issues:
+              invalid_provider: Seçilen döviz kuru sağlayıcısı tanınmamıştır. Desteklenen bir sağlayıcı seçilene kadar otomatik kurlar sorgulamaları başarısız olur.
+          storage:
+            title: Dosya yükleme ve depolama
+            statuses:
+              configured: Depolama ayarları mevcuttur; yerel disk için bulut kimlik bilgilerine gerek yoktur.
+              not_configured: Seçilen depolama arka ucu için uygun bir yapılandırma bulunmamaktadır. Dosya yüklemeleri kullanılamayabilir.
+              incomplete: Gerekli depolama ayarları eksik veya tamamlanmamıştır. Dosya yüklemeleri veya indirmeleri çalışmayabilir.
+              not_checked: Bu arka uç, harici kimlik bilgisi tespiti veya özel bir yapılandırmayı kullanmaktadır. Erişim, yalnızca bu ayarlarla belirlenemez.
+            guidance: ACTIVE_STORAGE_SERVICE ve seçilen arka ucun dağıtım ayarlarını inceleyin. Yerel disk, web ve işçi hizmetleri tarafından paylaşılan kalıcı bir depolamaya ihtiyaç duyar. Arka uç değiştirilmesi mevcut dosyaları taşımaz; herhangi bir taşıma işlemi ayrı olarak planlanmalıdır.
+            issues:
+              root: Yerel depolama kökü
+              bucket: Depolama kovası
+              region: Depolama bölgesi
+              credentials: Depolama erişim anahtarı ve gizli anahtar (her ikisini de sağlayın veya harici kimlik doğrulama aracı kullanın)
+              endpoint: Depolama uç noktası (ve R2 için CLOUDFLARE_ACCOUNT_ID)
+      show:
+        tabs:
+          configuration: Yapılandırma
+  bills:
+    detail:
+      rule_detected: "%{name} adlı işlemlerle eşleşir"
+    match:
+      same_transfer: Aynı banka hesabına hesaplar arası transfer
+  budgets:
+    available_cash:
+      currency_warning: "%{currencies} bakiyeleri, %{currency} için henüz bir döviz kuru bulunmadığından dahil edilmemektedir."
+  categories:
+    locked: Kategoriler kilitlenmiştir. Yeni bir kategori eklemek için onları kilidini açın.
+    toggle_lock:
+      locked: Kategoriler kilitlidir
+      unlocked: Kategoriler kilidinden açılmıştır
+    index:
+      lock_categories: Kategori oluşturmayı kısıtlayın
+      locked_message: Kategori oluşturma işlemi kilitlidir. İthalat işlemleri ve banka senkronizasyonları hâlâ kategoriler ekleme imkanı sunmaktadır.
+      unlock_categories: Kategori oluşturma işlemini açın
+  category:
+    dropdowns:
+      show:
+        assign_error: Kategoriyi oluşturdum ancak onu atayamadım. Tekrar denemek için 'Yeniden Oluştur' seçeneğini kullanın.
+        back: Geri
+        create_error: Bu kategoriyi oluşturamadım. Lütfen tekrar deneyin.
+  chats:
+    ai_busy: Arka plandaki bir görevi tamamlıyorum, hemen mesajınıza döneceğim.
+    reservation:
+      ready_html: Mesajınıza hemen odaklanabilmek için bazı arka plandaki görevleri erteledim. %{countdown} s sırasında tekrar ortaya çıkacaklar, bu yüzden yazmaya devam edin!
+      busy: Bir arka plandaki görevi bitiriyorum, ardından tamamen size ait olacağım. Yazmaya devam edin!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: O Coinbase bağlantısı kullanılamıyor. Sağlayıcı Ayarları'ndan bir tane seçin.
+      no_credentials_configured: Cüzdanlarını eklemekten önce Sağlayıcı Ayarları'nda Coinbase bağlantısını bağlayın.
+      select_connection: Sağlayıcı Ayarları'ndan bir Coinbase bağlantısı seçin.
+  credit_cards:
+    due:
+      in_days:
+        zero: Bugün ödenmesi gerekiyor
+        one: Yarın ödenmesi gerekiyor
+        other: "%{count} gün sonra ödenmesi gerekiyor"
+      overdue:
+        one: Dün ödenmesi gerekiyordu
+        other: "%{count} gün gecikmeli"
+    form:
+      due_day: Ödemenin yapılması gereken gün
+      statement_close_day: Ekstre kapatma tarihi
+      statement_cycle_description: Ekstrenizin kapanış tarihi ile ödemenizin vadesi olan gün. Bu değerler belirlendiğinde, Genel Bakış sekmesi son ekstrenizin toplam tutarını ve bir sonrakine kadar biriken tutarı gösterir. Bağlı kartlar bu değerleri otomatik olarak doldurur ve sizin manuel olarak belirlediğiniz değerleri korur.
+      sophtron_balance_sign_description: Sophtron belirsiz bir işaret bildirdiğinde yalnızca özel ayarları kullanın. Otomatik mod, kredi kartı bakiyelerini negatif olarak göstermeye devam eder.
+      sophtron_balance_sign_label: Sophtron bakiyesinin anlamı
+    tabs:
+      overview:
+        above_minimum: Kredi kartı ekstrenizin toplam tutarı %{balance}'dir ve bu tutar, minimum ödeme tutarı olan %{minimum}'den daha yüksektir. Yalnızca asgari tutarı ödemek, karttaki kalan bakiyenin bu APR kurallarına tabi kalmasına neden olur.
+        closes_on: Bir sonraki ekstre %{date} tutarında kapanır
+        credit_toward_next: Bir sonraki ekstre için yapılan kredi
+        due_on: "%{date} için vade tarihi"
+        edit_card_details: Kart detaylarını düzenle
+        since_last_statement: Son ekstreden bu yana
+        statement_balance: Ekstre bakiyesi
+        multi_currency_unavailable: Bu ekstre, birden fazla para biriminde kaydedilen girişleri içermektedir ve her biri için bir döviz kuru olmadan toplanamaz. Tahminde bulunmak yerine bakiyeler boş bırakılmıştır.
+        no_cycle_description: Ekstrinizin kapanma gününü ve ödemenin vadesi olan günü belirleyin; bu sekme, son ekstrinizin toplam tutarını ve bir sonraki ekstre için biriken miktarı gösterecektir. Bağlı bir kart genellikle bunları sizin için doldurur.
+        no_cycle_title: Hiçbir ekstre döngüsü belirlenmedi
+        unknown: Bilinmiyor
+    update:
+      sophtron_balance_sign_error: Sophtron bakiye anlamı uygulanamadı. Önceki ayarınız korundu. Lütfen tekrar deneyin.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Demo ailesinin yenilenmesi tamamlandı
+      activity_heading: Bu dönemdeki faaliyetler
+      sessions_label: Önceki demo ailesi için benzersiz giriş oturumları
+      families_label: Yeni aile banka hesapları oluşturuldu
+      period_heading: Raporlama dönemi (UTC)
+      from_label: 'Başlangıç:'
+      to_label: 'Bitiş:'
+      time_format: "%b %-d, %Y, %H:%M:%S ve UTC"
+      family_heading: Önceki demo ailesi
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Bazı bakiyeler sayılmamaktadır
+      body:
+        one: "%{from}, → ve %{to} döviz kurları henüz mevcut değil, bu yüzden %{from} bakiyeleri bu toplamdan hariç tutulmuştur."
+        other: "%{from}'den %{to}'ye dönüşüm için gerekli döviz kurları henüz mevcut değil, bu yüzden bu bakiyeler de bu toplamdan hariç tutulmuştur."
+      settings_link: Döviz kuru sağlayıcısı ayarları
+    consume:
+      goal_currency_hint: "%{currency} cinsinden tutarı girin. Farklı bir para birimindeki bir banka hesabındaki tutarlar, ilgili hesaptan çekilmeden önce günün kuru üzerinden dönüştürülür."
+      errors:
+        missing_exchange_rate: Bu banka hesabının para birimi için henüz döviz kuru mevcut değil, bu yüzden bu harcama kaydedilemiyor.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Henüz döviz kuru bulunmadığı için bu banka hesabı dikkate alınmıyor.
+    goal_card:
+      partial_total: Bazı bakiyeler dikkate alınmıyor (henüz döviz kuru mevcut değil).
+    form:
+      earmark:
+        converted: Bu ayrılma ≈ {amount} şeklindedir.
+      fields:
+        currency_conversion_hint: Banka hesapları farklı para birimlerini kullanabilir. Toplam tutarlar %{currency} cinsinden dönüştürülür; hesap ayrılmaları ise her banka hesabının kendi para biriminde kalır.
+  imports:
+    publish:
+      guest_new_categories_or_tags: Misafirler kategori veya etiket oluşturamaz. Bunları mevcut olanlara eşleştirin veya boş bırakın.
+    create:
+      missing_upload: Dosyanızı alamadık. Lütfen tekrar yüklemeyi deneyin.
+  insights:
+    card:
+      dig_in: AI ile incelemeye başlayın.
+    dig_in:
+      prompt: |-
+        Bu içgörüyü anlamama yardımcı olun.
+
+        İçgörü: %{title}
+        Sure'nin bulduğu şey: %{body}
+        Dönem: %{period}
+        Rakamlar:
+        %{facts}
+
+        Bunun arkasında ne var ve yapmam gereken bir şey var mı?
+  mfa:
+    local_password_required: İki faktörlü kimlik doğrulama için yerel bir şifre gereklidir. Sizinki kimlik sağlayıcınız aracılığıyla yönetilmektedir.
+    create:
+      invalid_password: Yanlış şifre. Lütfen tekrar deneyin.
+    disable:
+      invalid_password: Yanlış şifre. Lütfen tekrar deneyin.
+    new:
+      password_label: Şifrenizle onaylayın
+      password_placeholder: Şifrenizi girin
+  pages:
+    dashboard:
+      customize:
+        start: Özelleştir
+        done: Tamamlandı
+        hide: "%{title}'i gizle"
+        hidden_title: Gizli widget'lar
+        hidden_description: Gösterge paneline bir widget ekleyin.
+        none_hidden: Her widget gösterilmektedir. Göz butonu ile birini gizleyin.
+        all_hidden_title: Her widget gizlenmiştir
+        all_hidden_description: Widgetleri tekrar eklemek için gösterge panelini özelleştirin.
+      cashflow_preview:
+        node_labels:
+          invested: Yatırıldı
+        group_by_label: Akışları göstermek için
+        sort_label: Akışları sırala
+        sort_auto: Otomatik
+        sort_ascending: En küçükten başlayarak
+        sort_descending: En büyükten başlayarak
+      spending_trend:
+        filter_categories: Kategorileri filtrele (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: Bu bağlantının eklendiğinden emin olamadık. Tekrar denemeden önce sayfayı yenileyin.
+    create:
+      already_connected: Bu kurum için zaten bir bağlantınız bulunuyor, bu yüzden bu bağlantı eklenmedi.
+      exchange_failed: Bu bağlantıyı ekleyemedik. Tekrar deneyin ve sorun devam ederse sunucu günlüklerine bakın.
+      token_expired: Bu bağlantı eklenebilmeden önce süresi doldu. Kurumu tekrar bağlayın.
+    duplicate_warning:
+      confirm: Bu bağlantıyı onaylayın
+      connected_by: "%{name} aracılığıyla bağlandı"
+      eu_no_add_accounts: Plaid, mevcut bir AB bağlantısına banka hesapları eklemeyi desteklememektedir. Hangi hesapların bağlı olacağını değiştirmek için bu bağlantıyı kaldırıp tekrar ekleyin.
+      linked_on: Bağlı %{date}
+      manage_connection: Banka hesaplarına git
+      mask: "****%{mask}"
+      no_accounts: Bu bağlantıdan henüz hiçbir banka hesabı eşleştirilmedi.
+      overlap:
+        all_connected:
+          one: Eklemeye çalıştığınız hesap zaten bağlı; tekrar eklemek yalnızca bir kopya oluşturur.
+          other: Eklemeye çalıştığınız %{count} hesabın tümü zaten bağlı; tekrar eklemek yalnızca kopyalar oluşturur.
+        different_login: Farklı bir %{institution} giriş bilgisiyle bağlantı kurmak için tekrar 'Yeni hesap' seçeneğini seçin ve Plaid aracılığıyla o giriş bilgileriyle giriş yapın.
+        more_accounts: Bu bağlantıya daha fazla banka hesabı eklemek için, mevcut bağlantıyı kapatın ve %{institution} bağlantısında 'Hesaplar ekle' seçeneğini kullanın.
+        others_connected:
+          one: Sure zaten %{name}'in bağlantısı aracılığıyla bu banka hesabına sahip, bu yüzden sizinkini eklemek yalnızca bir yinelenmeye neden olur.
+          other: Sure zaten %{name}'in bağlantısı aracılığıyla bu banka hesaplarına sahip, bu yüzden sizinkini eklemek yalnızca yinelenmeler oluşturur.
+        others_connected_several:
+          one: Sure zaten diğer kullanıcıların bağlantıları aracılığıyla bu banka hesabına sahip, bu yüzden sizinkini eklemek yalnızca bir yinelenmeye neden olur.
+          other: Sure zaten diğer kullanıcıların bağlantıları aracılığıyla bu banka hesaplarına sahip, bu yüzden sizinkini eklemek yalnızca yinelenmeler oluşturur.
+        none_connected: Eklemeye çalıştığınız banka hesaplarının hiçbiri henüz bağlı değil, bu yüzden muhtemelen farklı bir giriş yapılmıştır. Bunu eklemek yalnızca başka bir Plaid bağlantısı olarak sayılır.
+        some_connected:
+          connected:
+            one: Diğeri zaten bağlı durumda, bu yüzden bu bağlantının eklenmesi mevcudu tekrarlayacak ve başka bir Plaid bağlantısı olarak sayılacaktır.
+            other: Diğer %{count}'ler zaten bağlı durumda, bu yüzden bu bağlantının eklenmesi onları tekrarlayacak ve başka bir Plaid bağlantısı olarak sayılacaktır.
+          unconnected:
+            one: 'Eklemeye çalıştığınız banka hesaplarından biri henüz bağlı değil:'
+            other: 'Eklemeye çalıştığınız %{count} banka hesapları henüz bağlı değil:'
+        unknown:
+          one: Bu banka hesapları mevcut bağlantılarınızla karşılaştırılamıyor. Eğer aynı hesaplar ise, bu bağlantının eklenmesi onları tekrarlayacak ve başka bir Plaid bağlantısı olarak sayılacaktır.
+          other: Bu banka hesapları mevcut bağlantılarınızla karşılaştırılamıyor. Eğer aynı hesaplar ise, bu bağlantının eklenmesi onları tekrarlayacak ve başka bir Plaid bağlantısı olarak sayılacaktır.
+      title:
+        one: Bu kurum için zaten bir bağlantınız bulunmaktadır.
+        other: Bu kurum için zaten %{count} bağlantılarınız mevcuttur.
+      title_all_connected: Bu bağlantıyı zaten oluşturmuşsunuz.
+      title_others_connected:
+        one: Bu banka hesabı zaten bağlanmış durumdadır.
+        other: Bu banka hesapları zaten bağlanmış durumdadır.
+      update_existing: Mevcut bağlantıyı güncelleyin.
+  plans:
+    goals_card:
+      currency_warning:
+        one: 1 hedefleri, henüz döviz kuru bilgisi olmadığı için %{currencies} bakiyelerini dikkate almaz.
+        other: "%{count} hedefleri, henüz döviz kuru bilgisi olmadığı için %{currencies} bakiyelerini dikkate almaz."
+  recurring_allocations:
+    entry_exhausted: O işlemin toplam tutarı, zaten ödenmesi gereken diğer ödemelere yansıtılmıştır.
+  valuations:
+    names:
+      current_account_value: Mevcut banka hesabı bakiyesi
+      current_balance: Mevcut bakiye
+      current_loan_balance: Mevcut kredi bakiyesi
+      current_market_value: Mevcut piyasa değeri
+      manual_balance_update: El ile bakiye güncelleme
+      manual_principal_update: El ile anapara güncelleme
+      manual_value_update: El ile değer güncelleme
+      opening_account_value: Hesap açılış değeri
+      opening_balance: Açılış bakiyesi
+      original_purchase_price: Orijinal satın alma fiyatı

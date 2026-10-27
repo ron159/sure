@@ -1,0 +1,755 @@
+---
+vi:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} chỉ hỗ trợ các bất động sản dành cho cư dân sinh sống tại Vương quốc Anh."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Mã tham chiếu bất động sản độc nhất (gồm tối đa số chữ số của 12) dùng để xác định mọi địa chỉ tại Vương quốc Anh. Bạn có thể tìm thấy mã này trên trang web findmyaddress.co.uk của GeoPlace hoặc hỏi chính quyền địa phương. %{provider} sử dụng mã này để định giá bất động sản một cách miễn phí.
+      avm_county_label: Hạt (tùy chọn)
+      avm_town_label: Thị trấn hoặc thành phố
+      avm_postcode_label: Mã bưu chính
+      avm_preview_uprn: UPRN
+      avm_preview_range: Phạm vi ước tính
+      avm_preview_confidence: Mức độ tin cậy
+      avm_confidence:
+        medium: Trung bình
+        low: Thấp
+      avm_attribution_chimnie: Dữ liệu định giá từ Chimnie. Bao gồm dữ liệu OS, quyền tác giả và quyền cơ sở dữ liệu thuộc về ©, dữ liệu Royal Mail, quyền tác giả và quyền cơ sở dữ liệu thuộc về © Royal Mail, cùng dữ liệu HM Land Registry, quyền tác giả và quyền cơ sở dữ liệu thuộc về ©, được cấp phép theo điều khoản Open Government Licence phiên bản 3.0.
+    tabs:
+      overview:
+        refresh_valuation: Đồng bộ hóa dữ liệu định giá
+        valuation_source: Được định giá bởi %{provider}, lần cập nhật gần nhất vào %{date}
+        link_valuation: Cập nhật giá trị tự động bằng %{provider}
+        link_valuation_description: Giá trị của thuộc tính này chỉ được cập nhật thủ công.
+    refresh_valuation:
+      queued: Quá trình cập nhật giá trị đánh giá đã bắt đầu. Giá trị mới sẽ xuất hiện trong thời gian ngắn nữa.
+      not_linked: Thuộc tính này không được liên kết với bất kỳ nhà cung cấp đánh giá nào.
+      not_configured: "%{provider} chưa được cấu hình. Hãy thêm khóa API tương ứng vào mục Settings → Self-Hosting để cập nhật giá trị đánh giá này."
+    link_valuation:
+      linked: Đã liên kết với %{provider} và cập nhật giá trị của thuộc tính này.
+      link_failed: "%{provider} không thể xác định giá trị của thuộc tính này, vì vậy nó chưa được liên kết. Vui lòng kiểm tra xem địa chỉ có chính xác hay không, sau đó thử lại."
+      not_linkable: Thuộc tính này không thể được liên kết với nhà cung cấp đó. Hãy kiểm tra xem địa chỉ của nó có đầy đủ và nằm trong quốc gia được hỗ trợ hay không, đồng thời loại tiền tệ của tài khoản phải trùng khớp với nhà cung cấp.
+  settings:
+    providers:
+      trade_republic_panel:
+        requires_update: Hãy đăng nhập lại để tiếp tục việc đồng bộ hóa.
+        session_expires_in: Thời hạn đăng nhập sẽ hết hạn tại %{time} (%{at}).
+    classifiers:
+      account:
+        account_field: Hãy đưa tài khoản vào dưới dạng một token duy nhất.
+        account_field_hint: 'Tài khoản mà giao dịch diễn ra sẽ được coi là bằng chứng. Tuy nhiên, yếu tố này không thể quyết định một mình: một giao dịch cần có một từ khóa được xác định rõ hoặc thông tin về đơn vị bán hàng.'
+      amount:
+        amount_by_direction: Hãy chỉ rõ hướng chuyển, là chuyển tiền vào hay ra.
+        amount_by_direction_hint: Mỗi danh mục sẽ tự học cách chuyển tiền của mình theo hướng nào, đồng thời các khoản hoàn tiền và các giao dịch mua sắm tại cùng một đơn vị bán hàng sẽ được tách biệt riêng.
+        amount_field: Hãy nhập số tiền.
+        amount_field_hint: So sánh số tiền với các mức bình thường của từng danh mục theo cùng đơn vị tiền tệ, trên thang đối số.
+      category_training:
+        categories_hint: Các danh mục chưa được kiểm tra, cùng với các danh mục con của chúng, sẽ bị loại khỏi quá trình huấn luyện, vì vậy Bayes sẽ không bao giờ chọn chúng.
+        categories_some: Các danh mục %{count} thuộc nhóm %{total}
+        skip_self_labels: Đừng dựa vào những suy đoán của Bayes cho đến khi thông tin được xác nhận hoặc đã quá số ngày quy định
+        skip_self_labels_hint: Việc xác nhận có nghĩa là bạn đã thay đổi hoặc khóa thông tin đó. Những suy đoán sai sẽ không được phản hồi lại để củng cố; những suy đoán bị bỏ mặc trong thời gian dài sẽ được coi là đã được chấp nhận.
+      add_rule:
+        success: Quy tắc %{name} đã được thêm vào đầu danh sách các quy tắc của bạn.
+      classifier:
+        lock_results: Hãy khóa các thể loại mà bộ phân loại thiết lập.
+        lock_results_hint: Nó sẽ ngăn các quy tắc thay đổi các lựa chọn của Bayes, trừ khi bạn nhấn nút Áp dụng cho một quy tắc nào đó. AI sẽ không bao giờ thay đổi các lựa chọn của Bayes, dù chúng có bị khóa hay không.
+        rule: Hãy phân loại bằng bộ phân loại.
+        rule_hint: Quy tắc phân loại danh mục, có thể bật/tắt trong mục Quy tắc. Quy tắc này sẽ phân loại các giao dịch chưa được phân loại theo thứ tự các quy tắc của bạn sau mỗi lần đồng bộ hóa; những giao dịch mà nó không chắc chắn sẽ được chuyển sang quy tắc tự động phân loại.
+        threshold: Ngưỡng
+        threshold_hint: Điểm số tối thiểu cần thiết để Bayes phân loại một giao dịch (0.05–0.99). Các ngưỡng thấp hơn sẽ giúp phân loại nhiều giao dịch hơn nhưng cũng dễ gây ra nhiều sai sót hơn.
+      clear_locks:
+        success: Đang xóa các khóa bảo mật của Bayes. Việc này có thể mất vài phút.
+      evaluation:
+        apply_best: Áp dụng các thiết lập này
+        best: Kết quả tốt nhất
+        best_changes: 'Đã tìm thấy phương án tốt nhất, khác với phương án của bạn:'
+        best_no_changes: Không có phương án nào đạt điểm cao hơn so với cài đặt của bạn.
+        buttons_hint: 'Việc kiểm tra cài đặt của tôi sẽ đánh giá cài đặt của bạn. Tính năng Tìm phương án tốt nhất sẽ tìm kiếm trong %{tuning} tháng trước những phương án được hiển thị, vì vậy những gì nó tìm thấy sẽ được đánh giá dựa trên các tháng mà nó chưa xem xét. Nó đánh giá dựa trên ROC-AUC: mức độ mà các giao dịch thuộc từng nhóm được xếp hạng cao hơn so với các giao dịch khác ở mọi ngưỡng, chỉ giữ lại sự thay đổi khi tổng thể và ở tất cả các tháng ngoại trừ một tháng trong số %{tuning} cho thấy kết quả tốt hơn. Đầu tiên nó chọn các yếu tố đầu vào (mọi tổ hợp của mã đơn vị bán hàng, số tiền và tài khoản ngân hàng; sau đó đánh giá riêng từng đơn vị bán hàng và tài khoản ngân hàng; tiếp theo là tên đơn vị bán hàng và các ghi chú dưới dạng từ ngữ), sau đó thử từng thay đổi một đối với các cài đặt khác, và cuối cùng là phương pháp đánh giá. Các giá trị mặc định là của bộ phân loại ban đầu, kèm theo các nhóm mà bạn đã chọn; tùy chọn Đặt lại thành mặc định sẽ chuyển sang các giá trị này và kiểm tra chúng.'
+        categories_heading: Bộ phân loại theo nhóm
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'Những sai lầm phổ biến nhất: %{column} tại %{threshold}'
+        current: Cài đặt của tôi
+        defaults: Không thanh toán đúng hạn
+        description: Mỗi cột sẽ được đánh giá dựa trên các giao dịch mới trong %{months} tháng gần nhất, mỗi tháng sẽ được xử lý dựa trên dữ liệu lịch sử trước đó, sau đó được so sánh với các danh mục của bạn. Việc thử nghiệm sẽ không thay đổi danh mục của bất kỳ giao dịch nào, và các thiết lập phân loại chỉ thay đổi khi bạn áp dụng hoặcđặt lại chúng.
+        find_best: Tìm thiết lập tốt nhất
+        matcher_confusions: 'Những sai lầm phổ biến nhất của đơn vị bán hàng: %{column} tại %{similarity}'
+        matcher_description: 'Các đơn vị bán hàng mà bộ phân loại xác định trong cùng %{months} tháng: Các giao dịch %{count} với một đơn vị bán hàng, mỗi giao dịch sẽ được so sánh với dữ liệu lịch sử trước tháng của nó với tên đơn vị bán hàng bị ẩn; bên phải là đơn vị bán hàng mà nó thuộc về. Mọi ngưỡng và số lượng đơn vị bán hàng đều được đánh giá; giải pháp tốt nhất là giải pháp có giá trị tế bào tốt nhất về chi phí sai sót, và chính giải pháp đó sẽ được áp dụng. Việc thử nghiệm sẽ không xác định bất kỳ đơn vị bán hàng nào.'
+        merchants_heading: Bộ phân loại đơn vị bán hàng
+        no_confusions: Không có sai sót ở ngưỡng này.
+        no_matcher_confusions: Không có sai sót nào từ phía đơn vị bán hàng ở mức độ tương đồng này.
+        no_uncategorized: Không còn gì chưa được phân loại ở ngưỡng này.
+        no_unfilled: Không còn gì chưa liên kết với đơn vị bán hàng ở mức độ tương đồng này.
+        none: Chưa được kiểm tra.
+        ran_at: Đã được đánh giá %{time} trước đó trên các giao dịch %{count} (%{months}).
+        reset: Đặt lại thành các giá trị mặc định
+        reset_confirm: Đặt lại mọi thiết lập phân loại về giá trị mặc định và kiểm tra chúng?
+        right_wrong: Mỗi ô đều là đúng / sai.
+        run: Kiểm tra các thiết lập của tôi
+        running: Đang kiểm tra… phần này sẽ được cập nhật khi hoàn tất.
+        short_history: Chưa có đủ dữ liệu lịch sử để điều chỉnh bộ phân loại danh mục. Cần khoảng %{months} tháng giao dịch đã được phân loại, vì vậy tính năng Apply sẽ tạm thời để nguyên các thiết lập hiện tại.
+        similarity: Mức độ tương đồng
+        stale: Các thiết lập đã thay đổi kể từ lần kiểm tra này.
+        threshold: Ngưỡng
+        trying: Đang thử %{changes}…
+        uncategorized: 'Loại phổ biến nhất chưa được phân loại: %{column} tại %{threshold}'
+        unfilled: 'Loại phổ biến nhất chưa được điền thông tin: %{column} tại %{similarity}'
+        weight: Một sai sót sẽ gây ra chi phí.
+        weight_hint: 'Chọn những mục mà tùy chọn ‘Áp dụng’ đặt ra: những ô được in đậm, nơi mà số tiền cần khấu trừ cho mỗi sai sót là cao nhất. Đây chính là ngưỡng tối ưu được xác định cho các danh mục; ngưỡng cắt, mức độ tương đồng và số lượng đơn vị bán hàng dùng để vận hành bộ so khớp.'
+        weight_option:
+          one: Đáp án đúng là 1
+          other: Các đáp án đúng là %{count}
+      matcher:
+        lock_similar_merchants: Khóa lại các đơn vị bán hàng mà bộ so khớp đã chọn
+        lock_similar_merchants_hint: Ngăn chặn các quy tắc, AI và việc cập nhật chúng, trừ khi bạn nhấn ‘Áp dụng’ cho một quy tắc nào đó. Những khóa tự động không được coi là đã được xác nhận (Điều chỉnh bộ so khớp đơn vị bán hàng).
+        rule: Nhập lại các đơn vị bán hàng bị thiếu từ những mục gần giống nhau
+        rule_hint: Quy tắc ghép đơn vị bán hàng, có thể bật/tắt trong mục Quy tắc. Trong thứ tự các quy tắc của bạn, một giao dịch không ghi rõ đơn vị bán hàng sẽ được gán theo đơn vị bán hàng của những mục gần giống nó, chẳng hạn như "NETFLIX.COM 8812" và "Netflix com" đều có ghi rõ. Các giao dịch chuyển khoản giữa các tài khoản ngân hàng sẽ bị loại trừ.
+        similar_threshold: Mức độ tương đồng
+        similar_threshold_hint: Mức độ tương đồng thấp nhất giữa các mô tả, bỏ qua các con số và mã tham chiếu (0.5–0.99). Các giá trị ở mức thấp hơn sẽ được điền vào nhiều hơn, kèm theo nhiều sai sót hơn. Tùy chọn ‘Apply’ của tính năng Auto-tune cũng đang thiết lập giá trị này ở mức quá cao.
+      matcher_tuning:
+        similar_common_share: Thời hạn cuối
+        similar_common_share_hint: Một từ hoặc chuỗi 3 chữ cái xuất hiện trong hơn tỷ lệ giao dịch nguồn này (0,01–1) và trong ít nhất 50 giao dịch là quá phổ biến để phân biệt chúng, chẳng hạn «thẻ» hoặc «thanh toán», nên sẽ bị bỏ qua. Giá trị cao hơn tính đến nhiều từ hơn. Nút Áp dụng của tính năng tự điều chỉnh cũng đặt giá trị này.
+        similar_min_neighbours: Các đơn vị bán hàng đồng ý
+        similar_min_neighbours_hint: Cần bao nhiêu giao dịch gần giống nhau thuộc về cùng một đơn vị bán hàng, và không được có giao dịch nào thuộc về đơn vị bán hàng khác. 1 sao chép cả một giao dịch, điều này cũng được coi là sai lầm.
+        similar_min_neighbours_option:
+          one: Đơn vị bán hàng của 1
+          other: Các đơn vị bán hàng của %{count}
+        similar_skip_self: Đừng sao chép từ các đơn vị bán hàng của chính bộ phận so khớp cho đến khi được xác nhận hoặc đã qua bấy nhiêu ngày
+        similar_skip_self_hint: Việc xác nhận có nghĩa là bạn đã thay đổi hoặc khóa giao dịch đó. Những bản sao sai sẽ không được phát tán; một bản sao còn sót lại trong thời gian dài đó sẽ được coi là đã được chấp nhận.
+      merchant:
+        merchant_field: Khi được thiết lập, hãy đưa tên của đơn vị bán hàng thành một đơn vị duy nhất.
+        merchant_field_hint: Việc đếm được thực hiện dựa trên đặc điểm nhận diện, vì vậy ngay cả khi tên đơn vị bán hàng được đổi, lịch sử giao dịch vẫn được giữ nguyên.
+        merchant_name_words: Hãy hiển thị tên của đơn vị bán hàng dưới dạng các từ riêng lẻ.
+        merchant_name_words_hint: Cách hiển thị tương tự như mô tả gốc, do đó các tên tương tự sẽ được chia sẻ chứng cứ. Nội dung này sẽ trùng lặp với phần mô tả ở mục bên dưới.
+      run:
+        success: Bayes đang phân loại các giao dịch chưa được phân loại. Quá trình này có thể mất vài phút.
+      scoring:
+        complement: Hãy sử dụng phiên bản đơn giản hóa của Bayes.
+        complement_hint: Chấm điểm mỗi danh mục dựa trên mức độ giao dịch không phù hợp với các danh mục còn lại, giúp xử lý tốt hơn khi kích thước các danh mục rất khác nhau. Khi tắt, hệ thống sử dụng mô hình đa thức ban đầu.
+        prior: Bao gồm tần suất sử dụng mỗi danh mục.
+        prior_hint: Ưu tiên các danh mục bạn sử dụng thường xuyên nhất. Khi tắt, mọi danh mục được xử lý như nhau, giống mô hình ban đầu.
+        separate_fields: Đánh giá riêng đơn vị bán hàng và tài khoản ngân hàng, tách biệt khỏi các từ khóa.
+        separate_fields_hint: Mỗi yếu tố đều có phân bố riêng, vì vậy một mô tả dài không ảnh hưởng quá nhiều đến chúng. Cần phải bao gồm đơn vị bán hàng hoặc tài khoản ngân hàng; số tiền luôn được đánh giá riêng.
+        smoothing: Làm mịn dữ liệu.
+        smoothing_hint: Được thêm vào mọi phép đếm nhằm đảm bảo rằng một từ chưa từng xuất hiện sẽ không khiến một danh mục bị loại bỏ (0.001–10). 1 là phiên bản gốc; các quy tắc có mức độ tin cậy thấp hơn sẽ ưu tiên những gì đã từng xuất hiện nhiều hơn.
+      show:
+        add_rule_body: Trong các quy tắc của bạn không có quy tắc %{name} nào, vì vậy không có gì cần bật lên. Bạn có muốn thêm nó lên đầu danh sách các quy tắc không?
+        add_rule_confirm: Thêm quy tắc
+        add_rule_title: Có nên thêm quy tắc %{name} không?
+        account: Điều chỉnh tài khoản ngân hàng
+        amount: Điều chỉnh số tiền
+        auto_tune: Tự động điều chỉnh
+        category_training: Điều chỉnh bộ phân loại thể loại
+        clear_locks: Gỡ bỏ khóa Bayes
+        clear_locks_confirm_body: Gỡ khóa các thể loại Bayes và các đơn vị bán hàng bị khóa bởi bộ phân loại mà vẫn giữ nguyên trạng thái ban đầu, để các quy tắc và AI có thể thay đổi chúng một lần nữa. Các thể loại và đơn vị bán hàng vẫn được giữ nguyên.
+        clear_locks_confirm_button: Gỡ bỏ mọi khóa
+        clear_locks_confirm_title: Hỏi có gỡ bỏ khóa Bayes không?
+        description: Bộ phân loại thể loại Bayes học hỏi từ các giao dịch đã được phân loại của bạn và thực hiện việc phân loại các giao dịch mới trước bất kỳ nhà cung cấp nào có tên AI. Những thay đổi đối với các thiết lập này sẽ có hiệu lực từ lần xử lý phân loại tiếp theo; các giao dịch đã được phân loại trước đó sẽ vẫn giữ nguyên thể loại của chúng.
+        matcher: Bộ so khớp
+        matcher_description: Điền thông tin về các đơn vị bán hàng bị thiếu từ những giao dịch gần giống nhau, thông qua quy tắc so khớp đơn vị bán hàng (sau mỗi lần đồng bộ hóa) và trong quá trình chạy chương trình. Việc này sẽ thay đổi dữ liệu về các đơn vị bán hàng đã được lưu trữ.
+        matcher_tuning: Điều chỉnh bộ so khớp đơn vị bán hàng
+        merchant: Điều chỉnh thông tin về đơn vị bán hàng
+        run: Chạy chương trình
+        scoring: Đánh giá điểm tín dụng
+        title: Bộ phân loại
+        training: Huấn luyện
+        words: Tùy chỉnh giao dịch
+      training:
+        max_training_transactions: Các giao dịch dùng để huấn luyện
+        max_training_transactions_hint: 'Số lượng giao dịch mới nhất cần sử dụng (100–20,000): những giao dịch đã được phân loại mà bộ phân loại học hỏi từ đó, và những giao dịch có liên quan đến đơn vị bán hàng mà bộ so khớp sao chép từ đó.'
+      words:
+        bigrams: Bao gồm các cặp từ
+        bigrams_hint: Các từ nằm kế bên nhau cũng được tính chung, ví dụ như "thanh toán bằng thẻ".
+        binary: Loại bỏ các từ lặp lại
+        binary_hint: Mỗi từ chỉ được tính một lần mỗi giao dịch.
+        drop_codes: Loại bỏ các mã tham chiếu
+        drop_codes_hint: Các từ kết hợp chữ cái với 2 hoặc nhiều chữ số hơn, ví dụ như 2k4l19.
+        drop_numbers: Bỏ qua các con số
+        drop_numbers_hint: Lưu các con số, ngày tháng và số tiền trong phần mô tả.
+        include_notes: Bao gồm các ghi chú
+        include_notes_hint: Đọc cả các ghi chú lẫn tên.
+        keep_single_chars: Bao gồm các từ gồm một ký tự
+        keep_single_chars_hint: Các chữ cái và chữ số còn lại sau khi tách, như chữ "s" trong mcdonald's.
+        spread_filter: Loại bỏ những từ mà mọi danh mục đều sử dụng chung
+        spread_filter_hint: Không có thông tin nào được đề cập đến danh mục này. Con số biểu thị mức độ vượt trội so với tỷ lệ sử dụng chung của các danh mục khác mà danh mục này cần đạt được.
+        word_split: Các từ được tạo thành từ
+        word_split_ascii: a–z và 0–9
+        word_split_hint: Mọi ký tự khác đều tách các từ. Chữ cái của bất kỳ hệ chữ nào giữ nguyên các từ như Geschäft hoặc Кофейня; các chữ cái nối với nhau bằng một ký hiệu ở giữa cũng tạo thành một từ, như mcdonald's, s/o và m&s (ký hiệu ở một trong hai đầu, như trong *netflix, vẫn bị loại bỏ).
+        word_split_symbols: Chữ cái, chữ số, ký tự nằm bên trong
+        word_split_unicode: Chữ cái và chữ số, bất kỳ bảng chữ cái nào
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Tìm hiểu sâu về phân tích
+          subtitle: Thông báo tin nhắn trò chuyện đầu tiên khi bạn xem chi tiết nội dung phân tích bằng mã AI
+          label: Thông báo khi bắt đầu xem chi tiết
+    preferences:
+      show:
+        default_account_order_hint: Với chế độ Thủ công, hãy kéo thả các tài khoản trong thanh bên để thiết lập thứ tự của chúng.
+        investment_contributions_as_spending: Đánh giá việc đầu tư là một khoản chi tiêu
+        investment_contributions_as_spending_hint: Số tiền được chuyển vào các tài khoản đầu tư sẽ được tính vào mục chi tiêu trong bảng ngân sách, báo cáo và biểu đồ dòng tiền. Hãy tắt tính năng này nếu bạn muốn xem số tiền đó như đã được đầu tư.
+    securities:
+      show:
+        disable_mfa_password_label: Xác nhận bằng mật khẩu của bạn
+        disable_mfa_password_placeholder: Nhập mật khẩu của bạn
+        mfa_sso_only: Tính năng xác thực hai yếu tố được quản lý thông qua nhà cung cấp dịch vụ xác thực danh tính.
+    settings_nav:
+      classifier_label: Bộ phân loại
+    hostings:
+      show:
+        instance_settings_restricted: Thông tin tài khoản của nhà cung cấp, kết nối AI được chia sẻ cùng các thiết lập đồng bộ hóa sẽ được áp dụng cho tất cả các thành viên trong gia đình trên phiên bản này, vì vậy chỉ có quản trị viên cấp cao mới có thể thay đổi chúng. Việc chọn trợ lý nào mà mỗi gia đình sử dụng vẫn được thiết lập riêng cho từng gia đình. Bất kỳ ai có quyền truy cập vào máy chủ đều có thể thăng cấp một người dùng lên thành quản trị viên cấp cao; hướng dẫn tự triển khai Docker sẽ liệt kê lệnh tương ứng trong phần ghi chú nâng cấp.
+      assistant_settings:
+        type_mcp_only: Không có tính năng nào trong ứng dụng (hãy kết nối đại lý riêng của bạn thông qua MCP)
+        mcp_only_help: Trợ lý trong ứng dụng đã bị tắt cho mọi người trong hộ gia đình này. Các thao tác nhanh dùng AI cho hóa đơn và văn bản phân tích do AI tạo cũng ngừng hoạt động. MCP và phân loại chạy nền vẫn khả dụng; hãy kết nối tác tử bên ngoài tại Cài đặt > MCP.
+      openai_settings:
+        ai_health_probe_timeout_label: Thời gian chờ kiểm tra tình trạng hoạt động tính bằng giây (tùy chọn)
+        ai_health_probe_timeout_help: 'Mặc định: 5. Chỉ áp dụng cho các cuộc kiểm tra thời gian thực AI trong mục Mục Cài đặt > → Tình trạng hệ thống, và không bao giờ áp dụng cho các cuộc gọi thực tế AI. Hãy tăng giá trị này nếu các cuộc kiểm tra PDF báo cáo tình trạng chờ đợi khi sử dụng mô hình trên nền tảng đám mây. AI_HEALTH_PROBE_TIMEOUT sẽ ghi đè giá trị này.'
+      chimnie_settings:
+        title: Chimnie
+        description: Hãy nhập khóa Chimnie API của bạn để biết giá trị của các bất động sản dành cho cư dân Vương quốc Anh dựa trên chỉ số UPRN. Bạn có thể tạo một khóa miễn phí tại dashboard.chimnie.com (việc đăng ký yêu cầu có địa chỉ email của doanh nghiệp hoặc địa chỉ tên miền tùy chỉnh; các địa chỉ loại Gmail, Outlook và các loại tương tự sẽ không được chấp nhận). Các báo giá từ UPRN là miễn phí và được cập nhật hàng tháng; Sure giới hạn số lượng yêu cầu tối đa ở mức 1,000 mỗi tháng, và bạn có thể thay đổi giới hạn này thông qua biến môi trường CHIMNIE_MAX_REQUESTS_PER_MONTH.
+        env_configured_message: Đã được cấu hình thành công thông qua biến môi trường CHIMNIE_API_KEY.
+        label: Mật khẩu API
+        placeholder: Hãy nhập mật khẩu Chimnie và API của bạn tại đây
+      sync_settings:
+        market_data_sync_label: Kích hoạt việc nhập dữ liệu thị trường hàng ngày
+        market_data_sync_description: Khi được kích hoạt, giá của các chứng khoán tài chính sẽ được tự động nhập mỗi ngày, từ thứ Hai đến thứ Sáu, vào thời điểm đã chỉ định.
+        market_data_sync_time_label: Thời gian nhập dữ liệu thị trường (HH:MM)
+        market_data_sync_time_description: Chọn thời điểm trong ngày để nhập giá của các chứng khoán tài chính, ví dụ như ngay sau khi sàn giao dịch chính của bạn đóng cửa.
+  shared:
+    money_field:
+      above_max: Hãy nhập một số tiền không vượt quá %{max}.
+      below_min: Hãy nhập một số tiền tối thiểu là %{min}.
+      invalid_amount: Hãy nhập một số tiền hoặc biểu thức hợp lệ.
+      operator_add: Cộng
+      operator_subtract: Trừ
+      operator_multiply: Nhân
+      operator_divide: Chia nhỏ
+    require_non_guest: Khách không thể thực hiện thao tác này
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: Không có công cụ xử lý nào đang xử lý các hàng đợi AI (trò chuyện, phát hiện đơn vị bán hàng, phân loại). Vui lòng kiểm tra xem công cụ đó có tải tệp config/sidekiq.yml hay chưa.
+  loans:
+    form:
+      day_count_convention: Cơ sở tính lãi
+      day_count_convention_actual_365: Thực tế/365
+      day_count_convention_actual_actual: Thực tế/thực tế
+      day_count_convention_hint: Điều này xác định cách nhà cung cấp vay đo lường mỗi kỳ tính lãi so với một năm. Phương thức Actual/365 sử dụng số ngày thực tế trong mỗi tháng và là tiêu chuẩn cho các khoản vay thế chấp tại Vương quốc Anh và Úc. Phương thức 30/360 sử dụng giá trị cố định là một phần mười hai năm cho mỗi tháng, giống như cách mà Sure vẫn luôn áp dụng.
+      day_count_convention_thirty_360: 30/360 (phương thức tính dựa trên một phần mười hai năm cố định)
+  breadcrumbs:
+    classifier: Bộ phân loại
+  oauth:
+    registration:
+      invalid_client_name: client_name không được chứa các ký tự điều khiển hai chiều
+      reserved_client_name: client_name được dành riêng cho các ứng dụng thuộc bên thứ nhất
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Hiện chưa có tỷ giá hối đoái nào cho một trong các tài khoản liên quan đến mục tiêu này, vì vậy không thể hoàn tất thao tác.
+        rule:
+          split_not_alone: Một quy tắc phân chia không được chứa các thao tác khác
+        rule/action:
+          attributes:
+            value:
+              invalid_config: phải là một cấu hình phân chia hợp lệ
+              invalid_split_count: phải có từ %{min} đến %{max} các phần được phân chia
+              split_name_required: 'phần được phân chia #%{index} thiếu tên'
+              split_name_too_long: 'tên của phần được phân chia #%{index} quá dài (tối đa là 255 ký tự)'
+              split_name_invalid: 'tên của phần được phân chia #%{index} chứa các ký tự không hợp lệ'
+              split_type_invalid: 'Cách phân bổ #%{index} phải là một con số cố định hoặc tỷ lệ phần trăm'
+              split_share_invalid: 'Phần trăm trong cách phân bổ #%{index} phải là một con số dương'
+              split_category_invalid: 'Thể loại trong cách phân bổ #%{index} không thuộc nhóm này'
+              split_merchant_invalid: 'Đơn vị bán hàng trong cách phân bổ #%{index} không thuộc nhóm này'
+              split_tags_invalid: 'Cách phân bổ #%{index} có thẻ gắn thêm nhãn không thuộc nhóm này'
+              percentages_must_total_100: Các tỷ lệ phần trăm phải cộng lại bằng 100 (giá trị hiện tại là %{total})
+              fixed_requires_exact_amount_condition: 'Việc chia số tiền theo mức cố định đòi hỏi phải có điều kiện quy tắc phù hợp với số tiền giao dịch chính xác (ví dụ: Amount = 42.00); nếu không, các phần tiền được chia sẽ không thể cộng lại chính xác bằng tổng tiền của mỗi giao dịch tương ứng'
+              fixed_shares_must_equal_condition_amount: Các phần tiền được chia phải cộng lại bằng %{amount}, đây chính là số tiền chính xác mà điều kiện của quy tắc này yêu cầu
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: không phải là biểu thức chính quy hợp lệ
+              regex_too_complex: quá phức tạp để có thể chạy một cách an toàn
+              regex_too_long: quá dài (giới hạn tối đa là %{count} ký tự)
+              regex_backreference: không thể sử dụng tham chiếu ngược (\1 đến \9)
+  rules:
+    form:
+      stop_processing_label: Ngừng xử lý các quy tắc tiếp theo
+      stop_processing_description: Các quy tắc ở phía dưới danh sách sẽ không thay đổi các giao dịch phù hợp với quy tắc này.
+    condition_filters:
+      operators:
+        starts_with: Bắt đầu bằng
+        ends_with: Kết thúc bằng
+        matches_regex: Phù hợp với biểu thức chính quy
+    notification_baseline_timed_out: Quy tắc này vẫn đang bị vô hiệu hóa. Việc kiểm tra xem những giao dịch hiện có nào đã phù hợp mất quá nhiều thời gian. Việc bật quy tắc mà không thực hiện kiểm tra đó sẽ gửi email về mỗi giao dịch phù hợp. Hãy đơn giản hóa các điều kiện trước khi bật quy tắc trở lại.
+    classifier_rules:
+      category_classifier: Bộ phân loại danh mục
+      merchant_matcher: Bộ so khớp đơn vị bán hàng
+    rule:
+      stop_processing: Dừng
+      stop_processing_hint: Các quy tắc ở phía dưới sẽ không thay đổi các giao dịch đã được xác định bởi quy tắc này.
+    index:
+      order_hint: Các quy tắc được thực thi từ trên xuống dưới. Một khi một quy tắc đã thiết lập giá trị cho một trường trong giao dịch, các quy tắc ở phía dưới sẽ không thay đổi giá trị đó nữa. Các nhãn sẽ được thêm vào bởi mỗi quy tắc tương ứng. Hãy kéo các quy tắc để thay đổi thứ tự.
+      reorder_rule: Di chuyển quy tắc %{name}. Nhấn Enter hoặc Space để chọn nó, sau đó sử dụng phím mũi tên để di chuyển nó.
+    confirm:
+      rules_above_notice:
+        one: Quy tắc đang hoạt động ở vị trí phía trên sẽ được thực thi trước, vì vậy kết quả sẽ giống như khi thực thi toàn bộ quy tắc.
+        other: Các quy tắc đang hoạt động %{count} ở vị trí phía trên sẽ được thực thi trước, nên kết quả cũng giống như khi thực thi toàn bộ quy tắc.
+    actions:
+      split:
+        type_fixed: Số tiền cố định
+        type_percentage: Tỷ lệ phần trăm
+        type_label: Loại phân bổ
+        share_label: Số tiền hoặc tỷ lệ phần trăm để phân bổ
+        category_label: Chia theo danh mục
+        merchant_label: Chia theo đơn vị bán hàng
+        tags_label: Chia theo thẻ tag
+        remove_split: Loại bỏ cách chia
+        hint: 'Các phần chia có giá trị cố định sẽ được trừ đi trước theo đúng số tiền tương ứng. Sau đó, các phần chia theo tỷ lệ phần trăm sẽ chia số tiền còn lại. Nếu tất cả các phần chia ở đây đều sử dụng giá trị cố định, hãy thêm một điều kiện để phù hợp với số tiền giao dịch chính xác (ví dụ: Số tiền = 42.00), bởi vì mỗi giao dịch tương ứng đều cần có tổng số tiền như nhau để các giá trị cố định cộng lại được. Một quy tắc chia không được chứa các thao tác khác.'
+        fixed_summary_label: cố định
+        summary:
+          one: "%{count}: chia nhỏ"
+          other: "%{count}: các phần được chia nhỏ"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Kết nối Binance đó không khả dụng. Vui lòng chọn một kết nối khác trong Phần thiết lập nhà cung cấp.
+      no_credentials_configured: Hãy kết nối Binance trong Phần thiết lập nhà cung cấp trước khi thêm các tài khoản của nó.
+      select_connection: Vui lòng chọn một kết nối Binance trong Phần thiết lập nhà cung cấp.
+  reports:
+    index:
+      sections_aria: Các mục báo cáo
+    spending_vs_normal:
+      title: Chi tiêu so với mức bình thường
+      summary_html: Số tiền %{total} đã chi trong khoảng thời gian này. Mức bình thường cho khoảng thời gian dài như vậy là %{normal}, dựa trên dữ liệu từ %{baseline_start} đến %{baseline_end}.
+      summary_so_far_html: Tổng số tiền %{total} đã chi cho đến nay. Mức bình thường trong số ngày như vậy là %{normal}, dựa trên dữ liệu từ %{baseline_start} đến %{baseline_end}.
+      no_history_html: Số tiền %{total} đã chi trong khoảng thời gian này. Hiện vẫn chưa có đủ dữ liệu lịch sử trước đó để xác định mức bình thường.
+      no_history_short: Chưa có đủ dữ liệu lịch sử trước đó để so sánh.
+      no_spending: Không có chi tiêu nào trong khoảng thời gian này.
+      no_changes: Chi tiêu nằm trong mức bình thường ở mọi danh mục.
+      treemap_title: Chi phí được chi tiêu ở đâu
+      changes_title: Những gì đã thay đổi
+      direct: "%{category} (không có danh mục con)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Bình thường: %{amount}'
+        more: Chi tiêu cho %{amount} vượt mức bình thường (%{percent})
+        less: "%{amount} thấp hơn mức bình thường (%{percent})"
+        more_no_percent: "%{amount} cao hơn mức bình thường"
+        less_no_percent: "%{amount} thấp hơn mức bình thường"
+        no_normal: Không có dữ liệu lịch sử trước đây để so sánh
+        open: Chọn để xem các giao dịch này
+      legend:
+        less: 50–100% thấp
+        slightly_less: Thấp hơn 15–50%
+        normal: Khoảng bình thường
+        slightly_more: Cao hơn 15–50%
+        more: Cao hơn 50–100%
+        much_more: Cao hơn nữa 100%+
+  account_order:
+    manual:
+      label: Thủ công (cuốn để sắp xếp lại thứ tự)
+  onchain:
+    chains:
+      cosmos: Trung tâm Cosmos
+      polkadot: Polkadot
+  providers:
+    property_valuation:
+      missing_fields_gb: Vui lòng cung cấp tên, địa chỉ và mã bưu chính, cùng giá trị UPRN của bất động sản.
+      entry_name: Đánh giá giá trị %{provider}
+    chimnie:
+      errors:
+        invalid_uprn: Một giá trị UPRN gồm tối đa 12 chữ số. Vui lòng kiểm tra thông tin UPRN rồi thử lại.
+        no_estimate: Bất động sản này không có ước tính giá trị nào theo tiêu chuẩn Chimnie.
+        not_found: Chimnie không tìm thấy bất động sản nào có mã UPRN tương ứng.
+        unsupported_property: Chimnie chỉ áp dụng cho bất động sản dân cư; UPRN này thuộc về bất động sản thương mại hoặc đa mục đích.
+        unauthorized: Chimnie đã từ chối khóa API. Vui lòng kiểm tra khóa đó trong mục Cài đặt → Tự chủ.
+        insufficient_balance: Số dư tài khoản Chimnie của bạn quá thấp để thực hiện yêu cầu này.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: Toàn bộ số tiền của giao dịch này đã được dùng để thanh toán các khoản phí khác.
+      already_allocated: Giao dịch này đã được dùng để thanh toán hóa đơn hiện tại.
+    new:
+      covered_title: Giao dịch này đã thuộc về một hóa đơn khác rồi.
+      covered_body: "%{name} đã theo dõi khoản thanh toán này rồi, vì vậy nếu tạo hóa đơn mới thì sẽ tính nó hai lần."
+      covered_open: Mở hóa đơn
+      covered_suggested_title: Sure đã đề xuất một hóa đơn cho khoản thanh toán này rồi
+      covered_suggested_body: "%{name} đang chờ trong danh sách các đề xuất của bạn. Hãy xác nhận nó để bắt đầu theo dõi, nhằm tránh việc tạo hóa đơn mới lại tính khoản thanh toán này hai lần. Các khoản thanh toán tương ứng sẽ được liên kết tự động, và bạn có thể liên kết khoản thanh toán này từ hóa đơn đó."
+      covered_confirm: Xác nhận hóa đơn
+      covered_create_anyway: Tạo hóa đơn riêng biệt mặc dù vậy
+      covered_income_title: Khoản tiền gửi này đã nằm trong danh mục thu nhập rồi.
+      covered_income_body: "%{name} đã theo dõi khoản tiền gửi này, vì vậy việc thêm nó lần nữa sẽ khiến nó bị tính hai lần."
+      covered_income_open: Mở danh mục thu nhập
+      covered_income_suggested_title: Sure đã đề xuất danh mục thu nhập này rồi
+      covered_income_suggested_body: "%{name} đang chờ trong danh sách các đề xuất của bạn. Hãy thêm nó vào để bắt đầu theo dõi, nhằm tránh việc khoản tiền gửi này bị tính hai lần. Các khoản tiền gửi tương ứng sẽ được liên kết tự động, và bạn có thể liên kết khoản này từ danh mục thu nhập."
+      covered_income_confirm: Thêm vào danh mục thu nhập
+      covered_income_create_anyway: Dù vậy, hãy thêm một nguồn thu nhập riêng biệt.
+    create:
+      amount_too_precise: Hãy sử dụng tối đa 4 chữ số thập phân.
+      category_invalid: Hãy chọn một trong các danh mục của bạn, hoặc để trống.
+    already_covered: Giao dịch này đã trùng với một giao dịch lặp lại.
+    suggested_income:
+      title: Có thể là nguồn thu nhập mới.
+      confirm: Thêm nguồn thu nhập.
+      dismiss: Không phải thu nhập
+    confirmed_income: Thu nhập được cộng vào các giao dịch định kỳ của bạn
+  transfers:
+    show:
+      investment_contribution_subtitle: Hãy tính khoản chuyển khoản này vào mục chi tiêu trong các bảng ngân sách và báo cáo. Hãy tắt tính năng này khi tài khoản môi giới hoặc tài khoản tiền điện tử chỉ chuyển đổi tiền sang loại tiền tệ khác.
+      investment_contribution_title: Khoản đóng góp đầu tư
+  transactions:
+    form:
+      create_as_subcategory: Thêm làm một phân loại con…
+      choose_parent: 'Tạo "%{name}" dưới mục:'
+      back_to_categories: Đi lại
+    transaction_category:
+      set_on_outflow: Thể loại này thuộc về phía gửi tiền trong chuyển khoản giữa các tài khoản và chỉ có thể được thay đổi ở đó.
+    show:
+      category_set_on_hidden_outflow: Đây là phía nhận tiền trong chuyển khoản giữa các tài khoản. Thể loại của nó thuộc về phía gửi tiền, nằm trên một tài khoản mà bạn không thể truy cập, và chỉ có thể được thay đổi ở đó.
+      category_set_on_outflow: Đây là phía nhận tiền trong chuyển khoản giữa các tài khoản. Thể loại của nó thuộc về phía gửi tiền và chỉ có thể được thay đổi ở đó, vì vậy các ngân sách sẽ tính nó một lần.
+    search:
+      filters:
+        attachment: Tệp đính kèm
+    searches:
+      filters:
+        badge:
+          attachment_with: Kèm theo tệp đính kèm
+          attachment_without: Không kèm tệp đính kèm
+        attachment_filter:
+          with: Kèm tệp đính kèm
+          without: Không kèm tệp đính kèm
+  accounts:
+    sidebar:
+      reorder_account: Di chuyển %{account}
+      reorder_hint: Kéo để sắp xếp lại. Sử dụng bàn phím, nhấn Enter, sau đó nhấn phím mũi tên.
+      sort_mode:
+        start: Sắp xếp các tài khoản ngân hàng
+        hint: Hãy kéo thả các tài khoản ngân hàng bằng cách sử dụng tên của chúng để sắp xếp lại thứ tự.
+  admin:
+    system_health:
+      optional_services:
+        title: Các dịch vụ tùy chọn
+        description: Các tích hợp với nhà cung cấp dịch vụ tùy chọn. Các dịch vụ chưa được cấu hình chỉ mang tính chất thông tin. Những kiểm tra này chỉ xem xét các thiết lập; chúng không kiểm tra khả năng kết nối, gửi các sự kiện thử nghiệm, hay thay đổi sự đồng ý về phân tích dữ liệu. Hãy mở rộng một dịch vụ để xem chi tiết cấu hình.
+        missing_settings: 'Thiếu thiết lập: %{settings}'
+        statuses:
+          incomplete: Cấu hình chưa hoàn chỉnh
+          disabled: Đã bị vô hiệu hóa trong quy trình này
+        notes:
+          environment_disabled: Việc tích hợp đã tải lên đang bị vô hiệu hóa đối với môi trường Rails này.
+          explicitly_disabled: SKYLIGHT_ENABLED đã vô hiệu hóa các công cụ giám sát một cách rõ ràng.
+          self_hosted_checkout_disabled: Chức năng thanh toán gói dịch vụ và cổng quản lý hóa đơn đều bị vô hiệu hóa trong chế độ tự chủ. Các webhook của Stripe vẫn có thể được cấu hình; ở đây không yêu cầu mã ID giá thanh toán.
+          browser_analytics_disabled: Các tính năng phân tích trình duyệt đang bị vô hiệu hóa đối với môi trường này. Điều này không ảnh hưởng đến phần mềm khách hàng trên máy chủ được cấu hình riêng biệt.
+          shared_feedback_configured: Chức năng phản hồi tự chủ có một dự án riêng được tích hợp sẵn và được kích hoạt thông qua cài đặt của nó. Chức năng này không yêu cầu bất kỳ nhân viên POSTHOG_KEY nào. Các tùy chọn từ chối trên trình duyệt và mức độ sẵn có của SDK sẽ không được kiểm tra.
+          shared_feedback_disabled: Dự án phản hồi tự chủ riêng biệt đang bị vô hiệu hóa do cài đặt phản hồi hoặc môi trường tương ứng. Điều này không ảnh hưởng đến các tính năng phân tích do nhà cung cấp quản lý.
+          production_only: Sự tích hợp này chỉ được sử dụng trong môi trường sản xuất với cấu hình hiện tại của ứng dụng.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Báo cáo theo dõi và đánh giá AI mang tính tùy chọn. Kiểm tra này sẽ không gửi bất kỳ dữ liệu theo dõi hay yêu cầu đánh giá nào.
+            guidance: Hãy thiết lập cùng lúc LANGFUSE_PUBLIC_KEY và LANGFUSE_SECRET_KEY. LANGFUSE_HOST là tùy chọn. Hãy khởi động lại các dịch vụ bị ảnh hưởng sau khi thay đổi các thiết lập này.
+          sentry:
+            title: Sentry
+            description: Báo cáo về lỗi và hiệu suất mang tính tùy chọn. Bộ khởi tạo hiện tại chỉ cho phép tạo báo cáo trong môi trường sản xuất.
+            guidance: Hãy thiết lập SENTRY_DSN và khởi động lại các dịch vụ bị ảnh hưởng. Thao tác này sẽ kiểm tra cấu hình SDK đã được tải mà không ghi nhận lỗi hay gửi bất kỳ sự kiện nào.
+          skylight:
+            title: Skylight
+            description: Công cụ đo lường hiệu suất ứng dụng mang tính tùy chọn. Việc có mặt các thiết lập không đảm bảo rằng tiện ích liên quan đang chạy hoặc đang tạo báo cáo.
+            guidance: Hãy thiết lập SKYLIGHT_AUTHENTICATION và đảm bảo rằng Skylight được tải vào môi trường Rails mong muốn. Việc đặt giá trị SKYLIGHT_ENABLED thành false sẽ vô hiệu hóa các chức năng giám sát; riêng biến cờ này thôi thì không thể tải thêm thư viện cần thiết được. Hãy khởi động lại ứng dụng sau khi thực hiện các thay đổi.
+          stripe:
+            title: Stripe
+            description: Các webhook cho việc thanh toán và tính phí gói đăng ký theo yêu cầu. Việc kiểm tra này sẽ không tạo ra client Stripe, xác thực thông tin tài khoản, hay gửi yêu cầu thanh toán nào cả.
+            guidance: Hãy thiết lập cùng lúc cả STRIPE_SECRET_KEY và STRIPE_WEBHOOK_SECRET. Quy trình thanh toán cho gói đăng ký được quản lý cũng cần có sự hiện diện của STRIPE_MONTHLY_PRICE_ID và STRIPE_ANNUAL_PRICE_ID.
+          posthog:
+            title: PostHog
+            description: Các chức năng phân tích do bên vận hành cung cấp, mang tính tùy chọn, và sử dụng cấu hình được tải vào lúc khởi động ứng dụng. Việc cấu hình xong không có nghĩa là người dùng đã đồng ý cho việc thu thập dữ liệu phân tích.
+            guidance: Hãy thiết lập POSTHOG_KEY cùng với một giá trị không trống cho POSTHOG_HOST, hoặc để giá trị của host không được thiết lập để sử dụng giá trị mặc định. Các chức năng phân tích trong trình duyệt yêu cầu môi trường production hoặc POSTHOG_DEVELOPMENT_ENABLED trong môi trường phát triển. POSTHOG_FEEDBACK_ENABLED điều khiển chức năng phản hồi tự vận hành riêng biệt, chứ không phải các chức năng phân tích do bên vận hành cung cấp.
+          logtail:
+            title: Logtail
+            description: Chức năng chuyển tiếp nhật ký hoạt động sang môi trường production, mang tính tùy chọn. Khi chức năng này chưa được cấu hình, ứng dụng vẫn tiếp tục ghi nhật ký vào đầu ra tiêu chuẩn.
+            guidance: Hãy thiết lập cùng lúc LOGTAIL_API_KEY và LOGTAIL_INGESTING_HOST, sau đó khởi động lại các dịch vụ bị ảnh hưởng. Kiểm tra này sẽ không tạo ra bất kỳ bản ghi nhật ký nào.
+      configuration:
+        description: Cấu hình hiển thị cho tiến trình web này. Các kiểm tra này không gửi email, liên hệ với các nhà cung cấp, hay tải lên hoặc tải xuống tệp tin. Việc cấu hình được thực hiện có nghĩa là các thiết lập tồn tại, chứ không có nghĩa là việc truyền dữ liệu, quyền truy cập vào nhà cung cấp, hoặc quyền truy cập lưu trữ đã được xác minh.
+        statuses:
+          incomplete: Cấu hình chưa đầy đủ
+        settings_needed: Các thiết lập cần được xem xét
+        unknown_provider: Lựa chọn nhà cung cấp không được nhận diện
+        provider_statuses:
+          not_configured: Không tìm thấy khóa API
+          invalid: Lựa chọn không hợp lệ
+        configure_providers: Mở cài đặt tự chủ
+        storage_backend: 'Nơi lưu trữ được chọn: %{backend}'
+        storage_backends:
+          local: Đĩa cục bộ
+          test: Đĩa thử nghiệm
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: Bộ lưu trữ tương thích S3
+          google: Lưu trữ Google Cloud
+          other: Phần mềm nền tảng tùy chỉnh hoặc chưa được nhận diện
+        checks:
+          smtp:
+            title: Email (SMTP)
+            statuses:
+              configured: Các thiết lập SMTP đã được cài đặt.
+              not_configured: SMTP chưa được cấu hình. Việc gửi mật khẩu mới, thư mời, và các email hệ thống khác sẽ không thể được thực hiện thông qua SMTP.
+              incomplete: Một số thiết lập email bị thiếu hoặc chưa hoàn chỉnh. Các email hệ thống hoặc các liên kết trong đó có thể sẽ không hoạt động.
+              disabled: Chức năng gửi email đã bị vô hiệu hóa trong cấu hình bộ phát thư hiện tại.
+              not_checked: Quy trình này sử dụng phương thức gửi khác thay vì SMTP, chẳng hạn như chế độ xem thử phát triển. Việc gửi thông qua SMTP sẽ không được kiểm tra.
+            guidance: Không thể cấu hình SMTP trong giao diện quản trị. Hãy thiết lập các biến môi trường email cho cả dịch vụ web và dịch vụ worker, sau đó khởi động lại cả hai. Cả SMTP_USERNAME lẫn SMTP_PASSWORD đều có thể bị bỏ qua trong trường hợp sử dụng chức năng truyền tin không yêu cầu xác thực.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (là một con số nằm trong khoảng từ 1 đến 65535)
+              sender: EMAIL_SENDER (thay thế cho giá trị mặc định sender@sure.local)
+              app_domain: APP_DOMAIN (được sử dụng trong các liên kết email)
+              authentication: SMTP_USERNAME và SMTP_PASSWORD (có thể sử dụng cả hai hoặc không sử dụng gì cả)
+          securities:
+            title: Giá thị trường
+            statuses:
+              configured: Tất cả các nhà cung cấp giá thị trường đã được kích hoạt đều có cấu hình tương ứng.
+              not_configured: Các nhà cung cấp giá thị trường đã được kích hoạt thiếu các khóa API. Do đó, việc tìm kiếm tự động các chứng khoán tài chính và tra cứu giá cả thông qua các nhà cung cấp này sẽ không thể thực hiện được.
+              incomplete: Có ít nhất một nhà cung cấp giá thị trường đã được kích hoạt bị thiếu cấu hình hoặc có lựa chọn không hợp lệ. Các chứng khoán được gán cho nhà cung cấp đó có thể sẽ không nhận được các cập nhật giá.
+              disabled: Không có nhà cung cấp giá thị trường nào được kích hoạt. Các chức năng tìm kiếm tự động các chứng khoán tài chính và tra cứu giá sẽ không khả dụng.
+            guidance: Hãy chọn các nhà cung cấp và thêm các khóa API cần thiết vào phần cấu hình tự chủ, hoặc cấu hình chúng trong môi trường triển khai. Các thiết lập trong môi trường sẽ có ưu tiên cao hơn. Các nhà cung cấp công cộng không cần phải có khóa API.
+          exchange_rates:
+            title: Tỷ giá hối đoái
+            statuses:
+              configured: Nhà cung cấp tỷ giá hối đoái đã được chọn có cấu hình phù hợp.
+              not_configured: Không có nhà cung cấp tỷ giá hối đoái nào khả dụng được cấu hình. Chức năng chuyển đổi tiền tệ tự động có thể sẽ không khả dụng nếu thiếu tỷ giá đã lưu trữ.
+            guidance: Hãy chọn một nhà cung cấp tỷ giá hối đoái và thêm khóa API của họ nếu cần trong cài đặt tự chủ, hoặc cấu hình nó trong môi trường triển khai. Các thiết lập thay thế từ khóa EXCHANGE_RATE_PROVIDER và nhà cung cấp API sẽ có ưu tiên cao hơn.
+            issues:
+              invalid_provider: Nhà cung cấp tỷ giá hối đoái được chọn không được nhận diện. Việc tìm kiếm tỷ giá tự động sẽ thất bại cho đến khi chọn được một nhà cung cấp được hỗ trợ.
+          storage:
+            title: Tải lên tệp và lưu trữ
+            statuses:
+              configured: Các thiết lập lưu trữ đã được cấu hình; ổ đĩa cục bộ không cần thông tin xác thực dịch vụ đám mây.
+              not_configured: Phần mềm lưu trữ phía sau được chọn không có cấu hình tương ứng. Việc tải lên tệp có thể sẽ không khả dụng.
+              incomplete: Các thiết lập lưu trữ cần thiết bị thiếu hoặc chưa đầy đủ. Việc tải lên hoặc lấy lại tệp có thể sẽ không hoạt động.
+              not_checked: Phần mềm nền tảng này sử dụng công cụ khám phá thông tin xác thực bên ngoài hoặc cấu hình tùy chỉnh. Không thể xác định được quyền truy cập của nó chỉ dựa vào các thiết lập này.
+            guidance: Hãy xem xét ACTIVE_STORAGE_SERVICE cùng các thiết lập triển khai của phần mềm nền tảng đã chọn. Ổ đĩa cục bộ cần có không gian lưu trữ bền vững được chia sẻ giữa các dịch vụ web và dịch vụ công việc. Việc thay đổi phần mềm nền tảng sẽ không di chuyển các tập tin hiện có; hãy lên kế hoạch di chuyển riêng biệt.
+            issues:
+              root: Gốc lưu trữ cục bộ
+              bucket: Thùng chứa dữ liệu
+              region: Khu vực lưu trữ
+              credentials: Khóa truy cập lưu trữ và khóa bí mật lưu trữ (hãy cung cấp cả hai hoặc sử dụng công cụ khám phá thông tin xác thực bên ngoài)
+              endpoint: Đầu cuối lưu trữ (và CLOUDFLARE_ACCOUNT_ID dành cho R2)
+      show:
+        tabs:
+          configuration: Cấu hình
+    users:
+      update:
+        password_disabled: Tính năng thiết lập mật khẩu đã bị vô hiệu hóa vì người dùng chỉ có thể đăng nhập bằng SSO.
+  bills:
+    detail:
+      overview: Tổng quan
+      rule_detected: Phù hợp với các giao dịch có tên %{name}
+    match:
+      same_transfer: Chuyển khoản giữa các tài khoản ngân hàng cùng một tài khoản
+    paycheck:
+      bridge_left: "%{amount} là số dư còn lại sau khi thanh toán các hóa đơn"
+      bridge_show_more:
+        one: Hiển thị thêm 1
+        other: Hiển thị thêm %{count}
+      bridge_allocation_aria: Trong số các %{cash} trên các tài khoản ngân hàng của bạn, %{due} cần được thanh toán trước kỳ lương tiếp theo, còn %{left} thì vẫn còn số dư.
+      item_overdue: Quá hạn thanh toán
+  budgets:
+    available_cash:
+      currency_warning: Các số dư của %{currencies} không được tính vào vì hiện tại chưa có tỷ giá chuyển đổi sang %{currency}.
+  categories:
+    locked: Các thể loại đã bị khóa. Hãy mở khóa chúng để thêm thể loại mới.
+    toggle_lock:
+      locked: Các thể loại đang bị khóa
+      unlocked: Các thể loại đã được mở khóa
+    index:
+      lock_categories: Khóa chức năng tạo thể loại
+      locked_message: Chức năng tạo thể loại đang bị khóa. Tuy nhiên, việc nhập dữ liệu và đồng bộ hóa với tài khoản ngân hàng vẫn có thể thêm thể loại.
+      unlock_categories: Mở khóa chức năng tạo thể loại
+  category:
+    dropdowns:
+      show:
+        assign_error: Đã tạo danh mục nhưng không thể gán nó. Hãy chọn Tạo lại để thử lần nữa.
+        back: Đi lại
+        choose_parent: 'Tạo "%{name}" dưới mục:'
+        create_as_subcategory: Thêm làm danh mục con…
+        create_error: Không thể tạo danh mục đó. Vui lòng thử lại.
+  chats:
+    ai_busy: Đang hoàn tất một nhiệm vụ nền, ngay sau đó tôi sẽ xử lý tin nhắn của bạn.
+    reservation:
+      ready_html: Tôi đã tạm hoãn một vài công việc nền để có thể tập trung xử lý tin nhắn của bạn ngay. Chúng sẽ lẻn vào lại %{countdown} s, vì vậy hãy tiếp tục gõ nhé!
+      busy: Đang hoàn tất một công việc nền, sau đó tôi sẽ dành toàn bộ thời gian cho bạn. Hãy tiếp tục gõ nhé!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: Kết nối Coinbase đó không khả dụng. Vui lòng chọn một kết nối khác trong Phần thiết lập nhà cung cấp.
+      no_credentials_configured: Hãy kết nối Coinbase trong Phần thiết lập nhà cung cấp trước khi thêm các ví của nó.
+      select_connection: Vui lòng chọn một kết nối Coinbase trong Phần thiết lập nhà cung cấp.
+  credit_cards:
+    due:
+      in_days:
+        zero: Đến hạn thanh toán hôm nay
+        one: Hạn thanh toán là ngày mai
+        other: Hạn thanh toán trong %{count} ngày
+      overdue:
+        one: Hạn thanh toán là ngày hôm qua
+        other: Quá hạn %{count} ngày
+    form:
+      due_day: Ngày phải thanh toán
+      statement_close_day: Thời điểm đóng báo cáo kết thúc là
+      statement_cycle_description: Ngày kết thúc chu kỳ lập sao kê thẻ tín dụng và ngày phải thanh toán hóa đơn. Khi các giá trị này được thiết lập, tab Tổng quan sẽ hiển thị tổng số tiền trong sao kê gần nhất cũng như số tiền đang được tích lũy để tạo nên sao kê tiếp theo. Thẻ được liên kết sẽ tự động điền các giá trị này và duy trì những thiết lập mà bạn đã nhập thủ công.
+      sophtron_balance_sign_description: Chỉ nên sử dụng chế độ vượt qua thiết lập mặc định khi Sophtron báo cáo dấu hiệu không rõ ràng. Chế độ tự động sẽ tiếp tục tính toán để giảm số dư trên thẻ tín dụng.
+      sophtron_balance_sign_label: Ý nghĩa của số dư theo Sophtron
+    tabs:
+      overview:
+        above_minimum: Tổng số tiền trên sao kê thẻ tín dụng là %{balance}, cao hơn mức thanh toán tối thiểu %{minimum}. Nếu chỉ thanh toán mức tối thiểu, số dư còn lại trên thẻ sẽ chịu mức lãi suất hằng năm (APR) này.
+        closes_on: Sao kê tiếp theo sẽ kết thúc với số tiền %{date}
+        credit_toward_next: Số tiền được tích lũy để dùng cho sao kê tiếp theo
+        due_on: Đến hạn thanh toán %{date}
+        edit_card_details: Chỉnh sửa thông tin thẻ
+        since_last_statement: Kể từ bản sao kê trước
+        statement_balance: Số dư trong bản sao kê
+        multi_currency_unavailable: Bản sao kê này tổng hợp các giao dịch được ghi nhận bằng nhiều loại tiền tệ khác nhau, vì vậy không thể tính tổng ngay tại đây nếu thiếu tỷ giá cho từng loại tiền tệ. Các mục số dư sẽ được để trống thay vì ước lượng.
+        no_cycle_description: Hãy thiết lập ngày kết thúc bản sao kê và ngày đến hạn thanh toán; tab này sẽ hiển thị tổng số tiền trong bản sao kê gần nhất cũng như số tiền đang tích lũy để tạo thành bản sao kê tiếp theo. Thẻ được liên kết thường tự điền thông tin này thay cho bạn.
+        no_cycle_title: Chưa thiết lập chu kỳ sao kê
+        unknown: Không rõ
+    update:
+      sophtron_balance_sign_error: Không thể áp dụng nghĩa của ‘số dư’ theo mục Sophtron. Cài đặt trước đó của bạn vẫn được giữ nguyên. Vui lòng thử lại.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Việc làm mới dữ liệu mẫu đã hoàn tất
+      activity_heading: Các hoạt động diễn ra trong khoảng thời gian này
+      sessions_label: Các phiên đăng nhập duy nhất cho nhóm mẫu trước đó
+      families_label: Các tài khoản ngân hàng gia đình mới được tạo
+      period_heading: Khoảng thời gian báo cáo (UTC)
+      from_label: 'Từ:'
+      to_label: 'Đến:'
+      time_format: "%b %-d, %Y tại %H:%M:%S UTC"
+      family_heading: Nhóm mẫu trước đó
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Một số số dư không được tính vào tổng.
+      body:
+        one: Hiện vẫn chưa có tỷ giá chuyển đổi cho %{from}, → và %{to}, vì vậy các số dư tương ứng với %{from} cũng không được tính vào tổng này.
+        other: Hiện vẫn chưa có tỷ giá chuyển đổi từ %{from} sang %{to}, nên các số dư tương ứng cũng không được tính vào tổng này.
+      settings_link: Cài đặt nhà cung cấp tỷ giá hối đoái
+    consume:
+      goal_currency_hint: Hãy nhập số tiền bằng đơn vị %{currency}. Đối với các tài khoản sử dụng loại tiền tệ khác, số tiền đó sẽ được chuyển đổi theo tỷ giá hiện tại trước khi được rút khỏi tài khoản tương ứng.
+      errors:
+        missing_exchange_rate: Hiện chưa có tỷ giá chuyển đổi cho loại tiền tệ của tài khoản này, vì vậy chi tiêu này không thể được ghi nhận.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Chưa có tỷ giá chuyển đổi, nên tài khoản này không được tính vào tổng.
+    goal_card:
+      partial_total: Một số số dư không được tính vào tổng (chưa có tỷ giá chuyển đổi).
+    form:
+      earmark:
+        converted: Đây là các mục dành riêng ≈ {amount}.
+      fields:
+        currency_conversion_hint: Các tài khoản có thể sử dụng các loại tiền tệ khác nhau. Tổng số tiền sẽ được chuyển đổi sang %{currency}; các mục dành riêng cho từng tài khoản vẫn giữ nguyên bằng loại tiền tệ của tài khoản đó.
+  imports:
+    publish:
+      guest_new_categories_or_tags: Người dùng khách không thể tạo các danh mục hoặc thẻ gắn. Hãy gán chúng cho các danh mục hiện có hoặc để trống chúng.
+    create:
+      missing_upload: Chúng tôi chưa nhận được tập tin của bạn. Vui lòng thử tải lên lại.
+  insights:
+    card:
+      dig_in: Bắt đầu với AI
+    dig_in:
+      prompt: "Hãy giúp tôi phân tích thông tin này. \n\nThông tin chi tiết: %{title}\nKết quả phân tích Sure: %{body}\nThời kỳ: %{period}\nCác con số: \n%{facts}\n\nĐiều gì đang ẩn sau đó, và tôi có cần làm gì không?"
+  mfa:
+    local_password_required: Xác thực hai yếu tố yêu cầu mật khẩu địa phương. Mật khẩu của bạn được quản lý bởi nhà cung cấp dịch vụ xác thực danh tính.
+    create:
+      invalid_password: Mật khẩu không chính xác. Vui lòng thử lại.
+    disable:
+      invalid_password: Mật khẩu không chính xác. Vui lòng thử lại.
+    new:
+      password_label: Xác nhận bằng mật khẩu của bạn
+      password_placeholder: Nhập mật khẩu của bạn
+  pages:
+    dashboard:
+      customize:
+        start: Tùy chỉnh
+        hide: Ẩn %{title}
+        hidden_title: Các tiện ích ẩn
+        hidden_description: Thêm một tiện ích trở lại bảng điều khiển.
+        none_hidden: Tất cả các widget đều được hiển thị. Hãy ẩn một widget nào đó bằng nút mắt tương ứng.
+        all_hidden_title: Tất cả các widget đều bị ẩn
+        all_hidden_description: Tùy chỉnh bảng điều khiển để thêm các widget trở lại.
+      cashflow_preview:
+        node_labels:
+          invested: Đã đầu tư
+        group_by_label: Hiển thị các dòng tiền theo
+        sort_label: Sắp xếp các dòng tiền
+        sort_auto: Tự động
+        sort_ascending: Sắp xếp theo mức nhỏ nhất trước
+        sort_descending: Sắp xếp theo mức lớn nhất trước
+      spending_trend:
+        filter_categories: Lọc theo danh mục (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: Chúng tôi không thể xác nhận rằng kết nối này đã được thêm vào. Hãy tải trang lại để kiểm tra trước khi thử lại.
+    create:
+      already_connected: Bạn đã có sẵn kết nối dành cho tổ chức này, vì vậy kết nối này không được thêm vào.
+      exchange_failed: Chúng tôi không thể thêm kết nối này. Vui lòng thử lại, và nếu vấn đề vẫn tiếp diễn, hãy kiểm tra nhật ký máy chủ.
+      token_expired: Kết nối này đã hết hạn trước khi được thêm vào. Vui lòng kết nối với tổ chức tài chính đó một lần nữa.
+    duplicate_warning:
+      confirm: Xác nhận kết nối này.
+      connected_by: Đã kết nối thông qua %{name}.
+      eu_no_add_accounts: Plaid không hỗ trợ việc thêm tài khoản vào kết nối EU hiện có. Để thay đổi các tài khoản được kết nối, hãy xóa kết nối này rồi thêm lại.
+      linked_on: Đã liên kết với %{date}.
+      manage_connection: Đi đến mục tài khoản ngân hàng
+      mask: "****%{mask}"
+      no_accounts: Hiện vẫn chưa có tài khoản ngân hàng nào được đồng bộ hóa từ kết nối này.
+      overlap:
+        all_connected:
+          one: Tài khoản ngân hàng mà bạn cố gắng thêm đã được kết nối rồi, vì vậy việc thêm lại chỉ tạo ra các bản sao trùng lặp mà thôi.
+          other: Tất cả các tài khoản ngân hàng %{count} mà bạn cố gắng thêm đều đã được kết nối rồi, nên việc thêm chúng lại cũng chỉ tạo ra các bản sao trùng lặp mà thôi.
+        different_login: Để kết nối tài khoản ngân hàng %{institution} khác, hãy chọn tùy chọn Tài khoản mới một lần nữa, sau đó đăng nhập bằng tài khoản đó thông qua Plaid.
+        more_accounts: Để thêm thêm tài khoản ngân hàng vào kết nối này, hãy đóng kết nối hiện tại và chọn tùy chọn Thêm tài khoản trên kết nối %{institution}.
+        others_connected:
+          one: Sure đã có tài khoản ngân hàng này thông qua mối liên kết của %{name}, vì vậy việc thêm tài khoản của bạn chỉ tạo ra các bản sao trùng lặp mà thôi.
+          other: Sure đã có những tài khoản ngân hàng này thông qua mối liên kết của %{name}, nên việc thêm tài khoản của bạn cũng chỉ dẫn đến việc tạo ra các bản sao trùng lặp mà thôi.
+        others_connected_several:
+          one: Sure đã có tài khoản ngân hàng này thông qua mối liên kết của các thành viên khác, do đó việc thêm tài khoản của bạn cũng chỉ tạo ra các bản sao trùng lặp mà thôi.
+          other: Sure đã có những tài khoản ngân hàng này thông qua mối liên kết của các thành viên khác, vì vậy việc thêm tài khoản của bạn cũng chỉ dẫn đến việc tạo ra các bản sao trùng lặp mà thôi.
+        none_connected: Không có tài khoản nào trong số những tài khoản mà bạn cố gắng thêm đã được kết nối, nên rất có thể đây là lần đăng nhập khác nhau. Việc thêm chúng cũng chỉ được tính như một mối liên kết Plaid khác mà thôi.
+        some_connected:
+          connected:
+            one: Mối liên kết còn lại đã được kết nối rồi, vì vậy việc thêm mối liên kết này sẽ tạo ra bản sao trùng lặp và được tính như một mối liên kết Plaid khác nữa.
+            other: Các %{count} khác đã được kết nối rồi, vì vậy việc thêm kết nối này sẽ khiến chúng bị trùng lặp và được tính như một kết nối Plaid khác.
+          unconnected:
+            one: 'Một tài khoản mà bạn cố gắng thêm chưa được kết nối yet:'
+            other: 'Các tài khoản %{count} mà bạn cố gắng thêm chưa được kết nối yet:'
+        unknown:
+          one: Không thể kiểm tra các tài khoản này so với các kết nối hiện có của bạn. Nếu chúng là cùng một tài khoản, việc thêm kết nối này sẽ khiến chúng bị trùng lặp và được tính như một kết nối Plaid khác.
+          other: Không thể kiểm tra các tài khoản này so với các kết nối hiện có của bạn. Nếu chúng là cùng một tài khoản, việc thêm kết nối này sẽ khiến chúng bị trùng lặp và được tính như một kết nối Plaid khác.
+      title:
+        one: Bạn đã có sẵn một kết nối dành cho tổ chức này rồi
+        other: Bạn đã có các kết nối %{count} dành cho tổ chức tài chính này rồi
+      title_all_connected: Bạn đã thực hiện việc kết nối này trước đó rồi
+      title_others_connected:
+        one: Tài khoản ngân hàng này đã được kết nối rồi
+        other: Các tài khoản ngân hàng này đã được kết nối rồi
+      update_existing: Cập nhật kết nối hiện tại
+  plans:
+    goals_card:
+      currency_warning:
+        one: Mục tiêu 1 không bao gồm số dư của %{currencies} (chưa có tỷ giá chuyển đổi).
+        other: "%{count} các mục tiêu tài chính không bao gồm số dư trong %{currencies} (chưa có tỷ giá chuyển đổi)."
+  recurring_allocations:
+    entry_exhausted: Tổng số tiền của giao dịch đó đã được dùng để thanh toán các khoản phải trả khác rồi.
+  valuations:
+    names:
+      current_account_value: Giá trị của tài khoản hiện tại
+      current_balance: Số dư hiện tại
+      current_loan_balance: Số dư khoản vay hiện tại
+      current_market_value: Giá trị thị trường hiện tại
+      manual_balance_update: Cập nhật số dư thủ công
+      manual_principal_update: Cập nhật tiền gốc khoản vay thủ công
+      manual_value_update: Cập nhật giá trị thủ công
+      opening_account_value: Giá trị khi mở tài khoản ngân hàng
+      opening_balance: Số dư khi mở tài khoản ngân hàng
+      original_purchase_price: Giá mua ban đầu

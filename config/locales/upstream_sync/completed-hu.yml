@@ -1,0 +1,766 @@
+---
+hu:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: A %{provider} csak az Egyesült Királyságban található lakóingatlanokat támogatja.
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Az egyedi ingatlan-hivatkozási szám (legfeljebb 12 számjegy) minden egyesült királyságbeli címet azonosít. Keresse meg a GeoPlace findmyaddress.co.uk oldalán, vagy kérdezze meg a helyi tanácsot. %{provider} ezt használja az ingatlan ingyenes értékelésére.
+      avm_county_label: Megye (nem kötelező)
+      avm_town_label: Település vagy város
+      avm_postcode_label: Irányítószám
+      avm_preview_uprn: UPRN
+      avm_preview_range: Becsült tartomány
+      avm_preview_confidence: Bizalom
+      avm_confidence:
+        medium: Közepes
+        low: Alacsony
+      avm_attribution_chimnie: Értékelés adatok Chimnie. A OS adatokat tartalmazó © Crown szerzői és adatbázisjog, a Royal Mail adatokat tartalmazó © Royal Mail szerzői és adatbázisjog, valamint a HM Land Registry adatokat tartalmazó © Crown szerzői és adatbázisjog a Open Government Licence v3.0 licenc alatt érhető el.
+    tabs:
+      overview:
+        refresh_valuation: Az értékelés frissítése
+        valuation_source: 'Értékelés: %{provider}, utoljára frissítve: %{date}'
+        link_valuation: Az érték automatikus frissítése a %{provider}-vel
+        link_valuation_description: Ennek a tulajdonságnak az értéke csak manuálisan frissül.
+    refresh_valuation:
+      queued: Megkezdődött az értékelés frissítése. Az új érték hamarosan megjelenik.
+      not_linked: Ez a szálláshely nem kapcsolódik értékelési szolgáltatóhoz.
+      not_configured: A %{provider} nincs konfigurálva. Adja hozzá a API kulcsot a Beállítások → Self-Hosting-ban az értékelés frissítéséhez.
+    link_valuation:
+      linked: A %{provider}-hez kapcsolódott, és frissítette a tulajdonság értékét.
+      link_failed: "%{provider} nem tudta értékelni ezt a tulajdonságot, ezért nem volt linkelve. Ellenőrizze, hogy helyesen írta-e be a címet, majd próbálkozzon újra."
+      not_linkable: Ez a tulajdonság nem kapcsolható ehhez a szolgáltatóhoz. Ellenőrizze, hogy a cím teljes-e, és támogatott-e az ország, valamint hogy a fiók pénzneme megegyezik-e a szolgáltató pénznemével.
+  settings:
+    providers:
+      trade_republic_panel:
+        requires_update: Jelentkezzen be újra a szinkronizálás folytatásához.
+        session_expires_in: A bejelentkezés lejár %{time} (%{at}).
+    classifiers:
+      account:
+        account_field: A fiók egyetlen tokenként történő felvétele
+        account_field_hint: 'A tranzakció melyik számláján van, az számít bizonyítéknak. Soha nem dönt egyedül: egy tranzakcióhoz ismert szóra vagy kereskedőre van szükség.'
+      amount:
+        amount_by_direction: Tartalmazza az irányt, a pénzt be vagy ki
+        amount_by_direction_hint: Minden kategória megtudja, hogy hová megy a pénze, és a visszatérítések és az ugyanabban az üzletben történő vásárlások külön maradnak.
+        amount_field: Adja meg az összeget
+        amount_field_hint: Összehasonlítja az összeget az egyes kategóriák szokásos összegeivel ugyanabban a pénznemben, logaritmikus skálán.
+      category_training:
+        apply: Alkalmazás
+        categories_hint: A nem bejelölt kategóriák, az alkategóriáikkal együtt, ki vannak hagyva a képzésből, így a Bayes soha nem választja ki őket.
+        categories_some: "%{count} / %{total} kategória"
+        skip_self_labels: Ne tanuljon Bayes saját találgatásaiból, amíg meg nem erősítik, vagy ez a sok nap
+        skip_self_labels_hint: A Megerősítve azt jelenti, hogy megváltoztattad vagy lezártad. A rossz találgatást nem táplálják vissza és nem erősítik meg; az, amelyik egyedül marad, hosszú ideig elfogadottnak számít.
+      add_rule:
+        success: A %{name} szabály hozzá lett adva a szabályok tetejére.
+      classifier:
+        apply: Alkalmazás
+        lock_results: Az osztályozó által beállított kategóriák zárolása
+        lock_results_hint: Leállítja a Bayes választásait módosító szabályokat, kivéve, ha egy szabályon az Alkalmaz gombra kattint. A AI soha nem változtatja meg a Bayes választásait, zárolva vagy sem.
+        rule: Kategorizálás az osztályozóval
+        rule_hint: A Kategória osztályozó szabály, be- és kikapcsolása a szabályokban. Minden szinkronizálás után kategorizálja a kategorizálatlan tranzakciókat a szabály sorrendjében; amiben nem biztos, az egy automatikus kategorizálási szabályra marad.
+        threshold: Küszöbérték
+        threshold_hint: A Bayes esetében a tranzakció osztályozásához szükséges minimális pontszám (0.05–0.99). Az alacsonyabb küszöbértékek több tranzakciót osztályoznak, de több hibát is elkövetnek.
+      clear_locks:
+        success: Bayes zárolása törlésre kerül. Ez eltarthat néhány percet.
+      evaluation:
+        apply_best: Ezeknek a beállításoknak az alkalmazása
+        best: A legjobb találat
+        best_changes: 'Legjobb találat, az önétől megváltoztatva:'
+        best_no_changes: Semmi sem ért el jobb eredményt, mint a beállítások.
+        buttons_hint: A Test my settings (Beállításaim tesztelése) pontszámot ad a beállításoknak. A legjobb beállítások megkeresése a %{tuning} hónapokat keresi a megjelenítettek előtt, így amit talál, azokat a hónapokat értékeli, amelyeket nem látott. A ROC-AUC alapján ítéli meg, hogy az egyes kategóriák tranzakciói milyen jól rangsorolják a többieket, bármilyen küszöbértéknél, és csak akkor tartja meg a változást, ha általában magasabb, és csak egy kivételével az összes %{tuning} hónapban. Először kiválasztja a bemeneteket (a kereskedői token, az összeg és a számla minden kombinációját; majd a kereskedő és a számla külön pontszámát; majd a kereskedő nevét és a jegyzeteket szavakkal), majd egyszerre próbálja megváltoztatni a többi beállítást, és utoljára a pontszámot. Az alapértelmezett értékek az eredeti osztályozók, a választott kategóriákkal; A Reset to defaults kapcsolja át őket és teszteli őket.
+        categories_heading: Kategória osztályozó
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'A leggyakoribb hibák: %{column} és %{threshold}'
+        current: A saját beállításaim
+        defaults: Alapértelmezett
+        description: Minden oszlop az elmúlt %{months} hónapokban új tranzakciókként van értékelve, minden hónapban az azt megelőző előzmények alapján, majd összehasonlítva a kategóriákkal. A tesztelés nem módosítja a tranzakció kategóriáját, és az osztályozó beállításai csak az alkalmazás vagy az alaphelyzetbe állításkor változnak.
+        find_best: A legjobb beállítások megkeresése
+        matcher_confusions: 'A leggyakoribb kereskedői hibák: %{column} és %{similarity}'
+        matcher_description: 'Kereskedők, akiket a matcher ugyanabban a %{months} hónapban tölt ki: %{count} tranzakciók egy kereskedővel, mindegyik összehasonlítva a hónap előtti előzményekkel, a kereskedő rejtve; jobbra az a kereskedő, amellyel rendelkezik. Minden cutoff és a kereskedők száma pontszámot kap; A Legjobb találat az a cella, amely a legjobban megfelel a hiba költségének, amelyet az Alkalmazás beállít. A tesztelés nem tölt be kereskedőket.'
+        merchants_heading: A Merchant Matcher alkalmazás
+        no_confusions: Nincsenek hibák ezen a küszöbön.
+        no_matcher_confusions: A kereskedő nem téved ebben a hasonlóságban.
+        no_uncategorized: Ezen a küszöbön semmi sem marad kategorizálatlanul.
+        no_unfilled: Semmi sem maradt kereskedő nélkül ezen a hasonlóságon.
+        none: Még nem tesztelték.
+        ran_at: Pontszám %{time} előtt a %{count} tranzakciók (%{months}).
+        reset: Visszaállítás az alapértelmezett beállításokra
+        reset_confirm: Minden osztályozó beállítását visszaállítani az alapértelmezettre, és tesztelni őket?
+        right_wrong: Minden sejt helyes / rossz.
+        run: A beállításaim tesztelése
+        running: Tesztelés... ez a szakasz frissül, ha elkészült.
+        short_history: Még nincs elegendő előzmény a kategóriaosztályozó beállításához. Ehhez körülbelül %{months} hónapnyi kategorizált tranzakcióra van szükség, így az Apply most egyedül hagyja a beállításokat.
+        similarity: Hasonlóság
+        stale: A beállítások a teszt óta megváltoztak.
+        threshold: Küszöbérték
+        trying: A %{changes} kipróbálása…
+        uncategorized: 'A leggyakoribb uncategorized: %{column} és %{threshold}'
+        unfilled: 'A leggyakoribb kitöltetlen: %{column} és %{similarity}'
+        weight: A hiba ára
+        weight_hint: 'Kiválasztja, amit az Alkalmazás beállít: a félkövér cellákat, ahol a helyes válaszok mínusz ez a hibák száma a legmagasabb. Legjobb találat küszöbértéke a kategóriákhoz; a cutoff, a hasonlóság és a kereskedők száma a matcher számára.'
+        weight_option:
+          one: 1 helyes válasz
+          other: "%{count} helyes válasz"
+      matcher:
+        lock_similar_merchants: Zárolja a kereskedőket, akiket a párosítás beállított
+        lock_similar_merchants_hint: Leállítja a szabályokat, AI és szinkronizálja a módosításokat, kivéve, ha egy szabályon az Alkalmaz gombra kattint. A saját zárai nem számítanak megerősítettnek (Merchant matcher tuning).
+        rule: Töltse ki a hiányzó kereskedőket a közeli másolatokból
+        rule_hint: A Merchant matcher szabály, be- és kikapcsolható a szabályokban. A szabályok sorrendjében a kereskedő nélküli tranzakció azt a tranzakciót kapja, amelyet a közeli másolatai, például a „NETFLIX.COM 8812” és a „Netflix com” mindegyike tartalmaz. A transzferek ki vannak hagyva.
+        similar_threshold: Hasonlóság
+        similar_threshold_hint: A leírások legkisebb hasonlósága, figyelmen kívül hagyva a számokat és a hivatkozási kódokat (0.5–0.99). Az alsó többet tölt, több hibával. Az Auto-tune Apply beállítása is beállítja.
+      matcher_tuning:
+        similar_common_share: Cutoff
+        similar_common_share_hint: Egy szó vagy 3- betűrészlet a másolt tranzakciók több mint ezen arányában (0.01–1), és legalább 50-ben túl gyakori ahhoz, hogy külön lehessen őket megkülönböztetni, mint a "card" vagy a "payment", ezért figyelmen kívül hagyja. A magasabb számok több közülük. Az Auto-tune Apply beállítása is beállítja.
+        similar_min_neighbours: A kereskedők egyetértenek
+        similar_min_neighbours_hint: Hány közeli másolattal kell rendelkeznie a kereskedőnek, és egyiknek sem kell másnak lennie. 1 egyetlen tranzakciót másol, hibákat is.
+        similar_min_neighbours_option:
+          one: 1 kereskedő
+          other: "%{count} kereskedők"
+        similar_skip_self: Ne másolj a mérkőzésszervező saját kereskedőitől, amíg meg nem erősítik, vagy ez a sok nap nem telt el
+        similar_skip_self_hint: A Megerősítve azt jelenti, hogy megváltoztattad vagy lezártad. A rossz példányt nem terjesztik; az egyedül hagyott példány hosszú ideig elfogadottnak számít.
+      merchant:
+        merchant_field: Tartalmazza a kereskedőt, mint egy token, ha be van állítva
+        merchant_field_hint: Az identitás szerint számít, így az átnevezett kereskedő megőrzi a történelmét.
+        merchant_name_words: A kereskedő nevének szóként való feltüntetése
+        merchant_name_words_hint: Olvassa el a leírást, mint az eredeti, így a hasonló nevek megosztják a bizonyítékokat. Átfedésben van az alábbi tokennel.
+      run:
+        success: Bayes kategorizálja a kategorizálatlan tranzakciókat. Ez néhány percet vehet igénybe.
+      scoring:
+        complement: Használja a kiegészítő naiv Bayes
+        complement_hint: Az egyes kategóriákat aszerint értékeli, hogy a tranzakció mennyire rosszul illeszkedik a többihez. Ez jobban kezeli az eltérő méretű kategóriákat. Kikapcsolva az eredeti multinomiális modellt használja.
+        prior: Adja meg, hogy milyen gyakran használják az egyes kategóriákat
+        prior_hint: Előnyben részesíti a leggyakrabban használt kategóriákat. Kikapcsolva minden kategóriát egyformán kezel, mint az eredeti modell.
+        separate_fields: Értékelje a kereskedőt és a számlát a szavaktól függetlenül
+        separate_fields_hint: Mindegyiknek megvan a saját disztribúciója, így egy hosszú leírás nem fogja túlsúlyba helyezni őket. Szüksége van a kereskedőre vagy a számlára is; az összeg mindig önmagában pont.
+        smoothing: Simítás
+        smoothing_hint: Minden számhoz hozzáadva, így egy nem látott szó nem zárja ki a kategóriát (0.001–10). 1 az eredeti; alacsonyabb bízik abban, amit többet láttak.
+      show:
+        add_rule_body: Nincs %{name} szabály a szabályaidban, tehát nincs semmi, amit bekapcsolhatnál. Hozzáadni a szabályok tetejére?
+        add_rule_confirm: Szabály hozzáadása
+        add_rule_title: Adja hozzá a %{name} szabályt?
+        account: A fiók beállítása
+        amount: Összeg tuning
+        auto_tune: Automatikus hangolás
+        category_training: Kategória osztályzó tuning
+        clear_locks: Tiszta Bayes zárak
+        clear_locks_confirm_body: Feloldja a Bayes által zárolt kategóriákat és a kereskedőket, amelyeket a meccsszervező zárolt, amelyek még mindig azok, amiket beállítottak, így a szabályok és a AI újra megváltoztathatják őket. A kategóriák és a kereskedők maradnak.
+        clear_locks_confirm_button: Tiszta zárak
+        clear_locks_confirm_title: Bayes zárak törlése?
+        description: A Bayes kategóriaosztályozó megtanulja a kategorizált tranzakciókat, és az újakat a AI szolgáltató előtt kategorizálja. A beállítások módosítása a következő kategorizáláskor lép érvénybe; a már kategorizált tranzakciók megtartják a kategóriájukat.
+        matcher: Egyezik
+        matcher_description: Kitölti a hiányzó kereskedőket a közeli másolatokból, mivel a Merchant matcher szabály (minden szinkronizálás után) és a Run. Megváltoztatja a tárolt kereskedőket.
+        matcher_tuning: Kereskedőegyeztető hangolása
+        merchant: A Merchant tuning
+        run: Fuss!
+        scoring: Pontszám
+        title: Osztályozó
+        training: Képzés
+        words: A tranzakció tuning
+      training:
+        max_training_transactions: Képzési tranzakciók
+        max_training_transactions_hint: 'A legújabb tranzakciók közül hányat kell használni (100–20,000): a kategorizált tranzakciókat, amelyekből az osztályozó tanul, és a kereskedővel rendelkező tranzakciókat, amelyekből az összehasonlító másolja.'
+      words:
+        bigrams: Szópárok belefoglalása
+        bigrams_hint: A szomszédos szavak is együtt számítanak, például a "kártyás fizetés".
+        binary: Ismétlődő szavak kizárása
+        binary_hint: Tranzakciónként minden szó egyszer számít.
+        drop_codes: Referenciakódok kizárása
+        drop_codes_hint: 2 vagy több számjegyet tartalmazó betűket tartalmazó szavak, például 2k4l19.
+        drop_numbers: Számok kizárása
+        drop_numbers_hint: Számok, dátumok és összegek tárolása a leírásban.
+        include_notes: Jegyzetek hozzáadása
+        include_notes_hint: Olvassa a jegyzeteket, valamint a nevet.
+        keep_single_chars: Egy karakterből álló szavak belefoglalása
+        keep_single_chars_hint: Egyes betűk és számok maradnak a felosztás után, mint a mcdonald's "s".
+        spread_filter: Kizárni azokat a szavakat, amelyeket minden kategória ugyanúgy használ
+        spread_filter_hint: Semmit sem mondanak a kategóriáról. A szám azt adja meg, hogy egy kategória használatának mennyivel kell magasabbnak lennie a páros osztásnál.
+        word_split: Szavakból állnak
+        word_split_ascii: a–z és 0–9
+        word_split_hint: Minden más karakter elválasztja a szavakat. Bármely írás betűi megtartják az olyan szavakat, mint a Geschäft vagy a Кофейня; a belső szimbólumok esetében az egy szimbólummal összekapcsolt betűk is egy szó maradnak, mint a mcdonald's, s/o és m&s (a szó bármelyik végén álló szimbólum, mint a *netflix, még mindig hiányzik).
+        word_split_symbols: Betűk, számok, belső szimbólumok
+        word_split_unicode: Betűk és számok, bármilyen írásmód
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Insight Dig In dalszöveg
+          subtitle: Az első csevegőüzenet, amikor egy betekintést nyer a AI segítségével
+          label: Dig in üzenet
+    preferences:
+      show:
+        default_account_order_hint: A Kézi beállításnál húzza a fiókokat az oldalsávon a sorrend beállításához.
+        investment_contributions_as_spending: Számolja a befektetést kiadásnak
+        investment_contributions_as_spending_hint: A befektetési számlákra átutalt pénz a költségvetésekben, a jelentésekben és a pénzforgalmi diagramban kiadásként szerepel. Kapcsolja ki, ha inkább befektetettként szeretné megjeleníteni.
+    securities:
+      show:
+        disable_mfa_password_label: Erősítse meg a jelszavát
+        disable_mfa_password_placeholder: Adja meg a jelszavát
+        mfa_sso_only: A kétlépéses hitelesítést az identitásszolgáltató kezeli.
+    settings_nav:
+      classifier_label: Osztályozó
+    hostings:
+      show:
+        instance_settings_restricted: A szolgáltatói hitelesítő adatok, a megosztott AI kapcsolat és a szinkronizálási beállítások minden családra érvényesek ezen a példányon, így csak egy szuperadminisztrátor módosíthatja őket. A család által használt asszisztens továbbra is családonként van beállítva. A szerverhez hozzáféréssel rendelkező személyek előléptethetnek egy felhasználót szuper adminisztrátorrá; a Docker önkiszolgáló útmutató a frissítési megjegyzésekben mutatja ezt a parancsot.
+      assistant_settings:
+        type_mcp_only: Nincs az alkalmazásban (csatlakoztassa saját ügynökét a MCP-n keresztül)
+        mcp_only_help: Az alkalmazáson belüli asszisztens a háztartás minden tagja számára ki van kapcsolva. A számlákhoz tartozó AI-gyorsműveletek és az AI által írt elemzések szövege sem működik. Az MCP és a háttérben történő kategorizálás továbbra is elérhető; külső ügynököket a Beállítások > MCP menüben csatlakoztathatsz.
+      openai_settings:
+        ai_health_probe_timeout_label: Állapot-ellenőrzési időtúllépés másodpercben (opcionális)
+        ai_health_probe_timeout_help: 'Alapértelmezett: 5. Csak az élő AI ellenőrzésekre vonatkozik a Beállítások → Rendszerállapot menüpontban, soha nem a valódi AI hívásokra. Emelje fel, ha a PDF ellenőrzések időtúllépésről számolnak be egy felhőmodell esetén. AI_HEALTH_PROBE_TIMEOUT felülbírálja ezt a mezőt.'
+      chimnie_settings:
+        title: Chimnie
+        description: Adja meg a Chimnie API kulcsot, hogy értékelje az Egyesült Királyság lakóingatlanait a UPRN kulccsal. Hozzon létre egy ingyenes kulcsot a dashboard.chimnie.com címen (a regisztrációhoz üzleti vagy egyéni domain e-mail cím szükséges; Gmail, Outlook és hasonló címek nem elfogadottak). UPRN értékelése ingyenes és havonta frissül; A Sure a havi 1,000 kérelmekre korlátozza őket, amit a CHIMNIE_MAX_REQUESTS_PER_MONTH környezeti változóval módosíthat.
+        env_configured_message: A CHIMNIE_API_KEY környezeti változón keresztül sikeresen konfigurálva.
+        label: API-kulcs
+        placeholder: Itt adja meg a Chimnie API-kulcsát
+      sync_settings:
+        market_data_sync_label: Napi piaci adatok importálásának engedélyezése
+        market_data_sync_description: Ha engedélyezve van, a pénzügyi értékpapírok árai automatikusan importálódnak naponta egyszer, hétfőtől péntekig, a megadott időpontban.
+        market_data_sync_time_label: Piaci adatok importálásának ideje (HH:MM)
+        market_data_sync_time_description: Válassza ki a napszakot a pénzügyi értékpapírok árainak importálásához, például röviddel a fő tőzsde zárása után.
+  shared:
+    money_field:
+      above_max: Adja meg a legfeljebb %{max} összeget.
+      below_min: Adjon meg legalább %{min} összeget.
+      invalid_amount: Adjon meg egy érvényes összeget vagy kifejezést.
+      operator_add: Hozzáadás
+      operator_subtract: Kivonás
+      operator_multiply: Szorzás
+      operator_divide: Osztás
+    require_non_guest: A vendégek nem végezhetik el ezt a műveletet
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: A AI várólistákat (csevegés, kereskedőfelismerés, kategorizálás) nem dolgozza fel munkatárs. Ellenőrizzük, hogy a worker betölti-e a config/sidekiq.yml fájlt.
+  loans:
+    form:
+      day_count_convention: Kamatalap
+      day_count_convention_actual_365: Aktuális/365
+      day_count_convention_actual_actual: Aktuális / aktuális
+      day_count_convention_hint: Ez határozza meg, hogy a hitelező hogyan méri az egyes kamatperiódusokat egy évhez képest. A Tényleges/365 függvény az egyes hónapok tényleges napjainak számát használja, és az Egyesült Királyságban és Ausztráliában a jelzáloghitelek esetében szabványos. A 30/360 az év minden hónapjához egy fix egytizenketted részét használja, ahogy a Sure mindig is tette.
+      day_count_convention_thirty_360: 30/360 (egy lapos tizenketted)
+  breadcrumbs:
+    classifier: Osztályozó
+  oauth:
+    registration:
+      invalid_client_name: Az ügyfél_név nem tartalmazhat kétirányú vezérlő karaktereket
+      reserved_client_name: A client_name a belső alkalmazások számára van fenntartva
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Még nem áll rendelkezésre árfolyam a cél egyik fiókjához, így nem lehet befejezni.
+        rule:
+          split_not_alone: Egy megosztott szabálynak nem lehet más művelete
+        rule/action:
+          attributes:
+            value:
+              invalid_config: Érvényes split konfigurációnak kell lennie
+              invalid_split_count: A %{min} és a %{max} osztások között kell lennie
+              split_name_required: 'A #%{index} megosztásból hiányzik egy név'
+              split_name_too_long: 'A #%{index} név túl hosszú (maximum 255 karakter)'
+              split_name_invalid: 'A #%{index} név érvénytelen karaktereket tartalmaz'
+              split_type_invalid: 'A split #%{index} típusnak fixnek vagy százalékosnak kell lennie'
+              split_share_invalid: 'A #%{index} megosztásnak pozitív számnak kell lennie'
+              split_category_invalid: 'split #%{index} kategória nem tartozik ebbe a családba'
+              split_merchant_invalid: 'split #%{index} kereskedő nem tartozik ebbe a családba'
+              split_tags_invalid: 'A(z) #%{index} olyan címkével rendelkezik, amely nem tartozik ebbe a családba'
+              percentages_must_total_100: A százalékoknak össze kell adniuk 100 (%{total})
+              fixed_requires_exact_amount_condition: A rögzített összegű felosztáshoz olyan szabályfeltételre van szükség, amely pontos tranzakciós összeggel egyezik meg (pl. Összeg = 42.00), különben a részvények nem tudják megbízhatóan összeadni az egyes egyező tranzakciók összegét
+              fixed_shares_must_equal_condition_amount: A megosztott részvények összege %{amount} legyen, a szabály feltétele által megkövetelt pontos összeg
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: Nem érvényes reguláris kifejezés
+              regex_too_complex: Túl bonyolult a biztonságos működéshez
+              regex_too_long: Túl hosszú (maximum %{count} karakter)
+              regex_backreference: Nem használhat visszahivatkozásokat (\1-től \9-ig)
+  rules:
+    form:
+      stop_processing_label: További szabályok feldolgozásának leállítása
+      stop_processing_description: A listában lejjebb található szabályok nem módosítják a szabálynak megfelelő tranzakciókat.
+    condition_filters:
+      operators:
+        starts_with: 'Ezzel kezdődik:'
+        ends_with: 'Ezzel ér véget:'
+        matches_regex: Egyezik a regexp-pel
+    notification_baseline_timed_out: Ez a szabály továbbra is le van tiltva. Túl sokáig tartott annak ellenőrzése, hogy mely meglévő tranzakciók egyeznek. Ha engedélyezed ezt az ellenőrzés nélkül, akkor e-mailt küld minden egyező tranzakcióról. Egyszerűsítse a feltételeket, majd engedélyezze újra a szabályt.
+    classifier_rules:
+      category_classifier: Kategória osztályozó
+      merchant_matcher: A Merchant Matcher alkalmazás
+    rule:
+      stop_processing: Állj!
+      stop_processing_hint: A további szabályok nem módosítják az ezzel a szabálysal megegyező tranzakciókat.
+    index:
+      order_hint: A szabályok fentről lefelé futnak. Ha egy szabály beállít egy mezőt egy tranzakcióban, a szabályok nem módosítják a mezőt. A címkéket minden egyező szabály hozzáadja. Húzza a szabályokat a sorrend módosításához.
+      reorder_rule: Mozgasd a %{name} szabályt. Nyomja meg az Enter vagy a Szóköz billentyűt a megfogáshoz, majd a nyílbillentyűkkel mozgassa.
+    confirm:
+      rules_above_notice:
+        one: A fölötte lévő aktív szabály fut először, így az eredmény ugyanaz, mint a teljes futtatásnál.
+        other: A %{count} fölötti aktív szabályok futnak először, így az eredmény ugyanaz, mint a teljes futtatásnál.
+    actions:
+      split:
+        type_fixed: Rögzített összeg
+        type_percentage: Százalék
+        type_label: Osztott típus
+        share_label: Összeg vagy százalék felosztása
+        category_label: A kategória megosztása
+        merchant_label: A felosztás kereskedője
+        tags_label: Címkék megosztása
+        remove_split: Távolítsa el a split
+        hint: A rögzített osztásokat először pontos összegként vonjuk le. Százalékos osztás, majd ossza meg, ami maradt. Ha itt minden megosztás fix összeget használ, akkor adjon hozzá egy feltételt is, amely pontos tranzakciós összeggel egyezik meg (pl. Összeg = 42.00), mivel minden egyeztető tranzakciónak ugyanarra az összegre van szüksége ahhoz, hogy a rögzített összegek összeadódjanak. Egy megosztott szabálynak nem lehet más művelete.
+        fixed_summary_label: fix
+        summary:
+          one: "%{count} szétválás"
+          other: "%{count} megoszlás"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Ez a Binance kapcsolat nem érhető el. Válasszon egyet a Szolgáltató beállításai között.
+      no_credentials_configured: Csatlakoztassa a Binance-t a Szolgáltató beállításaiban, mielőtt hozzáadná a fiókjait.
+      select_connection: Válassza ki a Binance kapcsolatot a Szolgáltató beállításaiban.
+  reports:
+    index:
+      sections_aria: A jelentések szakaszai
+    spending_vs_normal:
+      title: Költség vs normál
+      summary_html: Ebben az időszakban %{total} lett elköltve. Egy ilyen hosszúságú időszakban a szokásos összeg %{normal}, a %{baseline_start} és %{baseline_end} közötti adatok alapján.
+      summary_so_far_html: "%{total} eddig elköltött. Normál ez a sok nap %{normal}, %{baseline_start} alapján %{baseline_end}."
+      no_history_html: Ebben az időszakban %{total} lett elköltve. Még nincs elegendő korábbi adat a szokásos összeg meghatározásához.
+      no_history_short: Még nincs elég korábbi történelem, amivel összehasonlíthatnánk.
+      no_spending: Ebben az időszakban nincs költés.
+      no_changes: A kiadások minden kategóriában megfeleltek a normálisnak.
+      treemap_title: Ahova ment
+      changes_title: Mi változott?
+      direct: "%{category} (nincs alkategória)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normál: %{amount}'
+        more: "%{amount} összeggel több a szokásosnál (%{percent})"
+        less: "%{amount} összeggel kevesebb a szokásosnál (%{percent})"
+        more_no_percent: "%{amount} összeggel több a szokásosnál"
+        less_no_percent: "%{amount} összeggel kevesebb a szokásosnál"
+        no_normal: Nincs korábbi történelem, amivel össze lehetne hasonlítani
+        open: Válassza ki ezeket a tranzakciókat
+      legend:
+        less: 50–100%-kal kevesebb
+        slightly_less: 15–50%-kal kevesebb
+        normal: A normálisról
+        slightly_more: 15–50%-kal több
+        more: 50–100%-kal több
+        much_more: 100%+ több
+  account_order:
+    manual:
+      label: Kézi (húzd át a sorrendet)
+  onchain:
+    chains:
+      cosmos: Cosmos Hub
+      polkadot: Polkadot
+  providers:
+    property_valuation:
+      missing_fields_gb: Adja meg a nevet, az utcacímet, az irányítószámot és az ingatlan UPRN-azonosítóját.
+      entry_name: "%{provider} értékelése"
+    chimnie:
+      errors:
+        invalid_uprn: A UPRN egy legfeljebb 12 számjegyből álló szám. Kérjük, ellenőrizze a UPRN és próbálja újra.
+        no_estimate: Chimnie nem rendelkezik becsült értékkel ehhez az ingatlanhoz.
+        not_found: Chimnie Nem találtunk ingatlant ezzel a UPRN.
+        unsupported_property: Chimnie csak lakóingatlanokat értékel; ez a UPRN kereskedelmi vagy vegyes célú ingatlanhoz tartozik.
+        unauthorized: A Chimnie elutasította a API kulcsot. Ellenőrizze a kulcsot a Beállítások → Self-Hosting.
+        insufficient_balance: A Chimnie számlaegyenlege túl alacsony a kérés teljesítéséhez.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: A tranzakció teljes összege már más esedékes kifizetésekhez van rendelve
+      already_allocated: Ez a tranzakció már alkalmazva van erre a számlára
+    new:
+      covered_title: Ez a tranzakció már egy számlához tartozik
+      covered_body: A %{name} már nyomon követi ezt a fizetést, így egy új számla kétszer számolná.
+      covered_open: Nyitott számla
+      covered_suggested_title: Sure már javasolt egy számlát ehhez a fizetéshez
+      covered_suggested_body: "%{name} várja javaslatait. Erősítse meg, hogy elkezdje nyomon követni, így egy új számla nem számítja ezt a fizetést kétszer. Az egyező kifizetések automatikusan összekapcsolódnak, és ezt a számlát is összekapcsolhatja."
+      covered_confirm: A számla megerősítése
+      covered_create_anyway: Külön számla létrehozása
+      covered_income_title: Ez a betét már egy jövedelemhez tartozik
+      covered_income_body: A %{name} már nyomon követi ezt a betétet, így újbóli hozzáadása kétszer is számolná.
+      covered_income_open: Nyitott jövedelem
+      covered_income_suggested_title: Sure már javasolta ezt a bevételt
+      covered_income_suggested_body: "%{name} várja javaslatait. Adja hozzá, hogy elkezdje nyomon követni, így ez a betét nem számít kétszer. A megfelelő betétek automatikusan összekapcsolódnak, és ezt a bevételből is összekapcsolhatja."
+      covered_income_confirm: Add hozzá a jövedelmet
+      covered_income_create_anyway: Külön jövedelem hozzáadása
+    create:
+      amount_too_precise: Legfeljebb 4 tizedesjegyek használata
+      category_invalid: Válasszon ki egy kategóriát, vagy hagyja üresen
+    already_covered: Ez a tranzakció már megfelel egy ismétlődő tranzakciónak
+    suggested_income:
+      title: Lehetséges új jövedelem
+      confirm: Add hozzá a jövedelmet
+      dismiss: Nem jövedelem
+    confirmed_income: Az ismétlődő tranzakciókhoz hozzáadott bevétel
+  transfers:
+    show:
+      investment_contribution_subtitle: Számítsa ezt az átutalást kiadásként a költségvetésekben és a jelentésekben. Kapcsolja ki, ha a bróker vagy a kriptográfiai számla csak a pénzt egy másik pénznemre konvertálja.
+      investment_contribution_title: Beruházási hozzájárulás
+  transactions:
+    form:
+      create_as_subcategory: Hozzáadás alkategóriaként…
+      choose_parent: '"%{name}" létrehozása a következő alatt:'
+      back_to_categories: Vissza!
+    transaction_category:
+      set_on_outflow: A kategória az átutalás kimenő oldalához tartozik, és csak ott módosítható
+    show:
+      category_set_on_hidden_outflow: Ez az átutalás bejövő oldala. Kategóriája a kimenő oldalhoz tartozik, egy olyan fiókhoz, amelyhez nem férhet hozzá, és csak ott módosítható.
+      category_set_on_outflow: Ez az átutalás bejövő oldala. A kategóriája a kimenő oldalhoz tartozik, és csak ott módosítható, így a költségkeretek egyszer számolják.
+    search:
+      filters:
+        attachment: Melléklet
+    searches:
+      filters:
+        badge:
+          attachment_with: Csatlakozóval
+          attachment_without: Csatlakozás nélkül
+        attachment_filter:
+          with: Csatlakozóval
+          without: Csatlakozás nélkül
+  accounts:
+    sidebar:
+      reorder_account: "%{account} áthelyezése"
+      reorder_hint: Húzással rendezheti át. A billentyűzettel nyomja le az Enter billentyűt, majd a nyílbillentyűket.
+      sort_mode:
+        start: A fiókok rendezése
+        hint: A fiókok átrendezéséhez húzza őket a fogantyújuknál fogva.
+  admin:
+    system_health:
+      optional_services:
+        title: Opcionális szolgáltatások
+        description: Opcionális kezelői integrációk. A nem konfigurált szolgáltatások tájékoztató jellegűek. Ezek az ellenőrzések csak a beállításokat vizsgálják, nem tesztelik a kapcsolatot, nem küldenek teszteseményeket, és nem módosítják az elemzési hozzájárulást. Bontsa ki a szolgáltatást a telepítési részletekért.
+        missing_settings: 'Hiányzó beállítások: %{settings}'
+        statuses:
+          incomplete: A konfiguráció nem teljes
+          disabled: Letiltott ebben a folyamatban
+        notes:
+          environment_disabled: A betöltött integráció le van tiltva ebben a Rails környezetben.
+          explicitly_disabled: A SKYLIGHT_ENABLED explicit módon letiltja a műszerezést.
+          self_hosted_checkout_disabled: Az előfizetés fizetési és a számlázási portál le van tiltva önkiszolgáló üzemmódban. A Stripe webhookok továbbra is konfigurálhatók; a fizetési ár azonosítók itt nem szükségesek.
+          browser_analytics_disabled: Ebben a környezetben a böngészőelemzés le van tiltva. Ez nem tiltja le a külön konfigurált kiszolgálói ügyfelet.
+          shared_feedback_configured: Az önkiszolgáló visszajelzésnek külön csomagolt projektje van, és a konfigurációja engedélyezi. Nem igényel operátor POSTHOG_KEY. A böngésző letiltása és a SDK elérhetősége nem ellenőrzött.
+          shared_feedback_disabled: A különálló, saját üzemeltetésű visszajelzési projekt a visszajelzési vagy környezeti beállításaival le van tiltva. Ez nem tiltja le az üzemeltető tulajdonában lévő elemzéseket.
+          production_only: Ezt az integrációt csak az alkalmazás aktuális konfigurációja használja az éles környezetben.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Opcionális AI nyomkövetés és értékelési jelentés. Ez az ellenőrzés nem küld nyomokat vagy kiértékelési kéréseket.
+            guidance: Állítsa össze a LANGFUSE_PUBLIC_KEY és a LANGFUSE_SECRET_KEY típusokat. A LANGFUSE_HOST opcionális. A beállítások módosítása után indítsa újra az érintett szolgáltatásokat.
+          sentry:
+            title: Sentry
+            description: Opcionális hiba- és teljesítményjelentés. A jelenlegi inicializáló csak éles környezetben teszi lehetővé a jelentéskészítést.
+            guidance: Állítsa be a SENTRY_DSN értéket, és indítsa újra az érintett szolgáltatásokat. Ez ellenőrzi a betöltött SDK konfigurációt anélkül, hogy hibát rögzítene vagy eseményt küldene.
+          skylight:
+            title: Skylight
+            description: Opcionális alkalmazásteljesítmény-mérés. A konfiguráció jelenléte nem erősíti meg, hogy az ügynök fut vagy jelentést készít.
+            guidance: Állítsa be a SKYLIGHT_AUTHENTICATION-t, és győződjön meg róla, hogy a Skylight be van töltve a kívánt Rails környezetbe. SKYLIGHT_ENABLED=false letiltja a műszerezést; a jelölő önmagában nem tölti be a gem-et. Indítsa újra a változtatások után.
+          stripe:
+            title: Stripe
+            description: Opcionális előfizetési számlázás és fizetési webhookok. Ez az ellenőrzés nem hoz létre Stripe ügyfelet, nem érvényesíti a hitelesítő adatokat, és nem küld kifizetési kérelmet.
+            guidance: Állítsa össze a STRIPE_SECRET_KEY és a STRIPE_WEBHOOK_SECRET típusokat. A felügyelt előfizetés fizetéskor a STRIPE_MONTHLY_PRICE_ID és a STRIPE_ANNUAL_PRICE_ID kódot is meg kell adni.
+          posthog:
+            title: PostHog
+            description: Opcionális, az üzemeltető tulajdonában lévő elemzés, az indításkor betöltött konfiguráció használatával. A konfigurált állapot nem jelenti azt, hogy a felhasználó beleegyezett az elemzésbe.
+            guidance: Állítsa be a POSTHOG_KEY és a nem üres POSTHOG_HOST értéket, vagy hagyja beállítatlanul az alapértelmezett értéket. A böngészőelemzéshez gyártás vagy fejlesztés alatt álló POSTHOG_DEVELOPMENT_ENABLED szükséges. A POSTHOG_FEEDBACK_ENABLED a különálló, saját üzemeltetésű visszajelzést vezérli, nem a kezelői elemzéseket.
+          logtail:
+            title: Logtail
+            description: Opcionális gyártási napló továbbítása. Ha nincs konfigurálva, az alkalmazás folytatja a naplózást a szabványos kimenetre.
+            guidance: Állítsa össze a LOGTAIL_API_KEY és a LOGTAIL_INGESTING_HOST kódokat, és indítsa újra az érintett szolgáltatásokat. Ez az ellenőrzés nem hoz létre tesztnaplót.
+      configuration:
+        description: A webfolyamat számára látható konfiguráció. Ezek az ellenőrzések nem küldenek e-maileket, nem lépnek kapcsolatba a szolgáltatókkal, és nem töltenek fel vagy töltenek le fájlokat. A konfigurált azt jelenti, hogy a beállítások jelen vannak, nem azt, hogy a kézbesítés, a szolgáltatói hozzáférés vagy a tárolási hozzáférés ellenőrzött.
+        statuses:
+          incomplete: A konfiguráció nem teljes
+        settings_needed: Áttekintendő beállítások
+        unknown_provider: Nem elismert szolgáltató kiválasztása
+        provider_statuses:
+          not_configured: Hiányzik az API-kulcs
+          invalid: Érvénytelen a kiválasztás
+        configure_providers: Nyissa meg az önkiszolgáló beállításokat
+        storage_backend: 'Kiválasztott tároló: %{backend}'
+        storage_backends:
+          local: A helyi lemez
+          test: Teszt lemez
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: S3-kompatibilis tárolás
+          google: Google Cloud Tárolás és szállítás
+          other: Egyéni vagy fel nem ismert backend
+        checks:
+          smtp:
+            title: E-mail cím (SMTP)
+            statuses:
+              configured: SMTP beállítások jelen vannak.
+              not_configured: A SMTP nincs konfigurálva. A SMTP-n keresztül nem küldhetők jelszó-visszaállítási, meghívó- és egyéb rendszer-e-mailek.
+              incomplete: Egyes e-mail-beállítások hiányoznak vagy hiányosak. Előfordulhat, hogy a rendszer e-mailjei vagy az azokban található hivatkozások nem működnek.
+              disabled: Az e-mail kézbesítés le van tiltva a futó levelezőprogram konfigurációjában.
+              not_checked: Ez a folyamat a SMTP-től eltérő kézbesítési módszert használ, például fejlesztési előzetes verziót. SMTP szállítás nem értékelhető.
+            guidance: A SMTP nem konfigurálható az adminisztrációs felületen. Állítsa be a levelezési környezeti változókat a webes és a munkaszolgáltatáshoz, majd indítsa újra mindkettőt. A SMTP_USERNAME és a SMTP_PASSWORD hitelesítetlen relé esetén elhagyható.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (1 és 65535 közötti szám)
+              sender: EMAIL_SENDER (helyettesíti az alapértelmezett sender@sure.local)
+              app_domain: APP_DOMAIN (e-mail hivatkozásokban használt)
+              authentication: SMTP_USERNAME és SMTP_PASSWORD (mindkettő vagy egyik sem)
+          securities:
+            title: Piaci árak
+            statuses:
+              configured: Minden engedélyezett piaci ár szolgáltató rendelkezik konfigurációval.
+              not_configured: Az engedélyezett piaci árú szolgáltatóknak hiányoznak a API kulcsaik. Ezeken a szolgáltatókon keresztül nem érhetők el a pénzügyi értékpapírok automatikus keresése és az árkeresés.
+              incomplete: Legalább egy engedélyezett piaci ár szolgáltató hiányzó konfigurációval rendelkezik, vagy érvénytelen a kijelölés. Az adott szolgáltatóhoz rendelt értékpapírok nem kaphatnak árfrissítéseket.
+              disabled: Nincs engedélyezve piaci ár szolgáltató. A pénzügyi értékpapírok automatikus keresése és az árkeresés nem érhető el.
+            guidance: Válassza ki a szolgáltatókat, és adja hozzá a szükséges API kulcsokat az önkiszolgáló beállításokban, vagy konfigurálja őket a telepítési környezetben. A környezeti felülbírálások elsőbbséget élveznek. A nyilvános szolgáltatóknak nincs szükségük API kulcsra.
+          exchange_rates:
+            title: Devizaárfolyamok
+            statuses:
+              configured: A kiválasztott árfolyam-szolgáltató konfigurálható.
+              not_configured: Nincs konfigurálva használható árfolyam-szolgáltató. Előfordulhat, hogy az automatikus valutaátváltás nem érhető el, ha hiányzik egy tárolt árfolyam.
+            guidance: Válasszon ki egy valutaváltási szolgáltatót, és szükség esetén adja hozzá a API kulcsát az önkiszolgáló beállításaihoz, vagy konfigurálja azt a telepítési környezetben. A EXCHANGE_RATE_PROVIDER és a szolgáltató API-kulcskörnyezeti felülbírálásai elsőbbséget élveznek.
+            issues:
+              invalid_provider: A kiválasztott árfolyam-szolgáltató nem ismert. Az automatikus árkeresések mindaddig sikertelenek, amíg egy támogatott szolgáltatót ki nem választ.
+          storage:
+            title: Fájlfeltöltés és tárolás
+            statuses:
+              configured: A tárolási beállítások jelen vannak; a helyi lemeznek nincs szüksége felhőalapú hitelesítő adatokra.
+              not_configured: A kiválasztott tárolási backend nem rendelkezik megfelelő konfigurációval. Előfordulhat, hogy a fájlfeltöltés nem érhető el.
+              incomplete: A szükséges tárolási beállítások hiányoznak vagy hiányosak. Előfordulhat, hogy a fájlok feltöltése vagy letöltése nem működik.
+              not_checked: Ez a backend külső hitelesítő adatok felderítését vagy egyéni konfigurációt használ. A hozzáférés nem határozható meg egyedül ezekből a beállításokból.
+            guidance: Tekintse át a ACTIVE_STORAGE_SERVICE és a kiválasztott backend telepítési beállításait. A helyi lemeznek állandó tárhelyre van szüksége, amelyet a webes és a munkaszolgáltatások osztanak meg. A háttérváltás nem telepíti át a meglévő fájlokat; minden áttelepítést külön kell megtervezni.
+            issues:
+              root: Helyi tárolási gyökér
+              bucket: A tároló vödör
+              region: A tárolási régió
+              credentials: Tárolóhozzáférési kulcs és titkos kulcs (mindkettőt megadhatja, vagy külső hitelesítő adatok felderítését használhatja)
+              endpoint: Tárolási végpont (és CLOUDFLARE_ACCOUNT_ID az R2 esetén)
+      show:
+        tabs:
+          configuration: Konfiguráció
+    users:
+      update:
+        password_disabled: A jelszó beállítása le van tiltva, mert a felhasználók csak egyszeri bejelentkezéssel jelentkezhetnek be.
+  bills:
+    detail:
+      overview: Áttekintés
+      rule_detected: Megfelel a %{name} nevű tranzakcióknak
+    match:
+      same_transfer: Utalás ugyanarra a számlára
+    paycheck:
+      bridge_left: "%{amount} maradt a számlák után"
+      bridge_show_more:
+        one: További 1 megjelenítése
+        other: További %{count} megjelenítése
+      bridge_allocation_aria: A %{cash}-ből a %{due} a következő fizetés előtt esedékes, és a %{left} maradt.
+      item_overdue: Lejárt
+  budgets:
+    available_cash:
+      currency_warning: A %{currencies} egyenlegek nem szerepelnek, mert a %{currency} átváltási árfolyama még nem elérhető.
+  categories:
+    locked: A kategóriák zárolva vannak. Oldja fel őket, hogy új kategóriát adjon hozzá.
+    toggle_lock:
+      locked: Kategóriák zárolva »
+      unlocked: Kategóriák feloldott állapotban
+    index:
+      lock_categories: Kategória létrehozásának zárolása
+      locked_message: A kategória létrehozása zárolva van. Az importálás és a bankszinkronizálás továbbra is hozzáadhat kategóriákat.
+      unlock_categories: Kategória létrehozás feloldása
+  category:
+    dropdowns:
+      show:
+        assign_error: Létrehozta a kategóriát, de nem tudta hozzárendelni. Válassza a Létrehozás lehetőséget az újbóli próbálkozáshoz.
+        back: Vissza!
+        choose_parent: '"%{name}" létrehozása a következő alatt:'
+        create_as_subcategory: Hozzáadás alkategóriaként…
+        create_error: Nem sikerült létrehozni ezt a kategóriát. Kérjük, próbálkozzon újra.
+  chats:
+    ai_busy: Csak befejezek egy háttérfeladatot, aztán rögtön rátérek az üzenetedre.
+    reservation:
+      ready_html: Elhalasztottam néhány háttérfeladatot, hogy egyenesen az üzenetedhez tudjak nyúlni. Vissza fognak lopakodni a %{countdown} s, így gépeljen tovább!
+      busy: Csak befejezek egy háttérmunkát, aztán a tiéd leszek. Folytasd a gépelést!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: Ez a Coinbase kapcsolat nem érhető el. Válasszon egyet a Szolgáltató beállításai között.
+      no_credentials_configured: Csatlakoztassa a Coinbase-t a Szolgáltató beállításaiban, mielőtt hozzáadná a pénztárcákat.
+      select_connection: Válassza ki a Coinbase kapcsolatot a Szolgáltató beállításaiban.
+  credit_cards:
+    due:
+      in_days:
+        zero: Ma esedékes
+        one: Holnap esedékes
+        other: Lejárati idő %{count} nap
+      overdue:
+        one: Tegnap esedékes
+        other: "%{count} nappal később"
+    form:
+      due_day: Fizetési határidő
+      statement_close_day: A nyilatkozat lezárul
+      statement_cycle_description: A kivonat lezárásának napja és a kifizetés esedékességének napja. Ha ezek be vannak állítva, az Áttekintés fül mutatja, hogy az utolsó utasítás hová ért, és mi épít a következőhöz. Egy összekapcsolt kártya automatikusan kitölti ezeket, és megtartja a kézzel beállított adatokat.
+      sophtron_balance_sign_description: Csak akkor használjon felülbírálást, ha a Sophtron kétértelmű jelet jelent. Az Automatikus továbbra is visszautasítja a hitelkártya-egyenlegeket.
+      sophtron_balance_sign_label: Sophtron egyensúly jelentése
+    tabs:
+      overview:
+        above_minimum: Az elszámolás összege %{balance}, ami meghaladja a %{minimum} minimális fizetendő összeget. Ha csak a minimumot fizeted be, a fennmaradó kártyatartozásra ez a THM vonatkozik.
+        closes_on: Következő nyilatkozat zárja %{date}
+        credit_toward_next: Jóváírás a következő kimutatásra
+        due_on: "%{date}"
+        edit_card_details: Kártyaadatok szerkesztése
+        since_last_statement: Utolsó nyilatkozat óta
+        statement_balance: Kimutatási egyenleg
+        multi_currency_unavailable: Ez a kimutatás egynél több pénznemben rögzített bejegyzéseket ad össze, amelyeket itt nem lehet összesíteni anélkül, hogy mindegyikhez árfolyamot adnánk. Az egyenlegek üresek maradnak, nem pedig kitaláltak.
+        no_cycle_description: Állítsa be a kivonat lezárásának napját és a fizetés esedékességének napját, és ez a fül megmutatja, hogy az utolsó kivonat mire jutott, és mi épül a következő felé. Egy összekapcsolt kártya általában kitölti ezeket az Ön számára.
+        no_cycle_title: Nincs beállítva utasításciklus
+    update:
+      sophtron_balance_sign_error: Nem sikerült alkalmazni a Sophtron egyenleg jelentését. Az előző beállítás megmaradt. Kérjük, próbálkozzon újra.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Demo család frissítés befejeződött
+      activity_heading: Tevékenység ebben az időszakban
+      sessions_label: Egyedi bejelentkezési munkamenetek az előző demó családhoz
+      families_label: Új családi fiókok létrehozása
+      period_heading: Jelentési időszak (UTC)
+      from_label: 'Innen:'
+      to_label: 'Hogy:'
+      time_format: "%b %-d, %Y és %H:%M:%S UTC"
+      family_heading: Előző demo család
+      id_label: 'Azonosító:'
+  goals:
+    currency_warning:
+      title: Néhány egyenleg nem számít
+      body:
+        one: Még nem áll rendelkezésre %{from} → %{to} átváltási árfolyam, így a %{from} egyenlegek nem szerepelnek ebben az összegben.
+        other: Még nem állnak rendelkezésre %{from} és %{to} közötti átváltási árfolyamok, így ezek az egyenlegek nem szerepelnek ebben az összegben.
+      settings_link: Árfolyamszolgáltató beállításai
+    consume:
+      goal_currency_hint: Írja be az összeget %{currency}. Egy másik pénznemben vezetett számla esetében az összeget a mai árfolyamon váltjuk át, mielőtt a számla elkülönítéséből kikerülne.
+      errors:
+        missing_exchange_rate: A fiók pénznemére még nem áll rendelkezésre átváltási árfolyam, így ezt a kiadást nem lehet rögzíteni.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Még nincs átváltási árfolyam, így ez a számla nem számít.
+    goal_card:
+      partial_total: Egyes egyenlegek nem számítanak (még nincs árfolyam)
+    form:
+      earmark:
+        converted: Ez az elkülönített összeg ≈ {amount}.
+      fields:
+        currency_conversion_hint: A számlák különböző pénznemeket használhatnak. Az összegek %{currency} értékre kerülnek átváltásra; a számlajelölések az egyes számlák pénznemében maradnak.
+  imports:
+    publish:
+      guest_new_categories_or_tags: A vendégek nem hozhatnak létre kategóriákat vagy címkéket. Csatlakoztassa őket a meglévőkhöz, vagy hagyja őket üresen.
+    create:
+      missing_upload: Nem kaptuk meg az aktáját. Kérjük, próbálja meg újra feltölteni.
+  insights:
+    card:
+      dig_in: Áss bele a AI-be
+    dig_in:
+      prompt: |-
+        Segíts részletesebben megvizsgálni ezt az elemzést.
+
+        Elemzés: %{title}
+        Amit a Sure talált: %{body}
+        Időszak: %{period}
+        Adatok:
+        %{facts}
+
+        Mi áll a háttérben, és érdemes-e tennem valamit?
+  mfa:
+    local_password_required: A kétlépéses hitelesítéshez helyi jelszó szükséges. Az Ön azonosítóját az identitásszolgáltatója kezeli.
+    create:
+      invalid_password: Helytelen jelszó. Kérjük, próbálkozzon újra.
+    disable:
+      invalid_password: Helytelen jelszó. Kérjük, próbálkozzon újra.
+    new:
+      password_label: Erősítse meg a jelszót
+      password_placeholder: Adja meg a jelszavát
+  pages:
+    dashboard:
+      customize:
+        start: Testreszabás
+        hide: "%{title} elrejtése"
+        hidden_title: A rejtett widgetek
+        hidden_description: Adjon hozzá egy widgetet az irányítópulthoz.
+        none_hidden: Minden widget látható. Rejtsd el az egyiket a szemgombjával.
+        all_hidden_title: Minden widget rejtett
+        all_hidden_description: Testreszabhatja az irányítópultot, hogy widgeteket adjon hozzá.
+      cashflow_preview:
+        node_labels:
+          invested: Befektetések
+        group_by_label: Folyamatok megjelenítése szerint
+        sort_label: Folyamatok rendezése
+        sort_auto: Autó
+        sort_ascending: A legkisebb először
+        sort_descending: A legnagyobb először
+      spending_trend:
+        filter_categories: Szűrő kategóriák (%{count})
+        apply: Alkalmazás
+  plaid_items:
+    auto_link_opener:
+      create_failed: Nem tudtuk megerősíteni, hogy ez a kapcsolat hozzá lett-e adva. Kérjük, töltse be újra az oldalt, hogy ellenőrizze, mielőtt újra próbálkozna.
+    create:
+      already_connected: Már rendelkezik kapcsolattal ehhez az intézményhez, ezért ez nem lett hozzáadva.
+      exchange_failed: Nem tudtuk hozzáadni ezt a kapcsolatot. Próbálkozzon újra, és ha a probléma továbbra is fennáll, ellenőrizze a kiszolgálónaplókat.
+      token_expired: Ez a kapcsolat lejárt, mielőtt hozzá lett adva. Csatlakoztassa újra az intézményt.
+    duplicate_warning:
+      confirm: Erősítse meg ezt a kapcsolatot
+      connected_by: 'Csatlakoztatta: %{name}'
+      eu_no_add_accounts: A Plaid nem támogatja a fiókok hozzáadását egy meglévő EU-kapcsolathoz. A csatlakoztatott fiókok módosításához távolítsa el ezt a fiókot, majd adja hozzá újra.
+      linked_on: "%{date}"
+      manage_connection: Ugrás a fiókokhoz
+      mask: "****%{mask}"
+      no_accounts: Erről a kapcsolatról még nem szinkronizált egyetlen fiók sem.
+      overlap:
+        all_connected:
+          one: A hozzáadni kívánt fiók már csatlakoztatva van, így újbóli hozzáadásával csak egy másolatot hozna létre.
+          other: A hozzáadni kívánt %{count} fiókok már mindegyike csatlakoztatva van, így újbóli hozzáadásuk csak másolatokat hoz létre.
+        different_login: Egy másik %{institution} bejelentkezési név csatlakoztatásához válassza ismét az Új fiók lehetőséget, és jelentkezzen be azzal a bejelentkezési névvel a Plaid segítségével.
+        more_accounts: Ha további fiókokat szeretne hozzáadni ehhez a kapcsolathoz, zárja be, és válassza a Fiókok hozzáadása lehetőséget a %{institution} kapcsolaton.
+        others_connected:
+          one: A Sure már rendelkezik ezzel a fiókkal a %{name} kapcsolatán keresztül, így a tiéd hozzáadása csak egy másolatot hozna létre.
+          other: A Sure már rendelkezik ezekkel a fiókokkal a %{name} kapcsolatán keresztül, így a tiéd hozzáadása csak duplikátumokat hoz létre.
+        others_connected_several:
+          one: Sure már rendelkezik ezzel a fiókkal más tagok kapcsolatain keresztül, így a tiéd hozzáadása csak egy duplikátumot hoz létre.
+          other: Sure már rendelkezik ezekkel a fiókokkal más tagok kapcsolatain keresztül, így a tiéd hozzáadása csak duplikátumokat hoz létre.
+        none_connected: A hozzáadni kívánt fiókok egyike sem csatlakozik még, ezért valószínűleg más bejelentkezési adatokat használ. A hozzáadása csak egy újabb Plaid kapcsolatnak számít.
+        some_connected:
+          connected:
+            one: A másik már csatlakoztatva van, így ennek a kapcsolatnak a hozzáadása megkettőzi azt, és egy másik Plaid kapcsolatnak számít.
+            other: A többi %{count} már csatlakoztatva van, így ennek a kapcsolatnak a hozzáadása megkettőzi őket, és egy másik Plaid kapcsolatnak számít.
+          unconnected:
+            one: 'Az egyik fiók, amelyet megpróbált hozzáadni, még nem csatlakozik:'
+            other: "%{count} A hozzáadni kívánt fiókok még nem csatlakoznak:"
+        unknown:
+          one: Ezek a fiókok nem ellenőrizhetők a meglévő kapcsolattal. Ha ugyanazok a fiókok, akkor a kapcsolat hozzáadása megkettőzi őket, és egy másik Plaid kapcsolatnak számít.
+          other: Ezek a fiókok nem ellenőrizhetők a meglévő kapcsolatokkal. Ha ugyanazok a fiókok, akkor a kapcsolat hozzáadása megkettőzi őket, és egy másik Plaid kapcsolatnak számít.
+      title:
+        one: Már van kapcsolata ehhez az intézményhez
+        other: Már rendelkezik %{count} kapcsolatokkal ehhez az intézményhez
+      title_all_connected: Már létrehoztad ezt a kapcsolatot
+      title_others_connected:
+        one: Ez a fiók már kapcsolódik
+        other: Ezek a fiókok már csatlakoznak
+      update_existing: Meglévő kapcsolat frissítése
+  plans:
+    goals_card:
+      currency_warning:
+        one: A 1 cél kihagyja a %{currencies} egyenlegeket (még nincs átváltási árfolyam).
+        other: A %{count} célok kihagyják a %{currencies} egyenlegeket (még nincs átváltási árfolyam).
+  recurring_allocations:
+    entry_exhausted: A tranzakció teljes összege már alkalmazva van más esedékes kifizetésekre.
+  valuations:
+    names:
+      current_account_value: Folyószámla érték
+      current_balance: Folyó fizetési mérleg
+      current_loan_balance: Folyó hitelegyenleg
+      current_market_value: Jelenlegi piaci érték
+      manual_balance_update: Manuális egyenlegfrissítés
+      manual_principal_update: Kézi fő frissítés
+      manual_value_update: Manuális értékfrissítés
+      opening_account_value: Nyitó számlaérték
+      opening_balance: Nyitó egyenleg
+      original_purchase_price: Eredeti vételár

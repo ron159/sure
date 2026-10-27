@@ -156,7 +156,7 @@ class AccountsTest < ApplicationSystemTestCase
 
       yield if block_given?
 
-      click_button "Create Account"
+      click_button I18n.t("helpers.submit.account.create")
 
       within_testid("account-sidebar-tabs") do
         click_on "All"
@@ -209,7 +209,7 @@ class AccountsTest < ApplicationSystemTestCase
           fill_in "Institution name", with: institution_name
           fill_in "Institution domain", with: institution_domain
           fill_in "Notes", with: notes
-          click_button "Update Account"
+          click_button I18n.t("helpers.submit.account.update")
 
           return if has_selector?("h2", text: name, wait: 2)
         rescue Selenium::WebDriver::Error::WebDriverError => e

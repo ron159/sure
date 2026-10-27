@@ -5,6 +5,28 @@ class SupportedLocaleI18nTest < ActiveSupport::TestCase
   Catalog = ApplicationLocaleCatalog
   COUNTS = [ 0, 1, 2, 3, 5, 11, 21, 22, 101, 1.5 ].freeze
 
+  test "classifier toggle labels distinguish enabled and disabled states" do
+    %w[fr tr ca ro ru pl pt-PT pt-BR nl hu vi uk].each do |locale|
+      enabled = I18n.t("settings.classifiers.evaluation.on", locale: locale, fallback: false, raise: true)
+      disabled = I18n.t("settings.classifiers.evaluation.off", locale: locale, fallback: false, raise: true)
+
+      refute_equal enabled, disabled, "#{locale} uses the same label for both states"
+      refute_includes %w[on off], enabled.downcase, "#{locale} should use a localized enabled label"
+      refute_includes %w[on off], disabled.downcase, "#{locale} should use a localized disabled label"
+    end
+  end
+
+  test "Slavic plural labels show the requested count beyond one" do
+    %w[ru pl uk].each do |locale|
+      [ 21, 22, 101 ].each do |count|
+        %w[rules.actions.split.summary credit_cards.due.in_days].each do |key|
+          text = I18n.t(key, locale: locale, count: count, fallback: false, raise: true)
+          assert_includes text, count.to_s, "#{locale} #{key} must display #{count}"
+        end
+      end
+    end
+  end
+
   # A whitespace grouping separator is formatting data, not a missing label.
   # Catalan has no counterpart for English "there" in the anonymous "Hey there"
   # greeting; its explicitly empty fragment leaves the translated greeting intact.

@@ -1,0 +1,772 @@
+---
+nl:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} ondersteunt uitsluitend woningen die zich in het Verenigd Koninkrijk bevinden."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Het Unieke Eigendomsreferentienummer (met tot 12 cijfers) identificeert elke adres in het VK. U vindt dit op findmyaddress.co.uk van GeoPlace of kunt het vragen aan uw plaatselijke gemeente. %{provider} gebruikt dit om de waarde van het eigendom gratis te bepalen.
+      avm_county_label: Gemeente (optioneel)
+      avm_town_label: Stad of plaats
+      avm_postcode_label: Postcode
+      avm_preview_uprn: UPRN
+      avm_preview_range: Schattingsscore
+      avm_preview_confidence: Vertrouwen
+      avm_confidence:
+        medium: Middel
+        low: Laag
+      avm_attribution_chimnie: Waarderingsgegevens van Chimnie. Bevat gegevens OS, © met koninklijk auteursrecht en databerecht, gegevens Royal Mail, © en Royal Mail met auteursrecht en databerecht, en gegevens HM Land Registry en © met koninklijk auteursrecht en databerecht, gecombineerd onder licentie volgens Open Government Licence versie 3.0.
+    tabs:
+      overview:
+        refresh_valuation: Waardering bijwerken
+        valuation_source: Gewaardeerd door %{provider}, laatst bijgewerkt op %{date}
+        link_valuation: Actualiseer de waarde automatisch met %{provider}
+        link_valuation_description: De waarde van deze eigenschap wordt alleen handmatig bijgewerkt.
+    refresh_valuation:
+      queued: Het bijwerken van de waarde is gestart. De nieuwe waarde verschijnt binnenkort.
+      not_linked: Deze eigenschap is niet gekoppeld aan een waardebepalingsdienstverlener.
+      not_configured: "%{provider} is niet geconfigureerd. Voeg de API-sleutel toe in Settings → Self-Hosting om deze waarde bij te werken."
+    link_valuation:
+      linked: Gekoppeld aan %{provider} en de waarde van de eigenschap is bijgewerkt.
+      link_failed: "%{provider} kon deze eigenschap niet waarderen, waardoor deze niet is gekoppeld. Controleer of het adres correct is en probeer het opnieuw."
+      not_linkable: Deze eigenschap kan niet worden gekoppeld aan die aanbieder. Controleer of het adres compleet is en zich in een ondersteund land bevindt, en of de valut van de bankrekening overeenkomt met die van de aanbieder.
+  settings:
+    providers:
+      meta:
+        login_required: Inloggen vereist
+        login_expires_soon: De inlogging verloopt in %{time} (%{at})
+      enable_banking_panel:
+        keep_client_certificate_hint: Laat leeg om het huidige certificaat te behouden
+      trade_republic_panel:
+        requires_update: Log in opnieuw om het synchroniseren voort te zetten.
+        session_expires_in: Inloggen verloopt na %{time} (%{at}).
+    classifiers:
+      account:
+        account_field: Voeg de bankrekening toe als één token.
+        account_field_hint: 'Op welke bankrekening een transactie plaatsvindt, telt als bewijs. Dit bepaalt nooit alleen: er is ook een bekend woord of handelaar nodig voor een transactie.'
+      amount:
+        amount_by_direction: Voeg de richting toe, of het om geld in of uit gaat.
+        amount_by_direction_hint: Elke categorie leert in welke richting het geld gaat, en restituties en aankopen bij dezelfde handelaar blijven gescheiden.
+        amount_field: Voeg het bedrag toe.
+        amount_field_hint: Vergelijkt het bedrag met de gebruikelijke bedragen per categorie in dezelfde valuta, op een logaritmische schaal.
+      category_training:
+        categories_hint: Ongecontroleerde categorieën, inclusief hun ondercategorieën, worden buitengesloten bij het trainen, zodat Bayes ze nooit kiest.
+        categories_some: Categorieën %{count} of %{total}
+        skip_self_labels: Leer niet van Bayes' eigen schattingen totdat ze bevestigd zijn of zo veel dagen oud zijn.
+        skip_self_labels_hint: Bevestigd betekent dat je ze hebt gewijzigd of vergrendeld. Een verkeerde schatting wordt niet teruggenomen of versterkt; een schatting die zo lang onveranderd blijft, wordt als geaccepteerd beschouwd.
+      add_rule:
+        success: De regel van %{name} is bovenaan je regels geplaatst.
+      classifier:
+        lock_results: Sluit de categorieën die de classifier vaststelt
+        lock_results_hint: Verhindert dat regels de keuzes van Bayes wijzigen, tenzij u op 'Toepassen' op een regel klikt. AI wijzigt nooit de keuzes van Bayes, of deze nu zijn vergrendeld of niet.
+        rule: Categorieer met de classifier
+        rule_hint: De regel voor de Category classifier, aan of uit in de Regels. Het categoriseert ongecategoriseerde transacties in de volgorde van uw regels, na elke synchronisatie; wat het niet zeker weet, wordt overgelaten aan een regel voor automatische categorisering.
+        threshold: Drempel
+        threshold_hint: De minimale score die vereist is voor Bayes om een transactie te categoriseren (0.05–0.99). Lagere drempels zorgen voor meer categorisering van transacties, maar leiden ook tot meer fouten.
+      clear_locks:
+        success: Bayes' de beveiligingen worden opgeheven. Dit kan enkele ogenblikken duren.
+      evaluation:
+        apply_best: Pas deze instellingen toe
+        best: Best gevonden
+        best_changes: 'Best gevonden, aangepast ten opzichte van de uwe:'
+        best_no_changes: Niets scoort beter dan uw instellingen.
+        buttons_hint: 'Test mijn instellingen: deze beoordelen uw instellingen. ''Beste instellingen vinden'' zoekt in de %{tuning} maanden vóór de getoonde, zodat wat wordt gevonden wordt beoordeeld op basis van de maanden waarin het niet te zien was. Het beoordeelt volgens ROC-AUC: in hoeverre de scores de transacties van elke categorie boven de rest plaatsten, bij elke drempel, waarbij een wijziging alleen wordt doorgevoerd wanneer deze over het algemeen hoger is en in alle %{tuning} maanden behalve één. Eerst worden de invoerwaarden gekozen (elke combinatie van het handelaartoken, bedrag en bankrekening; daarna wordt de handelaar en de bankrekening apart gescoord; vervolgens de naam van de handelaar en de opmerkingen als woorden), daarna worden één voor één wijzigingen aangebracht in de andere instellingen, en ten slotte in de Scoring-methode. De standaardinstellingen zijn die van de oorspronkelijke classificator, met uw gekozen categorieën; ''Terug naar standaardinstellingen'' schakelt over op deze en test ze.'
+        categories_heading: Categorie-classificator
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'Meest voorkomende fouten: %{column} bij %{threshold}'
+        current: Mijn instellingen
+        defaults: Standarden
+        description: Elke kolom wordt beoordeeld op de laatste %{months} maanden aan nieuwe transacties, waarbij elke maand wordt getraind op de geschiedenis daarvoor, om vervolgens te worden vergeleken met uw categorieën. Testen verandert de categorie van geen enkele transactie, en de instellingen van de classificator veranderen alleen wanneer u ze aanpast of reset.
+        find_best: Optimaliseer de instellingen
+        matcher_confusions: 'Meest voorkomende fouten van handelaren: %{column} bij %{similarity}'
+        matcher_description: 'Handelaren die door de matcher in dezelfde maanden bij %{months} worden gevonden: transacties met een handelaar bij %{count}, waarbij elke transactie wordt vergeleken met de geschiedenis vóór de maand waarin de handelaar betrokken is, waarbij de handelaar zelf verborgen blijft; rechts staat de handelaar waarmee te maken is. Elke drempel en het aantal handelaren worden beoordeeld; de beste optie is degene met de laagste kosten voor fouten, zoals door Apply wordt vastgesteld. Bij testing worden geen handelaren opgenomen.'
+        merchants_heading: Handelaarmatcher
+        no_confusions: Geen fouten bij deze drempel.
+        no_matcher_confusions: Geen fouten van handelaren bij deze gelijkenisniveau.
+        no_uncategorized: Niets ongecategoriseerd bij deze drempel.
+        no_unfilled: Er is niets overgebleven zonder een handelaar bij deze gelijkenis.
+        none: Nog niet getest.
+        ran_at: Kreeg eerder een score %{time} voor transacties %{count} (%{months}).
+        reset: Herstel naar standaardinstellingen
+        reset_confirm: Herstel alle instellingen van de classifier naar hun standaardwaarden en test ze?
+        right_wrong: Elke cel is correct / incorrect.
+        run: Mijn instellingen testen
+        running: Testen... deze sectie wordt bij voltooiing bijgewerkt.
+        short_history: Er is nog niet genoeg historie om de categorie-classificator af te stemmen. Hiervoor zijn ongeveer %{months} maanden aan gecategoriseerde transacties nodig, waardoor Apply voorlopig de instellingen ongewijzigd laat.
+        similarity: Gelijkheid
+        stale: De instellingen zijn sinds deze test veranderd.
+        threshold: Drempel
+        trying: Probeer %{changes}…
+        uncategorized: 'Meest voorkomende ongecategoriseerde: %{column} bij %{threshold}'
+        unfilled: 'Meest voorkomende onbevulde: %{column} bij %{similarity}'
+        weight: Een fout heeft gevolgen
+        weight_hint: 'Kiest wat Apply heeft ingesteld: de vetgedrukte cellen, waar het verschil tussen de juiste antwoorden en dit aantal per fout het hoogst is. De beste drempel voor categorieën; de cut-offwaarde, gelijkenis en het aantal handelaren voor de matcher.'
+        weight_option:
+          one: Juiste antwoord voor 1
+          other: "%{count} juiste antwoorden"
+      matcher:
+        lock_similar_merchants: Sluit de door de matcher aangewezen handelaren af
+        lock_similar_merchants_hint: Stopt regels, AI en synchroniseert eventuele wijzigingen, tenzij u op 'Toepassen' op een regel klikt. De eigen beperkingen tellen niet als bevestigd (Afstemming van de merchant matcher).
+        rule: Vul ontbrekende handelaren in uit near-duplicates
+        rule_hint: De regel voor de merchant matcher, aan of uit in de Regels. In de volgorde van uw regels krijgt een transactie zonder handelaar die handelaar die zijn near-duplicates hebben, zoals "NETFLIX.COM 8812" en "Netflix com", allemaal hebben. Overboekingen tussen rekeningen worden buiten beschouwing gelaten.
+        similar_threshold: Gelijkendheid
+        similar_threshold_hint: De laagste gelijkenis van de beschrijvingen, waarbij cijfers en referentiecodes (0.5–0.99) worden genegeerd. Hoe lager de score, des te meer invullingen zijn er en des te meer fouten. De instellingen van Auto-tune bepalen dit ook.
+      matcher_tuning:
+        similar_common_share: Sluitingsdatum
+        similar_common_share_hint: Een woord of reeks van 3 letters die voorkomt in meer dan dit aandeel van de brontransacties (0,01–1) en in ten minste 50 daarvan, is te algemeen om ze te onderscheiden, zoals «kaart» of «betaling», en wordt daarom genegeerd. Een hogere waarde telt meer woorden mee. De knop Toepassen van de automatische afstemming stelt deze waarde ook in.
+        similar_min_neighbours: Handelaren die akkoord gaan
+        similar_min_neighbours_hint: Hoeveel near-duplicates mogen er van de handelaar zijn, waarbij er geen andere mogen zijn. 1 kopieert zelfs één enkele transactie per ongeluk.
+        similar_min_neighbours_option:
+          one: 1 handelaar
+          other: "%{count} handelaren"
+        similar_skip_self: Kopieer niet van de eigen handelaren van de matcher totdat dit is bevestigd of het al zoveel dagen oud is
+        similar_skip_self_hint: Bevestigd betekent dat u het heeft gewijzigd of afgesloten. Een verkeerde kopie wordt niet verspreid; één die zo lang onaangeroerd blijft, wordt als geaccepteerd beschouwd.
+      merchant:
+        merchant_field: Voeg de handelaar toe als één token wanneer dit is ingesteld
+        merchant_field_hint: Het wordt geteld op basis van de identiteit, zodat een hergenoemde handelaar zijn historie behoudt.
+        merchant_name_words: Voeg de naam van de handelaar toe als afzonderlijke woorden
+        merchant_name_words_hint: Lees het zoals in de beschrijving, net zoals in het origineel, zodat vergelijkbare namen bewijs delen. Er is overlap met het token hieronder.
+      run:
+        success: Bayes is oncategoriseerde transacties aan het categoriseren. Dit kan enkele ogenblikken duren.
+      scoring:
+        complement: Gebruik de complementaire Bayes.
+        complement_hint: Beoordeelt elke categorie op basis van hoe slecht de transactie bij de andere categorieën past. Dit werkt beter bij categorieën van zeer verschillende omvang. Uitgeschakeld gebruikt het oorspronkelijke multinomiale model.
+        prior: Geef aan hoe vaak elke categorie wordt gebruikt.
+        prior_hint: Geeft voorrang aan de categorieën die u het vaakst gebruikt. Uitgeschakeld behandelt alle categorieën gelijk, zoals in het oorspronkelijke model.
+        separate_fields: Beoordeel de handelaar en de bankrekening apart van de woorden
+        separate_fields_hint: Ieder krijgt zijn eigen beoordeling, zodat een lange beschrijving niet zwaarder weegt dan de andere elementen. De handelaar of de bankrekening moet altijd worden opgenomen; de hoeveelheid wordt altijd apart beoordeeld.
+        smoothing: Vereenvoudiging
+        smoothing_hint: Wordt toegevoegd aan elke telling zodat een onbekend woord een categorie niet uitsluit (0.001–10). 1 is de oorspronkelijke versie; een lagere waarde geeft meer gewicht aan eerder gezien elementen.
+      show:
+        add_rule_body: Er is geen regel %{name} in uw regels, dus er is niets om in te schakelen. Wilt u deze toevoegen aan de bovenkant van uw regels?
+        add_rule_confirm: Regel toevoegen
+        add_rule_title: Voeg de regel %{name} toe?
+        account: Afstelling van de bankrekening
+        amount: Afstelling van het bedrag
+        auto_tune: Automatische afstelling
+        category_training: Afstelling van de categorieclassificator
+        clear_locks: Verwijder de beperkingen van Bayes
+        clear_locks_confirm_body: Het ontgrendelt de categorieën Bayes die zijn vergrendeld en de handelaren die door de matcher zijn vergrendeld, mits deze nog steeds overeenkomen met de ingestelde waarden, zodat regels en AI ze opnieuw kunnen aanpassen. De categorieën en handelaren blijven onveranderd.
+        clear_locks_confirm_button: Beperkingen verwijderen
+        clear_locks_confirm_title: Beperkingen van Bayes verwijderen?
+        description: De categoriseringsmachine van Bayes leert van uw al gecategoriseerde transacties en categoriseert nieuwe transacties vóór elke AI-provider. Veranderingen in deze instellingen treden in werking bij de volgende categorisering; reeds gecategoriseerde transacties behouden hun categorieën.
+        matcher: Matcher
+        matcher_description: Vult ontbrekende handelaren in uit near-duplicates, volgens de regel voor de Merchant matcher (na elke synchronisatie) en tijdens een uitvoering. Hierdoor veranderen de opgeslagen handelaren.
+        matcher_tuning: Afstemming van handelaarmatching
+        merchant: Afstemming van handelaars
+        run: Starten
+        scoring: Bewerking van scores
+        title: Classificator
+        training: Training
+        words: Afstemming van transacties
+      training:
+        max_training_transactions: Training van transacties
+        max_training_transactions_hint: 'Hoeveel van de nieuwste transacties te gebruiken (100–20,000): de gecategoriseerde transacties waaruit de classifier leert, en de transacties met een handelaar die door de matcher worden overgenomen.'
+      words:
+        bigrams: Woordparen opnemen
+        bigrams_hint: Aangrenzende woorden tellen ook samen, zoals bijvoorbeeld "kaartbetaling".
+        binary: Herhaalde woorden uitsluiten
+        binary_hint: Elk woord telt één keer per transactie.
+        drop_codes: Uitsluit referentiecodes.
+        drop_codes_hint: Woorden die letters combineren met 2 of meer cijfers, zoals 2k4l19.
+        drop_numbers: Uitsluit cijfers.
+        drop_numbers_hint: Zet cijfers, data en bedragen in de beschrijving.
+        include_notes: Voeg notities toe.
+        include_notes_hint: Leest zowel de notities als de naam.
+        keep_single_chars: Voeg éénlettergrepige woorden toe.
+        keep_single_chars_hint: Enkele letters en cijfers die na het splitsen overblijven, zoals de "s" in mcdonald's.
+        spread_filter: Uitsluit woorden die door alle categorieën op dezelfde manier worden gebruikt.
+        spread_filter_hint: Ze zeggen niets over de categorie. Het getal geeft aan in hoeverre het gebruik van één categorie boven het gemiddelde moet uitkomen.
+        word_split: Woorden bestaan uit
+        word_split_ascii: a–z en 0–9
+        word_split_hint: Alle andere tekens splitsen woorden. Letters uit elk schrift houden woorden zoals Geschäft of Кофейня intact; letters die door één intern symbool verbonden zijn, blijven ook één woord, zoals mcdonald's, s/o en m&s (een symbool aan een van beide uiteinden, zoals bij *netflix, wordt nog steeds verwijderd).
+        word_split_symbols: Letters, cijfers en symbolen in het midden
+        word_split_unicode: Letters en cijfers, uit elke schriftsoort
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Analyse verder verkennen
+          subtitle: Eerste chatbericht wanneer je dieper kijkt naar een inzicht met AI
+          label: Klik op de berichtoptie
+    preferences:
+      show:
+        default_account_order_hint: Met de handmatige modus kunt u de bankrekeningen in de zijbalk slepen om de volgorde in te stellen.
+        investment_contributions_as_spending: Tel investeringen mee als uitgaven
+        investment_contributions_as_spending_hint: Geld dat naar beleggingsrekeningen wordt overgemaakt, telt als uitgave in budgetten, rapporten en de kasstroomgrafiek. Zet dit uit om het in plaats daarvan als geïnvesteerd weer te geven.
+    securities:
+      show:
+        disable_mfa_password_label: Bevestig met uw wachtwoord
+        disable_mfa_password_placeholder: Voer uw wachtwoord in
+        mfa_sso_only: Tweefactorauthentificatie wordt beheerd via uw identiteitsprovider.
+    settings_nav:
+      classifier_label: Classificator
+    hostings:
+      show:
+        instance_settings_restricted: De credentials van de provider, de gedeelde verbinding AI en de synchronisatieinstellingen zijn van toepassing op elke familie in deze instelling, waardoor alleen een superadmin ze kan wijzigen. Welke assistent uw familie gebruikt, wordt nog steeds per familie ingesteld. Iemand met toegang tot de server kan een gebruiker promoveren tot superadmin; de zelfhostinggids Docker toont het commando in de upgrade-notities.
+      assistant_settings:
+        type_mcp_only: Niets in de app (verbind uw eigen agent via MCP)
+        mcp_only_help: Voor iedereen in dit huishouden is de assistent in de app uitgeschakeld. De snelkoppelingen AI voor rekeningen en de door AI opgestelde inhoudsteksten stoppen ook. MCP en achtergrondcategorisering blijven beschikbaar. Verbind externe agents via Instellingen > MCP.
+      llm_provider_selector:
+        max_items_per_call_label: Maximaal aantal items per batch (optioneel)
+        max_items_per_call_help: 'Bovengrens voor batches voor automatische categorisering / detectie van handelaren. Standaardwaarde: 25. Met providers die compatibel zijn met OpenAI, worden grotere batches automatisch opgesplitst om binnen het contextvenster te passen.'
+      openai_settings:
+        ai_health_probe_timeout_label: Tijdsduur van de health check in seconden (optioneel)
+        ai_health_probe_timeout_help: 'Standaardwaarde: 5. Dit geldt alleen voor de actieve AI-checks onder Settings → System health, nooit voor echte AI-oproepen. Verhoog deze waarde als de PDF-checks een tijdsverloop melden bij het gebruik van een cloudmodel. AI_HEALTH_PROBE_TIMEOUT heeft voorrang op dit veld.'
+      chimnie_settings:
+        title: Chimnie
+        description: Voer uw Chimnie API-sleutel in om UK-woonobjecten te waarderen op basis van hun UPRN. Maak een gratis sleutel aan bij dashboard.chimnie.com (registratie vereist een bedrijfs- of custom-domain e-mailadres; Gmail-, Outlook- en soortgelijke adressen worden niet geaccepteerd). De waarderingen via UPRN zijn gratis en worden maandelijks bijgewerkt; Sure beperkt het aantal aanvragen per maand tot 1,000, wat u kunt wijzigen met de CHIMNIE_MAX_REQUESTS_PER_MONTH-omgevingsvariabele.
+        env_configured_message: Is succesvol geconfigureerd via de CHIMNIE_API_KEY-omgevingsvariabele.
+        label: API-sleutel
+        placeholder: Voer hier uw Chimnie API-sleutel in
+      sync_settings:
+        market_data_sync_label: Activeer de import van dagelijkse marktgegevens
+        market_data_sync_description: Wanneer dit is geactiveerd, worden de prijzen van financiële effecten automatisch één keer per dag, van maandag tot en met vrijdag, op het aangegeven tijdstip geïmporteerd.
+        market_data_sync_time_label: Tijdstip voor import van marktgegevens (HH:MM)
+        market_data_sync_time_description: Kies het tijdstip van de dag om de prijzen van financiële effecten te importeren, bijvoorbeeld kort nadat de belangrijkste beurs is gesloten.
+  shared:
+    money_field:
+      above_max: Voer een bedrag in dat maximaal gelijk is aan %{max}.
+      below_min: Voer een bedrag in van ten minste %{min}.
+      invalid_amount: Voer een geldig bedrag of uitdrukking in.
+      operator_add: Optellen
+      operator_subtract: Afhalen
+      operator_multiply: Vermenigvuldigen
+      operator_divide: Delen
+    require_non_guest: Bezoekers mogen deze actie niet uitvoeren
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: Er wordt door geen enkele worker gewerkt aan de AI-queues (chat, detectie van handelaren, categorisering). Controleer of de worker config/sidekiq.yml laadt.
+  loans:
+    form:
+      day_count_convention: Basis voor rente
+      day_count_convention_actual_365: Effectief/365
+      day_count_convention_actual_actual: Effectief/effectief
+      day_count_convention_hint: Dit bepaalt hoe uw leningverstrekker elke renteperiode in verhouding tot een jaar meet. Effectief/365 gebruikt het werkelijke aantal dagen per maand en is de standaard voor hypotheekleningen in het Verenigd Koninkrijk en Australië. 30/360 gebruikt een vaste een twaalfde van een jaar per maand, net zoals Sure altijd heeft gedaan.
+      day_count_convention_thirty_360: 30/360 (een vaste twaalfde)
+  breadcrumbs:
+    classifier: Classificator
+  oauth:
+    registration:
+      invalid_client_name: client_name mag geen bidirectionele controlecaracters bevatten
+      reserved_client_name: client_name is gereserveerd voor apps van de eerste partij
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Er is op dit moment nog geen wisselkoers beschikbaar voor een van de rekeningen van dit doel, waardoor het niet kan worden afgerond.
+        rule:
+          split_not_alone: Een splitselregel mag geen andere acties bevatten
+        rule/action:
+          attributes:
+            value:
+              invalid_config: moet een geldige configuratie voor het verdelen zijn
+              invalid_split_count: moet tussen %{min} en %{max} verdelingen hebben
+              split_name_required: 'verdeling #%{index} mist een naam'
+              split_name_too_long: 'de naam van verdeling #%{index} is te lang (maximaal 255 karakters)'
+              split_name_invalid: 'de naam van verdeling #%{index} bevat ongeldige karakters'
+              split_type_invalid: 'het type van verdeling #%{index} moet ''vast'' of ''procentueel'' zijn'
+              split_share_invalid: 'Verdeel #%{index}: het aandeel moet een positief getal zijn'
+              split_category_invalid: 'Verdeel #%{index}: de categorie behoort niet tot deze familie'
+              split_merchant_invalid: 'Verdeel #%{index}: de handelaar behoort niet tot deze familie'
+              split_tags_invalid: 'Verdeel #%{index}: het heeft een tag die niet tot deze familie behoort'
+              percentages_must_total_100: De percentages moeten samen op 100 uitkomen (kreeg %{total})
+              fixed_requires_exact_amount_condition: Verdelingen met vaste bedragen vereisen een regelconditie die overeenkomt met een exact bedrag van de transactie (bijv. Bedrag = 42.00); anders kunnen de aandelen niet betrouwbaar samen het totaal van elke overeenkomstige transactie uitmaken
+              fixed_shares_must_equal_condition_amount: de opgedeelde aandelen moeten samen %{amount} bedragen, het exacte bedrag dat vereist is volgens de voorwaarde van deze regel
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: is geen geldige reguliere expressie
+              regex_too_complex: is te complex om veilig te verwerken
+              regex_too_long: is te lang (het maximum is %{count} karakters)
+              regex_backreference: er mogen geen back-referenties worden gebruikt (\1 tot \9)
+  rules:
+    form:
+      stop_processing_label: Stop met het verwerken van verdere regels
+      stop_processing_description: De regels verderop in de lijst veranderen de transacties die aan deze regel voldoen niet.
+    condition_filters:
+      operators:
+        starts_with: Beginnt met
+        ends_with: Eindigt met
+        matches_regex: Voldoet aan regex
+    notification_baseline_timed_out: Deze regel is nog steeds uitgeschakeld. Het controleren welke bestaande transacties al voldoen duurde te lang. Het inschakelen zonder die controle zou voor elke overeenkomstige transactie een e-mail sturen. Vereenvoudig eerst de voorwaarden en schakel de regel daarna opnieuw in.
+    classifier_rules:
+      category_classifier: Categorieclassificator
+      merchant_matcher: Handelaarscomparator
+    rule:
+      stop_processing: Stoppen
+      stop_processing_hint: Regels verderop veranderen transacties die door deze regel zijn geselecteerd niet.
+    index:
+      order_hint: Regels worden van boven naar beneden uitgevoerd. Zodra een regel een veld in een transactie heeft ingesteld, veranderen latere regels dat veld niet meer. Tags worden toegevoegd door elke overeenkomstige regel. Sleep regels om de volgorde te wijzigen.
+      reorder_rule: Verplaats regel %{name}. Druk op Enter of de ruimtebar om deze te selecteren, en gebruik daarna de toetsenbordpijltjestoetsen om hem te verplaatsen.
+    confirm:
+      rules_above_notice:
+        one: De actieve regel erboven wordt eerst uitgevoerd, waardoor het resultaat hetzelfde is als bij een volledige uitvoering.
+        other: De actieve regels %{count} erboven worden eerst uitgevoerd, waardoor het resultaat hetzelfde is als bij een volledige uitvoering.
+    actions:
+      split:
+        type_fixed: Vaste bedrag
+        type_percentage: Procent
+        type_label: Type verdeling
+        share_label: Verdelingsbedrag of -procent
+        category_label: Verdelingscategorie
+        merchant_label: Gedeelde handelaar
+        tags_label: Gedeelde tags
+        remove_split: Gedeelde verdeling verwijderen
+        hint: Vaste verdelingen worden eerst afgetrokken als exacte bedragen. Percentageverdelingen delen vervolgens het resterende bedrag. Als elke verdeling hier een vast bedrag gebruikt, voeg dan ook een voorwaarde toe die overeenkomt met een exact transactiebedrag (bijv. Bedrag = 42.00), aangezien elke overeenkomstige transactie hetzelfde totaal nodig heeft zodat de vaste bedragen op elkaar uitkomen. Een verdelingsregel mag geen andere acties bevatten.
+        fixed_summary_label: vast
+        summary:
+          one: "%{count} verdeling"
+          other: "%{count} splitst"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Die verbinding met Binance is niet beschikbaar. Kies er eentje in de Provider Settings.
+      no_credentials_configured: Verbind u eerst met Binance in de Provider Settings voordat u de bankrekeningen toevoegt.
+      select_connection: Kies een verbinding met Binance in de Provider Settings.
+  reports:
+    index:
+      sections_aria: Rapportsecties
+    spending_vs_normal:
+      title: Uitgaven versus normaal
+      summary_html: "%{total} uitgegeven in deze periode. Normaal voor een periode van deze lengte is %{normal}, gebaseerd op %{baseline_start} tot %{baseline_end}."
+      summary_so_far_html: "%{total} uitgegeven tot nu toe. Normaal voor zoveel dagen is %{normal}, gebaseerd op %{baseline_start} tot %{baseline_end}."
+      no_history_html: "%{total} uitgegeven in deze periode. Er is nog niet genoeg eerdere geschiedenis om te bepalen wat normaal is."
+      no_history_short: Er is nog niet genoeg eerdere geschiedenis om mee te vergelijken.
+      no_spending: Er is geen uitgave in deze periode.
+      no_changes: De uitgaven vallen binnen de normale grenzen in elke categorie.
+      treemap_title: Waar het naartoe is gegaan
+      changes_title: Wat is veranderd
+      direct: "%{category} (geen subcategorie)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normaal: %{amount}'
+        more: "%{amount} meer dan normaal (%{percent})"
+        less: "%{amount} minder dan normaal (%{percent})"
+        more_no_percent: "%{amount} meer dan normaal"
+        less_no_percent: "%{amount} minder dan normaal"
+        no_normal: Er is geen eerdere geschiedenis om mee te vergelijken
+        open: Kies om deze transacties te bekijken
+      legend:
+        less: 50–100% minder
+        slightly_less: 15–50% minder
+        normal: Ongeveer normaal
+        slightly_more: 15–50% meer
+        more: 50–100% meer
+        much_more: 100%+ meer
+  account_order:
+    manual:
+      label: Handmatig (slepen voor herordenen)
+  onchain:
+    chains:
+      cosmos: Cosmos Hub
+      polkadot: Polkadot
+  providers:
+    property_valuation:
+      missing_fields_gb: Geef alstublieft de naam, straatadres en postcode, evenals de UPRN van het object op.
+      entry_name: Waardering van %{provider}
+    chimnie:
+      errors:
+        invalid_uprn: Een UPRN bestaat uit maximaal 12 cijfers. Controleer alstublieft de UPRN en probeer het opnieuw.
+        no_estimate: Voor dit object is er geen schatting beschikbaar voor de Chimnie.
+        not_found: Chimnie kon geen object vinden met deze UPRN.
+        unsupported_property: Chimnie geeft alleen waarden voor woningen; deze UPRN behoort tot een commercieel of gemengd gebruik object.
+        unauthorized: Chimnie heeft de sleutel API afgewezen. Controleer de sleutel in Instellingen → voor zelfhosting.
+        insufficient_balance: Uw saldo op de Chimnie bankrekening is te laag voor dit verzoek.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: Het volledige bedrag van deze transactie is al gebruikt voor andere verschuldigde betalingen.
+      already_allocated: Deze transactie is al toegewezen aan deze rekening.
+    new:
+      covered_title: Deze transactie behoort al tot een bepaalde rekening.
+      covered_body: "%{name} houdt deze betaling al bij, waardoor een nieuwe rekening deze tweemaal zou tellen."
+      covered_open: Nieuwe rekening openen
+      covered_suggested_title: Sure heeft al een rekening voorgesteld voor deze betaling
+      covered_suggested_body: "%{name} wacht in uw voorstellen. Bevestig het om het te volgen, zodat een nieuwe rekening deze betaling niet tweemaal telt. Overeenkomstige betalingen worden automatisch gecombineerd, en u kunt deze hiermee verbinden vanuit de rekening."
+      covered_confirm: Rekening bevestigen
+      covered_create_anyway: Maak toch een aparte rekening aan
+      covered_income_title: Deze deposito behoort al tot een inkomen
+      covered_income_body: "%{name} houdt dit deposito al bij, dus als u het opnieuw toevoegt, wordt het twee keer gerekend."
+      covered_income_open: Inkomsten openen
+      covered_income_suggested_title: Sure heeft deze inkomsten al voorgesteld
+      covered_income_suggested_body: "%{name} wacht in uw voorstellen. Voeg het toe om het bij te houden, zodat dit deposito niet twee keer wordt gerekend. Overeenkomstige deposito's worden automatisch met elkaar verbonden, en u kunt dit exemplaar hiermee verbinden vanuit de inkomsten."
+      covered_income_confirm: Inkomsten toevoegen
+      covered_income_create_anyway: Voeg desondanks aparte inkomsten toe
+    create:
+      amount_too_precise: Gebruik maximaal 4 decimale plaatsen
+      category_invalid: Kies één van uw categorieën, of laat deze leeg
+    already_covered: Deze transactie komt al overeen met een herhalende transactie
+    suggested_income:
+      title: Mogelijk nieuw inkomen
+      confirm: Voeg inkomen toe
+      dismiss: Is geen inkomen
+    confirmed_income: Inkomsten die worden toegevoegd aan uw herhalende transacties
+  transfers:
+    show:
+      investment_contribution_subtitle: Tel deze overboeking tussen rekeningen mee als uitgave in budgetten en rapporten. Zet dit uit wanneer de beleggingsrekening of crypto-rekening het geld alleen omzet in een andere valuta.
+      investment_contribution_title: Beleggingsbijdrage
+  transactions:
+    form:
+      create_as_subcategory: Voeg toe als subcategorie…
+      choose_parent: 'Maak "%{name}" aan onder:'
+      back_to_categories: Terug
+    transaction_category:
+      set_on_outflow: De categorie valt onder de uitgaande kant van deze overboeking tussen rekeningen en kan alleen daar worden gewijzigd.
+    show:
+      category_set_on_hidden_outflow: Dit is de inkomende kant van een overboeking tussen rekeningen. De categorie daarvan valt onder de uitgaande kant, op een bankrekening die u niet kunt bereiken, en kan alleen daar worden gewijzigd.
+      category_set_on_outflow: Dit is de inkomende kant van een overboeking tussen rekeningen. De categorie daarvan valt onder de uitgaande kant en kan alleen daar worden gewijzigd, waardoor budgetten dit één keer meerekenen.
+    search:
+      filters:
+        attachment: Bijlage
+    searches:
+      filters:
+        badge:
+          attachment_with: Met bijlage
+          attachment_without: Zonder bijlage
+        attachment_filter:
+          with: Met bijlage
+          without: Zonder bijlage
+  accounts:
+    sidebar:
+      reorder_account: Verplaats %{account}
+      reorder_hint: Sleep om te hersorteren. Gebruik de toetsenbordtoetsen Enter en de pijltjestoetsen.
+      sort_mode:
+        start: Sorteer bankrekeningen
+        hint: Sleep bankrekeningen via hun handelaar om ze te hersorteren.
+        done: Gedaan
+  admin:
+    system_health:
+      optional_services:
+        title: Optionele diensten
+        description: Optionele integraties met providers. Ongeconfigureerde diensten dienen alleen informatieve doeleinden. Deze controles controleren enkel de instellingen; ze testen geen verbinding, sturen geen testevenementen en veranderen ook geen instellingen met betrekking tot analytics. Expandeer een dienst voor meer details over de instellingen.
+        missing_settings: 'Ontbrekende instellingen: %{settings}'
+        statuses:
+          incomplete: Onvolledige configuratie
+          disabled: Uitgeschakeld in dit proces
+        notes:
+          environment_disabled: De geladen integratie is uitgeschakeld voor deze Rails-omgeving.
+          explicitly_disabled: SKYLIGHT_ENABLED schakelt de instrumentatie expliciet uit.
+          self_hosted_checkout_disabled: De afrekening voor abonnementen en het facturatieportaal zijn in self-hosted-modus uitgeschakeld. Stripe-webhooks kunnen nog steeds worden geconfigureerd; hier zijn prijs-ID's voor de afrekening niet vereist.
+          browser_analytics_disabled: Browseranalyses zijn voor deze omgeving uitgeschakeld. Dit schakelt de apart geconfigureerde serverclient niet uit.
+          shared_feedback_configured: Feedback voor self-hosting heeft een apart bundeld project en wordt geactiveerd door diens configuratie. Het vereist geen operator POSTHOG_KEY. Er wordt geen controle uitgevoerd op browser-opt-out en de beschikbaarheid van SDK.
+          shared_feedback_disabled: Het aparte self-hosted feedbackproject is uitgeschakeld door de instellingen voor feedback of de omgeving. Dit schakelt de door de operator beheerde analyses niet uit.
+          production_only: Deze integratie wordt alleen in productieomgevingen gebruikt, afhankelijk van de huidige configuratie van de applicatie.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Optioneel traceren en rapporteren van AI. Door deze controle worden geen sporen of evaluatieverzoeken verstuurd.
+            guidance: Stel LANGFUSE_PUBLIC_KEY en LANGFUSE_SECRET_KEY samen in. LANGFUSE_HOST is optioneel. Zet de betreffende diensten opnieuw op na het wijzigen van deze instellingen.
+          sentry:
+            title: Sentry
+            description: Optioneel rapporteren van fouten en prestaties. De huidige inicialisator maakt rapporteren alleen mogelijk in productieomgevingen.
+            guidance: Stel SENTRY_DSN in en zet de betreffende diensten opnieuw op. Hiermee wordt de geladen SDK-configuratie gecontroleerd, zonder dat er een fout wordt geregistreerd of een event wordt verstuurd.
+          skylight:
+            title: Skylight
+            description: Optioneel instrumenteren van de applicatieprestaties. Het feit dat de configuratie aanwezig is, garandeert niet dat de agent draait of rapporteert.
+            guidance: Stel SKYLIGHT_AUTHENTICATION in en zorg ervoor dat Skylight wordt geladen in de gewenste Rails-omgeving. Als SKYLIGHT_ENABLED=false wordt de instrumentatie uitgeschakeld; alleen dit vlaggetje zorgt er niet voor dat de benodigde component wordt geladen. Zet de applicatie opnieuw op na de wijzigingen.
+          stripe:
+            title: Stripe
+            description: Optionele facturatie voor abonnementen en webhooks voor betalingen. Deze controle creëert geen Stripe-client, valideert geen credentials, noch stelt er betalingsverzoeken op.
+            guidance: Stel zowel STRIPE_SECRET_KEY als STRIPE_WEBHOOK_SECRET tegelijkertijd in. Voor het beheerde afrekenproces voor abonnementen zijn ook STRIPE_MONTHLY_PRICE_ID en STRIPE_ANNUAL_PRICE_ID nodig.
+          posthog:
+            title: PostHog
+            description: Optionele analytics die eigendom zijn van de provider, waarbij gebruik wordt gemaakt van de bij het opstarten geladen configuratie. Het feit dat deze is geconfigureerd betekent niet dat de gebruiker heeft ingestemd met het gebruik van analytics.
+            guidance: Stel POSTHOG_KEY in en geef een niet-lege waarde op voor POSTHOG_HOST, of laat de host ongeconfigureerd om de standaardinstellingen te gebruiken. Browseranalytics vereisen een productieomgeving of POSTHOG_DEVELOPMENT_ENABLED in de ontwikkelomgeving. POSTHOG_FEEDBACK_ENABLED beheert afzonderlijke, zelf gehoste feedbackfuncties, en niet de analytics van de provider.
+          logtail:
+            title: Logtail
+            description: Optioneel doorsturen van logs naar de productieomgeving. Wanneer dit niet is geconfigureerd, blijft de applicatie logs genereren naar de standaarduitvoer.
+            guidance: Stel LOGTAIL_API_KEY en LOGTAIL_INGESTING_HOST samen in en start de betreffende diensten opnieuw op. Deze controle genereert geen testlog.
+      configuration:
+        description: Configuratie zichtbaar voor dit webproces. Deze controles sturen geen e-mails, nemen geen contact op met providers, en zetten noch downloaden bestanden. 'Geconfigureerd' betekent dat de instellingen aanwezig zijn, maar niet dat de levering, toegang tot providers of opslag al is geverifieerd.
+        statuses:
+          incomplete: Onvolledige configuratie
+        settings_needed: Instellingen die gecontroleerd moeten worden
+        unknown_provider: Onherkende keuze voor provider
+        provider_statuses:
+          not_configured: " Sleutel API ontbreekt"
+          invalid: Ongeldige selectie
+        configure_providers: Instellingen voor zelfhosting openen
+        storage_backend: 'Geselecteerde opslag: %{backend}'
+        storage_backends:
+          local: Lokale schijf
+          test: Testschijf
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: Opslag die compatibel is met S3
+          google: Google Cloud-opslag
+          other: Aanpasbare of onherkende achterkant
+        checks:
+          smtp:
+            title: E-mail (SMTP)
+            statuses:
+              configured: De instellingen van SMTP zijn aanwezig.
+              not_configured: SMTP is niet geconfigureerd. Wachtwoordherstellingen, uitnodigingen en andere systeeme-mails kunnen niet via SMTP worden verstuurd.
+              incomplete: Sommige e-mailinstellingen ontbreken of zijn onvolledig. Systeeme-mails of de links daarin werken mogelijk niet.
+              disabled: De levering van e-mails is uitgeschakeld in de huidige configuratie van de mailer.
+              not_checked: Dit proces gebruikt een andere leveringsmethode dan SMTP, zoals een ontwikkelingspreview. De levering via SMTP wordt niet geëvalueerd.
+            guidance: SMTP kan niet worden geconfigureerd in het admin-UI. Stel de e-mailomgevingsvariabelen in voor zowel de web- als werkerservices en start deze daarna opnieuw op. SMTP_USERNAME en SMTP_PASSWORD kunnen beide worden weggelaten voor een ongeauthenticeerde relay.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (een getal van 1 tot 65535)
+              sender: EMAIL_SENDER (verving de standaard sender@sure.local)
+              app_domain: APP_DOMAIN (gebruikt in e-maillinks)
+              authentication: SMTP_USERNAME en SMTP_PASSWORD (gebruik beide of geen van beide)
+          securities:
+            title: Marktprijzen
+            statuses:
+              configured: Alle geactiveerde aanbieders van marktprijzen hebben een configuratie.
+              not_configured: De geactiveerde aanbieders van marktprijzen missen hun API-sleutels. Automatische zoekopdrachten naar financiële effecten en prijsopvragen zijn via deze aanbieders niet mogelijk.
+              incomplete: Er is ten minste één geactiveerde aanbieder van marktprijzen waarbij de configuratie ontbreekt of de keuze ongeldig is. Effecten die aan die aanbieder zijn toegewezen, kunnen geen prijsupdates ontvangen.
+              disabled: Er is geen geactiveerde aanbieder van marktprijzen. Automatische zoekopdrachten naar financiële effecten en prijsopvragen zijn niet beschikbaar.
+            guidance: Kies aanbieders en voeg eventuele vereiste API-sleutels in de zelfhostingsinstellingen toe, of configureer ze in de implementatieomgeving. Instellingen uit de omgeving hebben voorrang. Publieke aanbieders hebben geen API-sleutel nodig.
+          exchange_rates:
+            title: Wisselkoersen
+            statuses:
+              configured: De geselecteerde aanbieder voor wisselkoersen beschikt over configuratie.
+              not_configured: Er is geen bruikbare aanbieder voor wisselkoersen geconfigureerd. Automatische valutauitwisseling kan niet beschikbaar zijn wanneer een opgeslagen koers ontbreekt.
+            guidance: Kies een wisselkoersprovider en voeg indien nodig diens API-sleutel toe in de zelfhostingsinstellingen, of configureer deze in de implementatieomgeving. Omgevingsoverrulingen met EXCHANGE_RATE_PROVIDER en de API-sleutel van de provider hebben voorrang.
+            issues:
+              invalid_provider: De geselecteerde wisselkoersprovider wordt niet herkend. Automatische zoekopdrachten naar wisselkoersen mislukken totdat een ondersteunde provider is geselecteerd.
+          storage:
+            title: Bestandsoptimalisatie en opslag
+            statuses:
+              configured: Opslaginstellingen zijn aanwezig; de lokale schijf heeft geen cloudgegevens nodig.
+              not_configured: De geselecteerde opslagbackend heeft geen overeenkomstige configuratie. Bestandsoptimalisatie kan niet beschikbaar zijn.
+              incomplete: Nodige opslaginstellingen ontbreken of zijn onvolledig. Bestandsoptimalisatie of -opvraging werkt mogelijk niet.
+              not_checked: Deze backend maakt gebruik van externe credential-discovery of een aangepaste configuratie. De toegang tot deze backend kan niet alleen op basis van deze instellingen worden bepaald.
+            guidance: Bekijk ACTIVE_STORAGE_SERVICE en de implementatie-instellingen van de geselecteerde backend. De lokale schijf heeft permanente opslag nodig die gedeeld wordt door de web- en workerdiensten. Het wijzigen van backends migreren geen bestaande bestanden; plan eventuele migraties apart.
+            issues:
+              root: Wortelpad van lokale opslag
+              bucket: Opslagbak
+              region: Opslagregio
+              credentials: Opslagtoegangscode en geheime sleutel (lever beide in of gebruik externe credential-discovery)
+              endpoint: Opslagendpoint (en CLOUDFLARE_ACCOUNT_ID voor R2)
+      show:
+        tabs:
+          configuration: Configuratie
+    users:
+      update:
+        password_disabled: Het instellen van een wachtwoord is uitgeschakeld omdat gebruikers alleen met SSO in kunnen loggen.
+  bills:
+    detail:
+      overview: Overzicht
+      rule_detected: Komt overeen met transacties genaamd %{name}
+    match:
+      same_transfer: Overboeking naar dezelfde bankrekening
+    paycheck:
+      bridge_left: "%{amount} overgebleven na betalingen van rekeningen"
+      bridge_show_more:
+        one: Toon meer informatie over 1
+        other: Toon meer informatie over %{count}
+      bridge_allocation_aria: Van de %{cash} op uw bankrekeningen is %{due} vóór uw volgende salarisverstrekking verschuldigd en is er nog %{left} over.
+      item_overdue: Verstek
+  budgets:
+    available_cash:
+      currency_warning: De saldos van %{currencies} zijn niet opgenomen omdat er nog geen wisselkoers voor %{currency} beschikbaar is.
+  categories:
+    locked: Categorieën zijn vergrendeld. Ontgrendel ze om een nieuwe categorie toe te voegen.
+    toggle_lock:
+      locked: Categorieën zijn vergrendeld
+      unlocked: Categorieën zijn ontgrendeld
+    index:
+      lock_categories: Vergrendel de mogelijkheid om categorieën aan te maken
+      locked_message: Het aanmaken van categorieën is vergrendeld. Importen en synchronisatie met de bank kunnen nog steeds categorieën toevoegen.
+      unlock_categories: Ontgrendel de mogelijkheid om categorieën aan te maken
+  category:
+    dropdowns:
+      show:
+        assign_error: De categorie is aangemaakt, maar kon niet worden toegewezen. Kies opnieuw voor 'Maak aan' om het opnieuw te proberen.
+        back: Terug
+        choose_parent: 'Maak "%{name}" aan onder:'
+        create_as_subcategory: Voeg toe als subcategorie…
+        create_error: Die categorie kon niet worden aangemaakt. Probeer het alstublieft opnieuw.
+  chats:
+    ai_busy: Ik ben net een achtergrondtaak aan het afmaken, daarna ga ik meteen verder met uw bericht.
+    reservation:
+      ready_html: Ik heb wat achtergrondtaken uitgesteld zodat ik meteen kan reageren op uw bericht. Ze komen wel weer terug in %{countdown} s, dus blijf maar typen!
+      busy: Ik ben net een achtergrondtaak aan het afmaken, daarna ben ik helemaal voor u. Blijf maar typen!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: Die Coinbase-verbinding is niet beschikbaar. Kies er eentje in de Provider Settings.
+      no_credentials_configured: Verbind eerst Coinbase in de Provider Settings voordat u de wallets eraan toevoegt.
+      select_connection: Kies een Coinbase-verbinding in de Provider Settings.
+  credit_cards:
+    due:
+      in_days:
+        zero: Moet vandaag betaald worden
+        one: Verplicht om morgen te betalen
+        other: Verplicht om over %{count} dagen te betalen
+      overdue:
+        one: Verplicht om gisteren te betalen
+        other: "%{count} dagen te laat"
+    form:
+      due_day: Dag dat de betaling verplicht is
+      statement_close_day: Het creditcardafschrift wordt op deze dag afgesloten
+      statement_cycle_description: De dag van de maand waarop uw creditcardafschrift wordt afgesloten en de dag waarop de betaling verschuldigd is. Zodra deze waarden zijn ingesteld, toont het tabblad ‘Overzicht’ aan hoe hoog het laatste afschrift was en wat er wordt opgebouwd voor het volgende. Een gekoppelde kaart vult deze waarden automatisch in en houdt rekening met de hand ingevoerde waarden.
+      sophtron_balance_sign_description: Gebruik een override alleen wanneer Sophtron een onduidelijk teken rapporteert. De automatische optie blijft de saldos op de creditcard verlagen.
+      sophtron_balance_sign_label: Betekenis van het saldo volgens Sophtron
+    tabs:
+      overview:
+        above_minimum: Het totaal van uw creditcardafschrift is %{balance}, hoger dan de minimale betaling van %{minimum}. Als u alleen het minimum betaalt, blijft het resterende saldo onderworpen aan dit jaarlijkse rentepercentage (APR).
+        closes_on: Het volgende afschrift wordt afgesloten met een saldo van %{date}
+        credit_toward_next: Betaling die wordt gebruikt voor het volgende afschrift
+        due_on: Verstuurd op %{date}
+        edit_card_details: Kaartgegevens wijzigen
+        since_last_statement: Sinds vorig afschrift
+        statement_balance: Saldo van het afschrift
+        multi_currency_unavailable: Dit afschrift bevat posten die in meerdere valuta's zijn geregistreerd, waardoor deze hier niet samengeteld kunnen worden zonder een conversieratio voor elk van hen. De saldos blijven leeg in plaats van geschat te worden.
+        no_cycle_description: Stel de dag in waarop uw afschrift wordt opgesteld en de dag waarop betaling vereist is. Dan toont dit tabblad het bedrag van uw vorige afschrift en wat er wordt opgebouwd voor het volgende afschrift. Een gekoppelde kaart vult deze gegevens meestal voor u in.
+        no_cycle_title: Er is geen cyclus voor het creditcardafschrift ingesteld.
+    update:
+      sophtron_balance_sign_error: Het begrip 'saldo' van Sophtron kon niet worden toegepast. Uw vorige instelling is behouden gebleven. Probeer het opnieuw.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Verversing van de demo-familie is voltooid.
+      activity_heading: Activiteiten gedurende deze periode.
+      sessions_label: Unieke inlogsessies voor de vorige demo-familie.
+      families_label: Nieuwe familiebankrekeningen zijn aangemaakt.
+      period_heading: Rapportageperiode (UTC)
+      from_label: 'Van:'
+      to_label: 'Tot:'
+      time_format: "%b %-d, %Y bij %H:%M:%S UTC"
+      family_heading: Vorige demonstratiefamilie
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Sommige saldos worden niet meegeteld
+      body:
+        one: Er is nog geen wisselkoers beschikbaar voor %{from} → %{to}, waardoor de saldos van %{from} buiten deze totaalbedrag vallen.
+        other: Er zijn nog geen wisselkoersen beschikbaar van %{from} naar %{to}, waardoor die saldos buiten deze totaalbedrag vallen.
+      settings_link: Instellingen voor de wisselkoersleverancier
+    consume:
+      goal_currency_hint: Voer het bedrag in in %{currency}. Voor een bankrekening in een andere valuta wordt dit bedrag eerst omgerekend naar de huidige koers voordat het van die bankrekening wordt afgetrokken.
+      errors:
+        missing_exchange_rate: Er is nog geen wisselkoers beschikbaar voor de valuta van deze bankrekening, waardoor deze uitgave niet geregistreerd kan worden.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Er is nog geen wisselkoers, dus deze bankrekening wordt niet meegeteld.
+    goal_card:
+      partial_total: Sommige saldos worden niet meegeteld (er is nog geen wisselkoers).
+    form:
+      earmark:
+        converted: Dit is toegewezen aan ≈ {amount}.
+      fields:
+        currency_conversion_hint: Bankrekeningen mogen verschillende valuta's gebruiken. De totaalsommen worden omgerekend naar %{currency}; de toewijzingen blijven in de valuta van de respectievelijke bankrekening.
+  imports:
+    publish:
+      guest_new_categories_or_tags: Gasten kunnen geen categorieën of tags maken. Maak ze gelijk aan bestaande of laat ze leeg.
+    create:
+      missing_upload: We hebben uw bestand niet ontvangen. Probeer het alstublieft opnieuw te uploaden.
+  insights:
+    card:
+      dig_in: Ga aan de slag met AI
+    dig_in:
+      prompt: |-
+        Help me om die inzichten te begrijpen.
+
+        Inzichten: %{title}
+        Wat is gevonden door Sure: %{body}
+        Periode: %{period}
+        Cijfers:
+        %{facts}
+
+        Wat zit er achter en moet ik iets ondernemen?
+  mfa:
+    local_password_required: Tweefactorauthentificatie heeft een lokale wachtwoordvereiste. Uw wachtwoord wordt beheerd door uw identiteitsprovider.
+    create:
+      invalid_password: Fout wachtwoord. Probeer het alstublieft opnieuw.
+    disable:
+      invalid_password: Fout wachtwoord. Probeer het alstublieft opnieuw.
+    new:
+      password_label: Bevestig met uw wachtwoord
+      password_placeholder: Voer uw wachtwoord in
+  pages:
+    dashboard:
+      customize:
+        start: Personaliseren
+        done: Klaar
+        hide: "%{title} verbergen"
+        hidden_title: Verborgen widgets
+        hidden_description: Voeg een widget terug toe aan het dashboard.
+        none_hidden: Elk widget wordt weergegeven. Verberg er eentje met de knop met het oog.
+        all_hidden_title: Alle widgets zijn verborgen
+        all_hidden_description: Pas het dashboard aan om de widgets weer toe te voegen.
+      cashflow_preview:
+        node_labels:
+          invested: Geïnvesteerd
+        group_by_label: Toon stromen per
+        sort_label: Sorteer stromen
+        sort_ascending: Van klein naar groot
+        sort_descending: Van groot naar klein
+      spending_trend:
+        filter_categories: Categorieën filteren (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: We konden niet bevestigen dat deze verbinding is toegevoegd. Laad de pagina opnieuw om dit te controleren voordat u het opnieuw probeert.
+    create:
+      already_connected: U heeft al een verbinding voor deze instelling, dus deze is niet toegevoegd.
+      exchange_failed: We konden deze verbinding niet toevoegen. Probeer het opnieuw, en als het probleem aanhoudt, controleer dan de serverloggen.
+      token_expired: Deze verbinding is verlopen voordat deze kon worden toegevoegd. Verbind u opnieuw met de instelling.
+    duplicate_warning:
+      confirm: Bevestig deze verbinding
+      connected_by: Verbonden via %{name}
+      eu_no_add_accounts: Plaid ondersteunt het toevoegen van bankrekeningen aan een bestaande EU-verbinding niet. Om de verbonden bankrekeningen aan te passen, moet u deze verwijderen en opnieuw toevoegen.
+      linked_on: Geverifieerd via %{date}
+      manage_connection: Ga naar bankrekeningen
+      mask: "****%{mask}"
+      no_accounts: Er zijn nog geen accountbankrekeningen gesynchroniseerd van deze verbinding.
+      overlap:
+        all_connected:
+          one: De accountbankrekening die u probeerde toe te voegen, is al verbonden; het opnieuw toevoegen zou alleen maar een duplicaat opleveren.
+          other: De %{count} accountbankrekeningen die u probeerde toe te voegen, zijn allemaal al verbonden; het opnieuw toevoegen zou alleen maar duplicaten opleveren.
+        different_login: Om een andere %{institution} inloggegevens te koppelen, kiest u opnieuw voor 'Nieuwe account' en doet u inloggen met die gegevens via Plaid.
+        more_accounts: Om meer accountbankrekeningen aan deze verbinding toe te voegen, sluit u deze af en kiest u voor 'Accountbankrekeningen toevoegen' bij de %{institution}-verbinding.
+        others_connected:
+          one: Sure heeft deze accountbankrekening al via de verbinding van %{name}; het toevoegen van de uwe zou alleen maar een duplicaat opleveren.
+          other: Sure heeft al deze bankrekeningen via de connectie van %{name}, dus het toevoegen van de uwe zou alleen maar duplicaten opleveren.
+        others_connected_several:
+          one: Sure heeft al deze bankrekening via de connecties van andere leden, dus het toevoegen van de uwe zou alleen maar een duplicaat veroorzaken.
+          other: Sure heeft al deze bankrekeningen via de connecties van andere leden, dus het toevoegen van de uwe zou alleen maar duplicaten opleveren.
+        none_connected: Geen enkele van de bankrekeningen die u probeerde toe te voegen is nog niet gecombineerd, waardoor dit waarschijnlijk een andere inlog is. Het toevoegen wordt dan alleen geregistreerd als nog een connectie van Plaid.
+        some_connected:
+          connected:
+            one: De andere connectie is al gecombineerd, dus het toevoegen van deze connectie zou een duplicaat veroorzaken en wordt geregistreerd als nog een connectie van Plaid.
+            other: De andere %{count} zijn al gecombineerd, dus het toevoegen van deze connectie zou duplicaten opleveren en wordt geregistreerd als nog een connectie van Plaid.
+          unconnected:
+            one: 'Een bankrekening die u probeerde toe te voegen, is nog niet verbonden:'
+            other: "%{count} bankrekeningen die u probeerde toe te voegen, zijn nog niet verbonden:"
+        unknown:
+          one: Deze bankrekeningen kunnen niet worden gecontroleerd tegen uw bestaande verbindingen. Als het om dezelfde bankrekeningen gaat, zou het toevoegen van deze verbinding ze dupliceren en dit als nog een Plaid-verbinding beschouwd worden.
+          other: Deze bankrekeningen kunnen niet worden gecontroleerd tegen uw bestaande verbindingen. Als het om dezelfde bankrekeningen gaat, zou het toevoegen van deze verbinding ze dupliceren en dit als nog een Plaid-verbinding beschouwd worden.
+      title:
+        one: U heeft al een verbinding voor deze instelling.
+        other: U heeft al %{count}-verbindingen voor deze instelling.
+      title_all_connected: U heeft deze verbinding al gemaakt.
+      title_others_connected:
+        one: Deze bankrekening is al verbonden.
+        other: Deze bankrekeningen zijn al verbonden.
+      update_existing: Bewerk de bestaande verbinding.
+  plans:
+    goals_card:
+      currency_warning:
+        one: Doelstelling 1 houdt de saldos van %{currencies} buiten beschouwing (er is nog geen wisselkoers).
+        other: Doelstellingen %{count} houden de saldos van %{currencies} buiten beschouwing (er is nog geen wisselkoers).
+  recurring_allocations:
+    entry_exhausted: Het volledige bedrag van die transactie is al gebruikt voor andere verschuldigde betalingen
+  valuations:
+    names:
+      current_account_value: Waarde van de bankrekening
+      current_balance: Huidig saldo
+      current_loan_balance: Huidig saldo van de lening
+      current_market_value: Huidige marktwaarde
+      manual_balance_update: Handmatige bijwerking van het saldo
+      manual_principal_update: Handmatige bijwerking van de hoofdsom
+      manual_value_update: Handmatige bijwerking van de waarde
+      opening_account_value: Waarde bij het openen van de bankrekening
+      opening_balance: Beginsaldo
+      original_purchase_price: Oorspronkelijke aankoopprijs

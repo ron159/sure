@@ -152,7 +152,7 @@ class RulesTest < ApplicationSystemTestCase
         assert_no_selector "[data-tag-select-target='menu']", visible: true
       end
 
-      click_button "Update Rule"
+      click_button I18n.t("helpers.submit.rule.update")
     end
 
     assert_text "Rule updated", wait: 10
@@ -170,7 +170,7 @@ class RulesTest < ApplicationSystemTestCase
       click_on "Add condition"
       find("[data-rules-target='conditionsList'] input[name$='[value]']").fill_in(with: "Coffee")
       click_on "Add action"
-      click_on "Create Rule"
+      click_on I18n.t("helpers.submit.rule.create")
     end
 
     # A successful create lands on the confirmation dialog; before the

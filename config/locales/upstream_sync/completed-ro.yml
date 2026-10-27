@@ -1,0 +1,796 @@
+---
+ro:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} acceptă numai proprietăți rezidențiale situate în Regatul Unit."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Numărul unic de referință al proprietății (până la 12 cifre) identifică fiecare adresă din Regatul Unit. Găsiți-l pe findmyaddress.co.uk al lui GeoPlace sau întrebați consiliul local. %{provider} îl folosește pentru a evalua proprietatea gratuit.
+      avm_county_label: Județ (opțional)
+      avm_town_label: Oraș sau oraș
+      avm_postcode_label: Cod poștal
+      avm_preview_uprn: UPRN
+      avm_preview_range: Interval estimativ
+      avm_preview_confidence: Încredere
+      avm_confidence:
+        medium: Mediu
+        low: Scăzut
+      avm_attribution_chimnie: Date de evaluare de la Chimnie. Conține date OS © Crown drepturi de autor și drept de bază de date, date Royal Mail © Royal Mail drepturi de autor și drept de bază de date și date HM Land Registry © Drepturi de autor Crown și dreptul de bază de date, licențiate conform Open Government License v3.0.
+    tabs:
+      overview:
+        refresh_valuation: Actualizați evaluarea
+        valuation_source: Evaluat de %{provider}, ultima actualizare %{date}
+        link_valuation: Actualizați valoarea automat cu %{provider}
+        link_valuation_description: Valoarea acestei proprietăți este actualizată numai manual.
+    refresh_valuation:
+      queued: Actualizarea evaluării a început. Noua valoare va apărea în scurt timp.
+      not_linked: Această proprietate nu este legată de un furnizor de evaluare.
+      not_configured: "%{provider} nu este configurat. Adăugați cheia API în Setări → Auto-găzduire pentru a reîmprospăta această evaluare."
+    link_valuation:
+      linked: S-a conectat la %{provider} și a actualizat valoarea proprietății.
+      link_failed: "%{provider} nu a putut evalua această proprietate, așa că nu a fost conectată. Verificați dacă adresa este corectă, apoi încercați din nou."
+      not_linkable: Această proprietate nu poate fi conectată la acel furnizor. Verificați dacă adresa sa este completă și într-o țară acceptată și dacă moneda contului corespunde furnizorului.
+  settings:
+    providers:
+      meta:
+        login_required: Este necesară autentificarea
+        login_expires_soon: Conectarea expiră în %{time} (%{at})
+      enable_banking_panel:
+        keep_client_certificate_hint: Lăsați necompletat pentru a păstra certificatul curent
+      trade_republic_panel:
+        requires_update: Conectați-vă din nou pentru a relua sincronizarea.
+        session_expires_in: Autentificarea expiră în %{time} (%{at}).
+    classifiers:
+      account:
+        account_field: Includeți contul ca un simbol
+        account_field_hint: 'În ce cont se află o tranzacție contează ca dovadă. Nu decide niciodată singur: o tranzacție are nevoie de un cuvânt sau comerciant cunoscut.'
+      amount:
+        amount_by_direction: Includeți direcția, banii de intrare sau de ieșire
+        amount_by_direction_hint: Fiecare categorie învață în ce direcție merg banii, iar rambursările și achizițiile din același magazin rămân separate.
+        amount_field: Includeți suma
+        amount_field_hint: Compară suma cu sumele obișnuite ale fiecărei categorii în aceeași monedă, pe o scară logaritmică.
+      category_training:
+        categories_hint: Categoriile nebifate, cu subcategoriile lor, sunt lăsate în afara instruirii, așa că Bayes nu le alege niciodată.
+        categories_some: "%{count} din categoriile %{total}"
+        skip_self_labels: Nu învățați din propriile presupuneri ale lui Bayes până nu sunt confirmate sau vechi de atâtea zile
+        skip_self_labels_hint: Confirmat înseamnă că l-ați schimbat sau l-ați blocat. O presupunere greșită nu este reintrodusă și consolidată; unul lăsat singur atât de mult contează ca fiind acceptat.
+      add_rule:
+        success: Regula %{name} a fost adăugată în partea de sus a regulilor dvs.
+      classifier:
+        lock_results: Blocați categoriile pe care le setează clasificatorul
+        lock_results_hint: Oprește modificarea regulilor la alegerile lui Bayes, cu excepția cazului în care dați clic pe Aplicați pe o regulă. AI nu schimbă niciodată alegerile lui Bayes, blocate sau nu.
+        rule: Clasificați cu clasificatorul
+        rule_hint: Regula clasificatorului de categorii, activată și oprită cu aceasta în Reguli. Ea clasifică tranzacțiile necategorisite în ordinea regulilor dvs., după fiecare sincronizare; ceea ce nu este sigur este lăsat pentru o regulă de clasificare automată.
+        threshold: Prag
+        threshold_hint: Scorul minim necesar pentru Bayes pentru a clasifica o tranzacție (0.05–0.99). Pragurile mai mici clasifică mai multe tranzacții, dar fac și mai multe greșeli.
+      clear_locks:
+        success: Bayes încuietori sunt șterse. Acest lucru poate dura câteva momente.
+      evaluation:
+        apply_best: Aplicați aceste setări
+        best: Cel mai bine găsit
+        best_changes: 'Cel mai bine găsit, schimbat față de al tău:'
+        best_no_changes: Nimic nu a avut un scor mai bun decât setările dvs.
+        buttons_hint: 'Testarea setărilor mele evaluează setările dvs. Găsiți cele mai bune setări caută %{tuning} cu luni înainte de cele afișate, astfel încât ceea ce găsește este punctat în lunile pe care nu le-a văzut. Ea judecă după ROC-AUC: cât de bine clasifică punctajele tranzacțiile fiecărei categorii deasupra celorlalte, la orice prag, păstrând o schimbare doar atunci când este mai mare în general și în toate acele luni %{tuning}, cu excepția uneia. Mai întâi alege intrările (fiecare combinație a simbolului de comerciant, a sumei și a contului; apoi deosebește punctajul comerciantului și al contului; apoi numele comerciantului și notele sub formă de cuvinte), apoi încearcă o modificare pe rând la celelalte setări și ultima la Scoring. Valorile implicite sunt cele ale clasificatorului original, cu categoriile selectate; Resetarea la valorile implicite le comută și le testează.'
+        categories_heading: Clasificator de categorie
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'Cele mai frecvente greșeli: %{column} la %{threshold}'
+        current: Setările mele
+        defaults: Valori implicite
+        description: Fiecare coloană este punctată în ultimele luni %{months} ca tranzacții noi, fiecare lună instruită pe istoricul anterior, apoi comparată cu categoriile dvs. Testarea nu modifică nicio categorie a tranzacției, iar setările clasificatorului se modifică numai atunci când aplicați sau resetați.
+        find_best: Găsiți cele mai bune setări
+        matcher_confusions: 'Cele mai frecvente greșeli ale comerciantului: %{column} la %{similarity}'
+        matcher_description: 'Comercianți pe care potrivirea le completează pe aceleași luni %{months}: %{count} tranzacții cu un comerciant, fiecare comparată cu istoricul dinaintea lunii sale, cu comerciantul ascuns; corect este comerciantul pe care îl are. Fiecare limită și număr de comercianți este punctat; Cel mai bine găsit este cel cu cea mai bună celulă pentru costul unei greșeli, pe care Apply o stabilește. Testarea nu completează comercianții.'
+        merchants_heading: Comerciant de potrivire
+        no_confusions: Nicio greșeală la acest prag.
+        no_matcher_confusions: Nicio greșeală de comerciant la această similitudine.
+        no_uncategorized: Nimic neclasificat la acest prag.
+        no_unfilled: Nu a mai rămas nimic fără un comerciant la această asemănare.
+        none: Nu a fost testat încă.
+        ran_at: A obținut %{time} în urmă cu tranzacțiile %{count} (%{months}).
+        reset: Resetați la valorile implicite
+        reset_confirm: Resetați fiecare setare a clasificatorului la valoarea implicită și testați-le?
+        right_wrong: Fiecare celulă este corectă / greșită.
+        run: Testați setările mele
+        running: Testare... această secțiune se actualizează când se termină.
+        short_history: Încă nu este suficient istoric pentru a regla clasificatorul de categorii. Acest lucru necesită aproximativ %{months} luni de tranzacții clasificate, așa că Apply își lasă setările în pace pentru moment.
+        similarity: Similaritate
+        stale: Setările s-au schimbat de la acest test.
+        threshold: Prag
+        trying: Se încearcă %{changes}…
+        uncategorized: 'Cele mai frecvente necategorizate: %{column} la %{threshold}'
+        unfilled: 'Cele mai frecvente necompletate: %{column} la %{similarity}'
+        weight: O greșeală costă
+        weight_hint: 'Alege ceea ce setează Aplicați: celulele aldine, unde răspunsurile corecte minus atâtea per greșeală sunt cele mai mari. Pragul cel mai bun găsit pentru categorii; limita, asemănarea și numărul de comercianți pentru potrivire.'
+        weight_option:
+          one: 1 răspuns corect
+          other: "%{count} răspunsuri corecte"
+          few: "%{count} răspunsuri corecte"
+      matcher:
+        lock_similar_merchants: Blocați comercianții pe care îi stabilește potrivirea
+        lock_similar_merchants_hint: Oprește regulile, AI și sincronizează modificarea acestora, cu excepția cazului în care dați clic pe Aplicați pe o regulă. Propriile încuietori nu sunt luate în considerare ca confirmate (reglare a potrivirii comerciantului).
+        rule: Completați comercianții lipsă din aproape duplicate
+        rule_hint: Regula de potrivire a comerciantului, activată și oprită cu aceasta în Reguli. În comanda dvs. de regulă, o tranzacție fără comerciant primește pe cea aproape duplicate, cum ar fi „NETFLIX.COM 8812” și „Netflix com”, toate au. Transferurile sunt lăsate afară.
+        similar_threshold: Similaritate
+        similar_threshold_hint: Similaritatea minimă a descrierilor, fără a ține cont de numere și coduri de referință (0,5–0,99). O valoare mai mică completează mai multe tranzacții, dar produce mai multe erori. Aplicarea reglării automate modifică și acest prag.
+      matcher_tuning:
+        similar_common_share: Tăiere
+        similar_common_share_hint: Un cuvânt sau o bucată de 3 litere în mai mult de această parte din tranzacțiile din care copiază (0,01–1) și în cel puțin 50 dintre ele este prea obișnuit pentru a le deosebi, cum ar fi „card” sau „plată”, așa că este ignorat. Mai mare numără mai multe dintre ele. Aplicarea auto-tune-ului îl setează și el.
+        similar_min_neighbours: Comercianții sunt de acord cu
+        similar_min_neighbours_hint: Câte aproape duplicate trebuie să aibă comerciantul, fără ca niciunul să aibă altul. 1 copiază o singură tranzacție, greșeli de asemenea.
+        similar_min_neighbours_option:
+          one: 1 comerciant
+          other: "%{count} comercianți"
+          few: "%{count} comercianți"
+        similar_skip_self: Nu copiați de la comercianții de potrivire până când nu este confirmat sau veche de atâtea zile
+        similar_skip_self_hint: Confirmat înseamnă că l-ați schimbat sau l-ați blocat. O copie greșită nu este răspândită; unul lăsat singur atât de mult contează ca fiind acceptat.
+      merchant:
+        merchant_field: Includeți comerciantul ca un singur simbol, atunci când este setat
+        merchant_field_hint: Contează după identitate, astfel încât un comerciant redenumit își păstrează istoricul.
+        merchant_name_words: Includeți numele comerciantului ca cuvinte
+        merchant_name_words_hint: Citiți ca descrierea, așa cum face originalul, astfel încât nume similare împărtășesc dovezi. Se suprapune cu simbolul de mai jos.
+      run:
+        success: Bayes clasifică tranzacțiile necategorizate. Acest lucru poate dura câteva momente.
+      scoring:
+        complement: Utilizați complement naiv Bayes
+        complement_hint: Evaluează fiecare categorie în funcție de cât de puțin se potrivește tranzacția cu celelalte. Această metodă gestionează mai bine categoriile de dimensiuni foarte diferite. Când este dezactivată, se folosește modelul multinomial original.
+        prior: Includeți cât de des este utilizată fiecare categorie
+        prior_hint: Favorizează categoriile pe care le folosești cel mai des. Când este dezactivată, tratează toate categoriile la fel, ca modelul original.
+        separate_fields: Punctează comerciantul și contul în afară de cuvintele
+        separate_fields_hint: Fiecare are propria distribuție, așa că o descriere lungă nu le depășește. Are nevoie de comerciant sau contul inclus; suma este întotdeauna punctată de la sine.
+        smoothing: Netezire
+        smoothing_hint: Adăugat la fiecare numărare, astfel încât un cuvânt nevăzut să nu excludă o categorie (0,001–10). 1 este al originalului; mai mic se încrede în ceea ce s-a văzut mai mult.
+      show:
+        add_rule_body: Nu există nicio regulă %{name} în regulile dvs., așa că nu aveți nimic de activat. Îl adaugi în partea de sus a regulilor tale?
+        add_rule_confirm: Adăugați regula
+        add_rule_title: Adăugați regula %{name}?
+        account: Reglarea contului
+        amount: Reglarea cantității
+        auto_tune: Reglare automată
+        category_training: Ajustarea clasificatorului de categorii
+        clear_locks: Ștergeți încuietori Bayes
+        clear_locks_confirm_body: Deblochează categoriile Bayes blocate și comercianții blocați de potrivire care sunt încă ceea ce au stabilit, astfel încât regulile și AI le pot schimba din nou. Raman categoriile si comerciantii.
+        clear_locks_confirm_button: Ștergeți încuietori
+        clear_locks_confirm_title: Ştergeţi încuietorile Bayes?
+        description: Clasificatorul de categorii Bayes învață din tranzacțiile dvs. clasificate și le clasifică pe cele noi înaintea oricărui furnizor AI. Modificările aduse acestor setări intră în vigoare de la următoarea execuție de clasificare; tranzacțiile deja clasificate își păstrează categoriile.
+        matcher: Potrivire
+        matcher_description: Completează comercianții lipsă din aproape duplicate, conform regulii Merchant matcher (după fiecare sincronizare) și pe Run. Schimbă comercianții stocați.
+        matcher_tuning: Ajustare a potrivirii comerciantului
+        merchant: Ajustarea comerciantului
+        run: Rulați
+        scoring: Punctajul
+        title: Clasificator
+        training: Antrenament
+        words: Ajustarea tranzacției
+      training:
+        max_training_transactions: Tranzacții de instruire
+        max_training_transactions_hint: 'Câte dintre cele mai noi tranzacții să utilizați (100–20.000): cele clasificate de la care învață clasificatorul și cele cu un comerciant de pe care le copiază.'
+      words:
+        bigrams: Includeți perechi de cuvinte
+        bigrams_hint: Cuvintele învecinate contează și ele împreună, cum ar fi „plată cu card”.
+        binary: Excludeți cuvintele repetate
+        binary_hint: Fiecare cuvânt contează o dată pe tranzacție.
+        drop_codes: Excludeți codurile de referință
+        drop_codes_hint: Cuvinte care amestecă litere cu 2 sau mai multe cifre, cum ar fi 2k4l19.
+        drop_numbers: Excludeți numerele
+        drop_numbers_hint: Stocați numerele, datele și sumele în descriere.
+        include_notes: Includeți notele
+        include_notes_hint: Citește notele, precum și numele.
+        keep_single_chars: Includeți cuvinte de un singur caracter
+        keep_single_chars_hint: Litere și cifre unice rămase după împărțire, ca „s” din mcdonald's.
+        spread_filter: Excludeți cuvintele pe care fiecare categorie le folosește la fel
+        spread_filter_hint: Nu spun nimic despre categorie. Numărul este cât de mult peste o cotă uniformă trebuie să fie utilizarea unei categorii.
+        word_split: Cuvintele sunt făcute din
+        word_split_ascii: a–z și 0–9
+        word_split_hint: Orice alt caracter separă cuvintele. Literele oricărui script păstrează cuvinte precum Geschäft sau Кофейня întregi; cu simboluri interioare, literele unite de un simbol rămân și un cuvânt, cum ar fi mcdonald's, s/o și m&s (un simbol la oricare dintre capete, ca în *netflix, este încă eliminat).
+        word_split_symbols: Litere, cifre, simboluri interioare
+        word_split_unicode: Litere și cifre, orice script
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Analiză aprofundată
+          subtitle: Primul mesaj de chat când cercetați o perspectivă cu AI
+          label: Sapă în mesajul
+    preferences:
+      show:
+        default_account_order_hint: Cu Manual, trageți conturile în bara laterală pentru a le stabili ordinea.
+        investment_contributions_as_spending: Considerați investițiile drept cheltuieli
+        investment_contributions_as_spending_hint: Banii mutați în conturile de investiții sunt considerați cheltuieli în bugete, rapoarte și diagrama fluxului de numerar. În schimb, dezactivează-l pentru a arăta ca investit.
+    securities:
+      show:
+        disable_mfa_password_label: Confirmați cu parola
+        disable_mfa_password_placeholder: Introdu parola
+        mfa_sso_only: Autentificarea cu doi factori este gestionată prin furnizorul dvs. de identitate.
+    settings_nav:
+      classifier_label: Clasificator
+    hostings:
+      show:
+        instance_settings_restricted: Acreditările furnizorului, setările de conectare și sincronizare AI partajate se aplică fiecărei familii din această instanță, așa că numai un superadministrator le poate schimba. Ce asistent folosește familia ta este încă setat pentru fiecare familie. Cineva cu acces la server poate promova un utilizator la super-administrator; ghidul de auto-găzduire Docker arată comanda în notele sale de actualizare.
+      assistant_settings:
+        type_mcp_only: Niciunul în aplicație (conectați-vă propriul agent prin MCP)
+        mcp_only_help: Asistentul din aplicație este dezactivat pentru toți membrii acestei gospodării. Comenzile rapide AI pentru facturi și textele de analiză redactate de AI se opresc și ele. MCP și clasificarea în fundal rămân disponibile; conectează agenți externi în Setări > MCP.
+      llm_provider_selector:
+        max_items_per_call_label: Articole maxime pe lot (opțional)
+        max_items_per_call_help: 'Limită superioară pentru loturile de clasificare automată/detecție a comerciantului. Implicit: 25. Cu furnizorii compatibili cu OpenAI, loturile mai mari sunt tăiate automat pentru a se potrivi cu fereastra de context.'
+      openai_settings:
+        ai_health_probe_timeout_label: Timeout pentru verificarea stării de sănătate în secunde (opțional)
+        ai_health_probe_timeout_help: 'Implicit: 5. Se aplică numai verificărilor live AI din Setări → Sănătatea sistemului, niciodată apelurilor reale AI. Creșteți-l dacă verificările PDF raportează un timeout cu un model cloud. AI_HEALTH_PROBE_TIMEOUT înlocuiește acest câmp.'
+      chimnie_settings:
+        title: Chimnie
+        description: Introduceți cheia Chimnie API pentru a evalua proprietățile rezidențiale din Regatul Unit după UPRN. Creați o cheie gratuită la dashboard.chimnie.com (înregistrarea necesită o adresă de e-mail comercială sau un domeniu personalizat; Gmail, Outlook și adrese similare nu sunt acceptate). Evaluările UPRN sunt gratuite și actualizate lunar; Sure le limitează la 1.000 de solicitări pe lună, pe care le puteți modifica cu variabila de mediu CHIMNIE_MAX_REQUESTS_PER_MONTH.
+        env_configured_message: Configurat cu succes prin variabila de mediu CHIMNIE_API_KEY.
+        label: Cheie API
+        placeholder: Introduceți aici cheia Chimnie API
+      sync_settings:
+        market_data_sync_label: Activați importul zilnic de date de piață
+        market_data_sync_description: Când este activată, prețurile titlurilor financiare sunt importate automat o dată pe zi, de luni până vineri, la ora specificată.
+        market_data_sync_time_label: Timp de import al datelor de piață (HH:MM)
+        market_data_sync_time_description: Alegeți ora din zi pentru a importa prețurile titlurilor financiare, de exemplu, la scurt timp după închiderea bursei principale.
+  shared:
+    money_field:
+      above_max: Introduceți o sumă de cel mult %{max}.
+      below_min: Introduceți o sumă de cel puțin %{min}.
+      invalid_amount: Introduceți o sumă sau o expresie validă.
+      operator_add: Adăugați
+      operator_subtract: Scădeți
+      operator_multiply: Înmulțiți
+      operator_divide: Împărțiți
+    require_non_guest: Oaspeții nu pot efectua această acțiune
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: Niciun lucrător nu procesează cozile AI (chat, detecție comerciant, clasificare). Verificați dacă lucrătorul încarcă config/sidekiq.yml.
+  loans:
+    form:
+      day_count_convention: Baza dobânzii
+      day_count_convention_actual_365: Zile efective/365
+      day_count_convention_actual_actual: Zile efective/zile efective
+      day_count_convention_hint: Aceasta determină modul în care creditorul dvs. măsoară fiecare perioadă de dobândă în raport cu un an. Actual/365 utilizează numărul real de zile din fiecare lună și este standard pentru creditele ipotecare din Marea Britanie și Australia. 30/360 folosește o doisprezecime fixă de an pentru fiecare lună, așa cum a făcut întotdeauna Sure.
+      day_count_convention_thirty_360: 30/360 (un al doisprezecelea plat)
+  breadcrumbs:
+    classifier: Clasificator
+  oauth:
+    registration:
+      invalid_client_name: client_name nu trebuie să conțină caractere de control bidirecționale
+      reserved_client_name: client_name este rezervat pentru aplicațiile primare
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Încă nu este disponibil niciun curs de schimb pentru unul dintre conturile acestui obiectiv, deci nu poate fi finalizat.
+        rule:
+          split_not_alone: O regulă de împărțire nu poate avea alte acțiuni
+        rule/action:
+          attributes:
+            value:
+              invalid_config: trebuie să fie o configurație divizată validă
+              invalid_split_count: trebuie să aibă între %{min} și %{max} despărțiri
+              split_name_required: 'split #%{index} lipsește un nume'
+              split_name_too_long: 'împărțire #%{index} numele este prea lung (maximum 255 de caractere)'
+              split_name_invalid: 'împărțire #%{index} numele conține caractere nevalide'
+              split_type_invalid: 'împărțit #%{index} tipul trebuie să fie fix sau procentual'
+              split_share_invalid: 'împărțit #%{index} cota trebuie să fie un număr pozitiv'
+              split_category_invalid: 'împărțit #%{index} categoria nu aparține acestei familii'
+              split_merchant_invalid: 'împărțit #%{index} comerciantul nu aparține acestei familii'
+              split_tags_invalid: 'split #%{index} are o etichetă care nu aparține acestei familii'
+              percentages_must_total_100: procentele trebuie să adauge până la 100 (am primit %{total})
+              fixed_requires_exact_amount_condition: împărțirile în sumă fixă ​​necesită o condiție de regulă care să se potrivească cu o sumă exactă a tranzacției (de exemplu, Sumă = 42,00), în caz contrar, acțiunile nu se pot însuma în mod fiabil la totalul fiecărei tranzacții de potrivire
+              fixed_shares_must_equal_condition_amount: suma părților împărțite trebuie să fie %{amount}, valoarea exactă cerută de condiția acestei reguli
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: nu este o expresie regulată validă
+              regex_too_complex: este prea complex pentru a rula în siguranță
+              regex_too_long: este prea lung (maximum este %{count} caractere)
+              regex_backreference: nu poate folosi referințe inverse (de la \1 la \9)
+  rules:
+    form:
+      stop_processing_label: Opriți procesarea altor reguli
+      stop_processing_description: Regulile de mai jos în listă nu modifică tranzacțiile cu care se potrivește această regulă.
+    condition_filters:
+      operators:
+        starts_with: Începe cu
+        ends_with: Se termină cu
+        matches_regex: Se potrivește cu expresia regex
+    notification_baseline_timed_out: Această regulă este în continuare dezactivată. Verificarea tranzacțiilor existente care se potrivesc deja a durat prea mult. Activarea fără această verificare ar trimite un e-mail despre fiecare tranzacție care se potrivește. Simplificați condițiile și apoi activați regula din nou.
+    classifier_rules:
+      category_classifier: Clasificator de categorie
+      merchant_matcher: Comerciant de potrivire
+    rule:
+      stop_processing: Opriți
+      stop_processing_hint: Regulile de mai jos nu modifică tranzacțiile potrivite de această regulă.
+    index:
+      order_hint: Regulile rulează de sus în jos. Odată ce o regulă stabilește un câmp pentru o tranzacție, regulile de mai jos nu modifică acel câmp. Etichetele sunt adăugate după fiecare regulă de potrivire. Trageți regulile pentru a schimba ordinea.
+      reorder_rule: Mutați regula %{name}. Apăsați Enter sau Space pentru a-l prinde, apoi utilizați tastele săgeți pentru ao muta.
+    confirm:
+      rules_above_notice:
+        one: Regula activă de mai sus rulează prima, astfel încât rezultatul este același ca în rularea completă.
+        other: Regulile active %{count} de deasupra se execută primele, astfel încât rezultatul este același ca în rularea completă.
+        few: Regulile active %{count} de deasupra rulează mai întâi, astfel încât rezultatul este același ca în rularea completă.
+    actions:
+      split:
+        type_fixed: Sumă fixă
+        type_percentage: Procent
+        type_label: Tip împărțit
+        share_label: Împărțiți cantitatea sau procentajul
+        category_label: Divizați categoria
+        merchant_label: Împărțiți comerciantul
+        tags_label: Împărțiți etichetele
+        remove_split: Eliminați despărțirea
+        hint: Împărțirile fixe sunt mai întâi scazute, ca sume exacte. Împărțiri procentuale apoi împărțiți ceea ce a mai rămas. Dacă fiecare împărțire aici folosește o sumă fixă, adăugați și o condiție care se potrivește cu o sumă exactă a tranzacției (de exemplu, Sumă = 42,00), deoarece fiecare tranzacție care se potrivește are nevoie de același total pentru ca sumele fixe să se adună. O regulă împărțită nu poate avea alte acțiuni.
+        fixed_summary_label: a fost fixat
+        summary:
+          one: "%{count} împărțit"
+          other: "%{count} desparte"
+          few: "%{count} divizează"
+  binance_items:
+    select_accounts:
+      connection_unavailable: Acea conexiune Binance nu este disponibilă. Alegeți unul din Setările furnizorului.
+      no_credentials_configured: Conectați Binance în Setările furnizorului înainte de a adăuga conturile sale.
+      select_connection: Alegeți o conexiune Binance din Setările furnizorului.
+  reports:
+    index:
+      sections_aria: Raportează secțiunile
+    spending_vs_normal:
+      title: Cheltuieli vs normale
+      summary_html: "%{total} cheltuit în această perioadă. Normal pentru o perioadă atât de lungă este %{normal}, bazat pe %{baseline_start} până la %{baseline_end}."
+      summary_so_far_html: "%{total} cheltuit până acum. Normal pentru atâtea zile este %{normal}, bazat pe %{baseline_start} până la %{baseline_end}."
+      no_history_html: "%{total} cheltuit în această perioadă. Nu există încă suficientă istorie anterioară pentru a spune ce este normal."
+      no_history_short: Deocamdată, istoricul anterior nu este suficient pentru a fi comparat.
+      no_spending: Nicio cheltuială în această perioadă.
+      no_changes: Cheltuielile s-au egalat cu cele normale în fiecare categorie.
+      treemap_title: Unde a mers
+      changes_title: Ce s-a schimbat
+      direct: "%{category} (fără subcategorie)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normal: %{amount}'
+        more: "%{amount} mai mult decât în mod normal (%{percent})"
+        less: "%{amount} mai puțin decât în mod normal (%{percent})"
+        more_no_percent: "%{amount} mai mult decât normal"
+        less_no_percent: "%{amount} mai puțin decât în mod normal"
+        no_normal: Nu există un istoric anterior de comparat cu
+        open: Selectați pentru a vedea aceste tranzacții
+      legend:
+        less: Cu 50–100% mai puțin
+        slightly_less: Cu 15–50% mai puțin
+        normal: Despre normal
+        slightly_more: Cu 15–50% mai mult
+        more: Cu 50–100% mai mult
+        much_more: Cu peste 100% mai mult
+  account_order:
+    manual:
+      label: Manual (trageți pentru a reordona)
+      label_short: Manual
+  onchain:
+    chains:
+      cosmos: Cosmos
+      polkadot: Polkadot
+  providers:
+    property_valuation:
+      missing_fields_gb: Furnizează un nume, adresa străzii, codul poștal și UPRN-ul proprietății.
+      entry_name: "%{provider} evaluare"
+    chimnie:
+      errors:
+        invalid_uprn: Un UPRN este un număr de până la 12 cifre. Vă rugăm să verificați UPRN și încercați din nou.
+        no_estimate: Chimnie nu are o estimare a valorii pentru această proprietate.
+        not_found: Chimnie nu a găsit o proprietate cu acest UPRN.
+        unsupported_property: Chimnie evaluează numai proprietăți rezidențiale; acest UPRN aparține unei proprietăți comerciale sau mixte.
+        unauthorized: Chimnie a respins cheia API. Verifică cheia din Setări → Self-Hosting.
+        insufficient_balance: Soldul contului dvs. Chimnie este prea mic pentru această solicitare.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: Suma totală a acestei tranzacții este deja aplicată altor plăți datorate
+      already_allocated: Această tranzacție este deja aplicată la această factură
+    new:
+      covered_title: Această tranzacție aparține deja unei facturi
+      covered_body: "%{name} urmărește deja această plată, astfel încât o nouă factură o va conta de două ori."
+      covered_open: Factură deschisă
+      covered_suggested_title: Sure a sugerat deja o factură pentru această plată
+      covered_suggested_body: "%{name} este în așteptare în sugestiile dumneavoastră. Confirmați-l pentru a începe să-l urmăriți, astfel încât o nouă factură să nu conteze această plată de două ori. Plățile corespunzătoare sunt conectate automat și puteți să o conectați pe aceasta din factură."
+      covered_confirm: Confirmați factura
+      covered_create_anyway: Creează oricum o factură separată
+      covered_income_title: Acest depozit aparține deja unui venit
+      covered_income_body: "%{name} urmărește deja acest depozit, astfel încât adăugarea din nou ar fi de două ori."
+      covered_income_open: Venituri deschise
+      covered_income_suggested_title: Sure a sugerat deja acest venit
+      covered_income_suggested_body: "%{name} este în așteptare în sugestiile dumneavoastră. Adăugați-l pentru a începe să-l urmăriți, astfel încât acest depozit să nu fie numărat de două ori. Depozitele corespunzătoare sunt conectate automat și puteți conecta acest lucru de la venit."
+      covered_income_confirm: Adăugați un venit
+      covered_income_create_anyway: Adăugați oricum un venit separat
+    create:
+      amount_too_precise: Utilizați cel mult 4 zecimale
+      category_invalid: Alege una dintre categoriile tale sau lasă-l gol
+    already_covered: Această tranzacție corespunde deja unei tranzacții recurente
+    suggested_income:
+      title: Posibile noi venituri
+      confirm: Adăugați un venit
+      dismiss: Nu este venit
+    confirmed_income: Venituri adăugate la tranzacțiile dvs. recurente
+  transfers:
+    show:
+      investment_contribution_subtitle: Numărați acest transfer ca cheltuieli în bugete și rapoarte. Opriți-l atunci când brokerul sau contul criptografic convertește banii într-o altă monedă.
+      investment_contribution_title: Contribuție de investiție
+  transactions:
+    form:
+      create_as_subcategory: Adaugă ca subcategorie…
+      choose_parent: 'Creați "%{name}" sub:'
+      back_to_categories: Înapoi.
+    transaction_category:
+      set_on_outflow: Categoria aparține părții de ieșire a acestui transfer și poate fi schimbată doar acolo
+    show:
+      category_set_on_hidden_outflow: Aceasta este partea de intrare a unui transfer. Categoria sa aparține părții de ieșire, pe un cont pe care nu îl puteți accesa și poate fi modificată numai acolo.
+      category_set_on_outflow: Aceasta este partea de intrare a unui transfer. Categoria sa aparține părții de ieșire și poate fi modificată doar acolo, astfel încât bugetele o iau în considerare o singură dată.
+    search:
+      filters:
+        attachment: Atașament
+    searches:
+      filters:
+        badge:
+          attachment_with: Cu atașament
+          attachment_without: Fără atașament
+        attachment_filter:
+          with: Cu atașament
+          without: Fără atașament
+  account_statements:
+    form:
+      period_hint: Sure citește perioada din PDF, dacă este menționată, sau dintr-o dată din numele fișierului (de ex. 2026-04). O poți seta și pe extras.
+  accounts:
+    sidebar:
+      reorder_account: Mută %{account}
+      reorder_hint: Trageți pentru a reordona. Cu tastatura, apăsați Enter, apoi tastele săgeată.
+      sort_mode:
+        start: Sortarea conturilor
+        hint: Trageți conturile de mâner pentru a le reordona.
+  admin:
+    system_health:
+      optional_services:
+        title: Servicii opționale
+        description: Integrări opționale ale operatorului. Serviciile neconfigurate sunt informative. Aceste verificări inspectează doar setările; ele nu testează conectivitatea, nu trimit evenimente de testare și nu modifică consimțământul pentru analiză. Extindeți un serviciu pentru detalii de configurare.
+        missing_settings: 'Setări lipsă: %{settings}'
+        statuses:
+          incomplete: Configurație incompletă
+          disabled: Dezactivat în acest proces
+        notes:
+          environment_disabled: Integrarea încărcată este dezactivată pentru acest mediu Rails.
+          explicitly_disabled: SKYLIGHT_ENABLED dezactivează în mod explicit instrumentarea.
+          self_hosted_checkout_disabled: Checkout de abonament și portalul de facturare sunt dezactivate în modul auto-găzduit. Stripe webhooks pot fi configurate în continuare; ID-urile de preț de checkout nu sunt necesare aici.
+          browser_analytics_disabled: Analiza browserului este dezactivată pentru acest mediu. Acest lucru nu dezactivează clientul de server configurat separat.
+          shared_feedback_configured: Feedback-ul auto-găzduit are un proiect separat și este activat prin configurarea acestuia. Nu necesită un operator POSTHOG_KEY. Opțiunea de renunțare a browserului și disponibilitatea SDK nu sunt verificate.
+          shared_feedback_disabled: Proiectul de feedback autogăzduit separat este dezactivat de setarea de feedback sau de mediu. Acest lucru nu dezactivează analizele deținute de operator.
+          production_only: Această integrare este utilizată numai în producție de configurația curentă a aplicației.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Raportare opțională de urmărire și evaluare AI. Nu sunt trimise urme sau solicitări de evaluare prin această verificare.
+            guidance: Setaţi LANGFUSE_PUBLIC_KEY şi LANGFUSE_SECRET_KEY împreună. LANGFUSE_HOST este opțional. Reporniți serviciile afectate după modificarea acestor setări.
+          sentry:
+            title: Sentry
+            description: Raportarea opțională a erorilor și a performanței. Inițializatorul curent permite raportarea numai în producție.
+            guidance: Setați SENTRY_DSN și reporniți serviciile afectate. Aceasta verifică configurația SDK încărcată fără a captura o eroare sau a trimite un eveniment.
+          skylight:
+            title: Skylight
+            description: Instrumentație opțională pentru performanța aplicației. Prezența configurației nu confirmă faptul că agentul rulează sau raportează.
+            guidance: Setați SKYLIGHT_AUTHENTICATION și asigurați-vă că Skylight este încărcat în mediul Rails dorit. SKYLIGHT_ENABLED=false dezactivează instrumentarea; steagul singur nu încarcă gem-ul. Reporniți după modificări.
+          stripe:
+            title: Stripe
+            description: Facturare opțională a abonamentelor și webhooks de plată. Această verificare nu creează un client Stripe, nu validează acreditările și nu face solicitări de plată.
+            guidance: Setaţi STRIPE_SECRET_KEY şi STRIPE_WEBHOOK_SECRET împreună. Pentru finalizarea achiziției abonamentului gestionat sunt necesare și STRIPE_MONTHLY_PRICE_ID și STRIPE_ANNUAL_PRICE_ID.
+          posthog:
+            title: PostHog
+            description: Analiză opțională deținută de operator, utilizând configurația încărcată la pornire. Configurat nu înseamnă că un utilizator și-a dat consimțământul pentru analiza datelor.
+            guidance: Setați POSTHOG_KEY și un POSTHOG_HOST nonblank, sau lăsați gazda nesetată pentru a utiliza valoarea implicită. Analiza browserului necesită producție sau POSTHOG_DEVELOPMENT_ENABLED în curs de dezvoltare. POSTHOG_FEEDBACK_ENABLED controlează feedback-ul separat auto-găzduit, nu analiza operatorului.
+          logtail:
+            title: Logtail
+            description: Redirecționarea opțională a jurnalului de producție. Când este neconfigurat, aplicația continuă să se înregistreze la ieșirea standard.
+            guidance: Setați LOGTAIL_API_KEY și LOGTAIL_INGESTING_HOST împreună și reporniți serviciile afectate. Nici un jurnal de testare nu este emis de această verificare.
+      configuration:
+        description: Configurație vizibilă pentru acest proces web. Aceste verificări nu trimit e-mailuri, nu contactează furnizorii și nu încarcă sau descarcă fișiere. Configurat înseamnă că setările sunt prezente, nu că livrarea, accesul furnizorului sau accesul la stocare a fost verificat.
+        statuses:
+          incomplete: Configurație incompletă
+        settings_needed: Setări de revizuit
+        unknown_provider: Selectarea furnizorului nerecunoscut
+        provider_statuses:
+          not_configured: Lipsește cheia API
+          invalid: Selectie nevalida
+        configure_providers: Deschideți setările de auto-găzduire
+        storage_backend: 'Stocare selectată: %{backend}'
+        storage_backends:
+          local: Disc local
+          test: Disc de testare
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: Stocare compatibilă cu S3
+          google: Google Cloud Stocare
+          other: Backend personalizat sau nerecunoscut
+        checks:
+          smtp:
+            title: E-mail (SMTP)
+            statuses:
+              configured: Setările SMTP sunt prezente.
+              not_configured: SMTP nu este configurat. Resetările parolelor, invitațiile și alte e-mailuri de sistem nu pot fi trimise prin SMTP.
+              incomplete: Unele configurări de e-mail lipsesc sau sunt incomplete. E-mailurile de sistem sau linkurile pe care le conțin pot să nu funcționeze.
+              disabled: Livrarea de e-mail este dezactivată în configurația programului de e-mail care rulează.
+              not_checked: Acest proces folosește o metodă de livrare diferită de SMTP, cum ar fi o previzualizare în dezvoltare. Livrarea SMTP nu este evaluată.
+            guidance: SMTP nu poate fi configurat în interfața de administrare. Setați variabilele de mediu de e-mail atât pentru serviciile web, cât și pentru cele de lucru, apoi reporniți ambele. SMTP_USERNAME și SMTP_PASSWORD pot fi omise pentru un releu neautentificat.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (un număr de la 1 la 65535)
+              sender: EMAIL_SENDER (înlocuiește sender@sure.local implicit)
+              app_domain: APP_DOMAIN (folosit în link-uri de e-mail)
+              authentication: SMTP_USERNAME și SMTP_PASSWORD (furnizați ambele sau niciunul)
+          securities:
+            title: Prețurile de piață
+            statuses:
+              configured: Toți furnizorii de prețuri de piață activați au configurație.
+              not_configured: Furnizorii de prețuri de piață activați nu au cheile API. Căutările automate pentru titlurile financiare și căutările de prețuri nu sunt disponibile prin intermediul acestor furnizori.
+              incomplete: Cel puțin un furnizor de prețuri de piață activat are o configurație lipsă sau o selecție nevalidă. Este posibil ca valorile mobiliare atribuite furnizorului respectiv să nu primească actualizări de preț.
+              disabled: Nu este activat niciun furnizor de prețuri de piață. Căutările automate pentru titlurile financiare și căutările de prețuri nu sunt disponibile.
+            guidance: Alegeți furnizorii și adăugați orice chei API necesare în setările de auto-găzduire sau configurați-le în mediul de implementare. Suprascrierile de mediu au prioritate. Furnizorii publici nu au nevoie de o cheie API.
+          exchange_rates:
+            title: Cursuri de schimb valutar
+            statuses:
+              configured: Furnizorul de curs valutar selectat are configurație.
+              not_configured: Nu este configurat niciun furnizor de curs valutar utilizabil. Este posibil ca conversia valutară automată să nu fie disponibilă atunci când lipseşte o rată stocată.
+            guidance: Alegeți un furnizor de curs de schimb și adăugați cheia API, dacă este necesar, în setările de auto-găzduire sau configurați-l în mediul de implementare. EXCHANGE_RATE_PROVIDER și furnizorul API-cheie de mediu suprascrieri au prioritate.
+            issues:
+              invalid_provider: Furnizorul de curs valutar selectat nu este recunoscut. Căutările automate de tarife eșuează până când este selectat un furnizor acceptat.
+          storage:
+            title: Încărcarea și stocarea fișierelor
+            statuses:
+              configured: Setările de stocare sunt prezente; discul local nu are nevoie de acreditări cloud.
+              not_configured: Backend-ul de stocare selectat nu are o configurație potrivită. Încărcarea fișierelor poate fi indisponibilă.
+              incomplete: Setările de stocare necesare lipsesc sau sunt incomplete. Încărcarea sau preluarea fișierelor poate să nu funcționeze.
+              not_checked: Acest backend utilizează descoperirea externă a acreditărilor sau o configurație personalizată. Accesul său nu poate fi determinat doar din aceste setări.
+            guidance: Examinați ACTIVE_STORAGE_SERVICE și setările de implementare ale backend-ului selectat. Discul local necesită stocare persistentă partajată de serviciile web și de lucru. Schimbarea backend-urilor nu migrează fișierele existente; planificați separat orice migrare.
+            issues:
+              root: Rădăcina stocării locale
+              bucket: Găleată de depozitare
+              region: Regiunea de depozitare
+              credentials: Cheie de acces la stocare și cheie secretă (furnizați ambele sau utilizați descoperirea externă a acreditărilor)
+              endpoint: Punct final de stocare (şi CLOUDFLARE_ACCOUNT_ID pentru R2)
+      show:
+        tabs:
+          configuration: Configurare
+    users:
+      update:
+        password_disabled: Setarea unei parole este dezactivată, deoarece utilizatorii se pot conecta numai cu SSO.
+  bills:
+    detail:
+      overview: Prezentare generală
+      rule_detected: Se potrivește cu tranzacțiile denumite %{name}
+    match:
+      same_transfer: Transfer în același cont
+    paycheck:
+      bridge_left: "%{amount} rămas după facturi"
+      bridge_show_more:
+        one: Afișează încă 1
+        other: Afișează încă %{count}
+        few: Afișează încă %{count}
+      bridge_allocation_aria: Din %{cash} din conturile dvs., %{due} este scadent înainte de următorul salariu și %{left} este lăsat.
+      item_overdue: Întârziat
+  budgets:
+    available_cash:
+      currency_warning: Soldurile %{currencies} nu sunt incluse deoarece nu există încă un curs de schimb disponibil pentru %{currency}.
+  categories:
+    locked: Categoriile sunt blocate. Deblochează-le pentru a adăuga o nouă categorie.
+    toggle_lock:
+      locked: Categoriile sunt blocate
+      unlocked: Categorii deblocate
+    index:
+      lock_categories: Blochează crearea categoriei
+      locked_message: Crearea categoriei este blocată. Importurile și sincronizările bancare pot adăuga în continuare categorii.
+      unlock_categories: Deblochează crearea categoriei
+  category:
+    dropdowns:
+      show:
+        assign_error: Ați creat categoria, dar nu ați putut să o atribuiți. Alegeți Creare din nou pentru a încerca din nou.
+        back: Înapoi.
+        choose_parent: 'Creați "%{name}" sub:'
+        create_as_subcategory: Adaugă ca subcategorie…
+        create_error: Nu am putut crea această categorie. Vă rugăm să încercați din nou.
+  chats:
+    ai_busy: Termin doar o sarcină de fundal, apoi voi trece direct la mesajul tău.
+    reservation:
+      ready_html: Am amânat câteva sarcini de fundal ca să pot trece direct la mesajul tău. Ei se vor strecura înapoi în %{countdown} s, așa că continuați să tastați!
+      busy: Doar terminând o sarcină de fundal, apoi sunt al tău. Continuă să tastezi!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: Acea conexiune Coinbase nu este disponibilă. Alegeți una din Setările furnizorului.
+      no_credentials_configured: Conectați Coinbase în Setările furnizorului înainte de a adăuga portofelele sale.
+      select_connection: Alege o conexiune Coinbase în Setările furnizorului.
+  credit_cards:
+    due:
+      in_days:
+        zero: Se plătește azi
+        one: Se plătește mâine
+        other: Scăzută în %{count} zile
+        few: Scăzută în %{count} zile
+      overdue:
+        one: Scăzută ieri
+        other: "%{count} zile restante"
+        few: "%{count} zile restante"
+    form:
+      due_day: Ziua scadentă a plății
+      statement_close_day: Declarația se închide pe
+      statement_cycle_description: Ziua lunii în care se închide extrasul dvs. de cont și ziua în care este scadentă plata. Cu acestea setate, fila Prezentare generală arată la ce a ajuns ultima declarație și ce se construiește spre următoarea. Un card conectat completează automat aceste informații și păstrează ceea ce ați setat manual.
+      sophtron_balance_sign_description: Utilizați o suprascriere numai atunci când Sophtron raportează un semn ambiguu. Automat continuă să nege soldurile cardurilor de credit.
+      sophtron_balance_sign_label: Semnificația echilibrului Sophtron
+    tabs:
+      overview:
+        above_minimum: Totalul extrasului cardului de credit este %{balance}, peste plata minimă de %{minimum}. Dacă plătești doar suma minimă, soldul rămas pe card este supus acestei rate anuale (APR).
+        apr: APR
+        closes_on: Următoarea declarație se închide %{date}
+        credit_toward_next: Credit pentru următorul extras de cont
+        due_on: "%{date}"
+        edit_card_details: Editează detaliile cardului
+        since_last_statement: De la ultima declarație
+        statement_balance: Declarație de sold
+        multi_currency_unavailable: Această declarație adună intrările înregistrate în mai mult de o monedă, care nu pot fi totalizate aici fără o rată pentru fiecare dintre ele. Soldurile sunt lăsate goale, mai degrabă decât ghicite.
+        no_cycle_description: Setați ziua în care se închide extrasul dvs. și ziua în care este scadentă plata, iar această filă vă va arăta la ce a ajuns ultimul dvs. extras și ce se construiește spre următorul. Un card conectat completează de obicei aceste informații pentru dvs.
+        no_cycle_title: Nici un ciclu de declarație setat
+    update:
+      sophtron_balance_sign_error: Nu s-a putut aplica semnificația echilibrului Sophtron. Setarea anterioară a fost păstrată. Vă rugăm să încercați din nou.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Reîmprospătarea demo a familiei a fost finalizată
+      activity_heading: Activitate în această perioadă
+      sessions_label: Sesiuni unice de conectare pentru familia demo anterioară
+      families_label: Noi conturi de familie create
+      period_heading: Perioada de raportare (UTC)
+      from_label: 'De la:'
+      to_label: 'Pentru:'
+      time_format: "%b %-d, %Y și %H:%M:%S UTC"
+      family_heading: Familia demo anterioară
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Unele solduri nu sunt luate în considerare
+      body:
+        one: Nu există încă o rată de schimb %{from} → %{to}, astfel încât soldurile %{from} sunt lăsate în afara acestui total.
+        other: Nu există încă rate de schimb disponibile de la %{from} la %{to}, astfel încât aceste solduri nu sunt incluse în acest total.
+        few: Nu există încă rate de schimb disponibile de la %{from} la %{to}, astfel încât aceste solduri nu sunt incluse în acest total.
+      settings_link: Setările furnizorului de curs valutar
+    consume:
+      goal_currency_hint: Introduceţi suma în %{currency}. Pentru un cont într-o altă monedă, este convertit la rata de astăzi înainte de a ieși din alocarea contului respectiv.
+      errors:
+        missing_exchange_rate: Nu există încă un curs de schimb disponibil pentru moneda acestui cont, astfel încât această cheltuială nu poate fi înregistrată.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Nici un curs de schimb încă, astfel încât acest cont nu este luat în considerare.
+    goal_card:
+      partial_total: Unele solduri nu sunt luate în considerare (nu există încă un curs de schimb)
+    form:
+      earmark:
+        converted: Această destinație ≈ {amount}.
+      fields:
+        currency_conversion_hint: Conturile pot folosi diferite valute. Totalurile sunt convertite în %{currency}; marcajele de cont rămân în moneda fiecărui cont.
+  holdings:
+    cost_basis_cell:
+      per_share_label: Pe acțiune
+  imports:
+    publish:
+      guest_new_categories_or_tags: Vizitatorii nu pot crea categorii sau etichete. Mapează-le la cele existente sau lasă-le goale.
+    create:
+      missing_upload: Nu am primit dosarul tău. Vă rugăm să încercați să o încărcați din nou.
+  insights:
+    card:
+      dig_in: Săpați cu AI
+    dig_in:
+      prompt: |-
+        Ajută-mă să înțeleg mai bine.
+
+        Insight: %{title}
+        What Sure found: %{body}
+        Period: %{period}
+        Figures:
+        %{facts}
+
+        What's behind it, and is there anything I should do?
+  mfa:
+    local_password_required: Autentificarea cu doi factori necesită o parolă locală. A ta este gestionată prin furnizorul tău de identitate.
+    create:
+      invalid_password: Parolă incorectă. Vă rugăm să încercați din nou.
+    disable:
+      invalid_password: Parolă incorectă. Vă rugăm să încercați din nou.
+    new:
+      password_label: Confirmați cu parola
+      password_placeholder: Introdu parola
+  pages:
+    dashboard:
+      customize:
+        start: Particularizează
+        hide: Ascunde %{title}
+        hidden_title: Widget-uri ascunse
+        hidden_description: Adăugați un widget înapoi la tabloul de bord.
+        none_hidden: Fiecare widget este afișat. Ascunde unul cu butonul său de ochi.
+        all_hidden_title: Fiecare widget este ascuns
+        all_hidden_description: Personalizați tabloul de bord pentru a adăuga widget-uri înapoi.
+      cashflow_preview:
+        node_labels:
+          invested: Investit
+        group_by_label: Arată fluxurile după
+        sort_label: Sortați fluxurile
+        sort_auto: Auto
+        sort_ascending: Cel mai mic întâi
+        sort_descending: Cel mai mare primul
+      spending_trend:
+        filter_categories: Filtrează categoriile (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: Nu am putut confirma adăugarea acestei conexiuni. Reîncărcați pagina pentru a verifica înainte de a încerca din nou.
+    create:
+      already_connected: Aveți deja o conexiune pentru această instituție, deci aceasta nu a fost adăugată.
+      exchange_failed: Nu am putut adăuga această conexiune. Încercați din nou și, dacă problema persistă, verificați jurnalele serverului.
+      token_expired: Această conexiune a expirat înainte de a fi adăugată. Conectați din nou instituția.
+    duplicate_warning:
+      confirm: Confirmați această conexiune
+      connected_by: Conectat de %{name}
+      eu_no_add_accounts: Plaid nu acceptă adăugarea de conturi la o conexiune UE existentă. Pentru a schimba conturile conectate, eliminați-l pe acesta și adăugați-l din nou.
+      linked_on: În legătură cu %{date}
+      manage_connection: Mergeți la conturi
+      mask: "****%{mask}"
+      no_accounts: Niciun cont nu s-a sincronizat încă de la această conexiune.
+      overlap:
+        all_connected:
+          one: Contul pe care ați încercat să-l adăugați este deja conectat, astfel încât adăugarea acestuia din nou ar crea doar un duplicat.
+          other: Conturile %{count} pe care ați încercat să le adăugați sunt deja conectate, astfel încât adăugarea lor din nou ar crea doar duplicate.
+          few: Conturile %{count} pe care ați încercat să le adăugați sunt deja conectate, astfel încât adăugarea lor din nou ar crea doar duplicate.
+        different_login: Pentru a conecta o altă autentificare %{institution}, alegeți din nou Cont nou și conectați-vă cu acea autentificare prin Plaid.
+        more_accounts: Pentru a adăuga mai multe conturi la această conexiune, închideți-o și alegeți Adăugare conturi pe conexiunea %{institution}.
+        others_connected:
+          one: Sure are deja acest cont prin conexiunea %{name}, deci adăugarea contului dvs. ar crea doar un duplicat.
+          other: Sure are deja aceste conturi prin conexiunea %{name}, deci adăugarea contului tău va crea doar duplicate.
+          few: Sure are deja aceste conturi prin conexiunea %{name}, deci adăugarea contului tău va crea doar duplicate.
+        others_connected_several:
+          one: Sure are deja acest cont prin conexiunile altor membri, deci adăugarea contului dvs. va crea doar un duplicat.
+          other: Sure are deja aceste conturi prin conexiunile altor membri, deci adăugarea contului dvs. va crea doar duplicate.
+          few: Sure are deja aceste conturi prin conexiunile altor membri, deci adăugarea contului dvs. va crea doar duplicate.
+        none_connected: Niciunul dintre conturile pe care ați încercat să le adăugați nu este conectat încă, deci este probabil o altă conectare. Adăugarea acestuia se consideră doar ca o altă conexiune Plaid.
+        some_connected:
+          connected:
+            one: Cealaltă este deja conectată, astfel încât adăugarea acestei conexiuni ar duplica-o și ar conta ca o altă conexiune Plaid.
+            other: Celelalte %{count} sunt deja conectate, astfel încât adăugarea acestei conexiuni le-ar duplica și le-ar conta ca o altă conexiune Plaid.
+            few: Celelalte %{count} sunt deja conectate, astfel încât adăugarea acestei conexiuni le-ar duplica și le-ar conta ca o altă conexiune Plaid.
+          unconnected:
+            one: 'Unul dintre conturile pe care ați încercat să le adăugați nu este conectat încă:'
+            other: "%{count} conturile pe care ai încercat să le adaugi nu sunt conectate încă:"
+            few: "%{count} conturile pe care ai încercat să le adaugi nu sunt conectate încă:"
+        unknown:
+          one: Aceste conturi nu pot fi verificate în raport cu conexiunea dvs. existentă. Dacă sunt aceleași conturi, adăugarea acestei conexiuni le va duplica și le va conta ca o altă conexiune Plaid.
+          other: Aceste conturi nu pot fi verificate în raport cu conexiunile existente. Dacă sunt aceleași conturi, adăugarea acestei conexiuni le va duplica și le va conta ca o altă conexiune Plaid.
+          few: Aceste conturi nu pot fi verificate în raport cu conexiunile existente. Dacă sunt aceleași conturi, adăugarea acestei conexiuni le va duplica și le va conta ca o altă conexiune Plaid.
+      title:
+        one: Aveți deja o conexiune pentru această instituție
+        other: Aveți deja conexiuni %{count} pentru această instituție
+        few: Aveți deja conexiuni %{count} pentru această instituție
+      title_all_connected: Ai făcut deja această conexiune
+      title_others_connected:
+        one: Acest cont este deja conectat
+        other: Aceste conturi sunt deja conectate
+        few: Aceste conturi sunt deja conectate
+      update_existing: Actualizarea conexiunii existente
+  plans:
+    goals_card:
+      currency_warning:
+        one: 1 goal omite soldurile %{currencies} (nu există încă un curs de schimb).
+        other: Obiectivele %{count} omit soldurile %{currencies} (nu există încă un curs de schimb).
+        few: Obiectivele %{count} omit soldurile %{currencies} (nu există încă un curs de schimb).
+  recurring_allocations:
+    entry_exhausted: Suma totală a tranzacției este deja aplicată altor plăți datorate
+  valuations:
+    names:
+      current_account_value: Valoarea contului curent
+      current_balance: Soldul curent
+      current_loan_balance: Soldul creditului curent
+      current_market_value: Valoarea curentă a pieței
+      manual_balance_update: Actualizare manuală a balanței
+      manual_principal_update: Actualizare principală manuală
+      manual_value_update: Actualizare manuală a valorii
+      opening_account_value: Valoarea contului de deschidere
+      opening_balance: Soldul de deschidere
+      original_purchase_price: Prețul inițial de achiziție

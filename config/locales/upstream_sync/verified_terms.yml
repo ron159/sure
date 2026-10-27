@@ -1,0 +1,142 @@
+---
+fr:
+  settings:
+    classifiers:
+      evaluation:
+        'on': activé
+        'off': désactivé
+      category_training:
+        exclude_transfers: Exclure les virements
+        exclude_transfers_hint: Virements et paiements entre vos comptes.
+tr:
+  settings:
+    classifiers:
+      evaluation:
+        'on': açık
+        'off': kapalı
+      category_training:
+        exclude_transfers: Transferleri hariç tut
+        exclude_transfers_hint: Hesaplarınız arasındaki transferler ve ödemeler.
+  valuations:
+    names:
+      original_principal: Başlangıç anaparası
+ca:
+  settings:
+    classifiers:
+      evaluation:
+        'on': activat
+        'off': desactivat
+      category_training:
+        exclude_transfers: Exclou les transferències
+        exclude_transfers_hint: Transferències i pagaments entre els teus comptes.
+  valuations:
+    names:
+      original_principal: Capital inicial
+ro:
+  settings:
+    classifiers:
+      evaluation:
+        'on': activat
+        'off': dezactivat
+      category_training:
+        exclude_transfers: Exclude transferurile
+        exclude_transfers_hint: Transferuri și plăți între conturile tale.
+  valuations:
+    names:
+      original_principal: Principalul inițial
+ru:
+  settings:
+    classifiers:
+      evaluation:
+        'on': включено
+        'off': выключено
+      category_training:
+        exclude_transfers: Исключить переводы
+        exclude_transfers_hint: Переводы и платежи между вашими счетами.
+  valuations:
+    names:
+      original_principal: Первоначальная сумма долга
+pl:
+  settings:
+    classifiers:
+      evaluation:
+        'on': włączone
+        'off': wyłączone
+      category_training:
+        exclude_transfers: Wyklucz przelewy
+        exclude_transfers_hint: Przelewy i płatności między Twoimi kontami.
+  valuations:
+    names:
+      original_principal: Pierwotna kwota kapitału
+pt-PT:
+  settings:
+    classifiers:
+      evaluation:
+        'on': ativado
+        'off': desativado
+      category_training:
+        exclude_transfers: Excluir transferências
+        exclude_transfers_hint: Transferências e pagamentos entre as suas contas.
+  valuations:
+    names:
+      original_principal: Capital inicial
+pt-BR:
+  settings:
+    classifiers:
+      evaluation:
+        'on': ativado
+        'off': desativado
+      category_training:
+        exclude_transfers: Excluir transferências
+        exclude_transfers_hint: Transferências e pagamentos entre suas contas.
+  valuations:
+    names:
+      original_principal: Principal original
+nl:
+  settings:
+    classifiers:
+      evaluation:
+        'on': aan
+        'off': uit
+      category_training:
+        exclude_transfers: Overboekingen uitsluiten
+        exclude_transfers_hint: Overboekingen en betalingen tussen je rekeningen.
+  valuations:
+    names:
+      original_principal: Oorspronkelijke hoofdsom
+hu:
+  settings:
+    classifiers:
+      evaluation:
+        'on': be
+        'off': ki
+      category_training:
+        exclude_transfers: Átutalások kizárása
+        exclude_transfers_hint: Átutalások és kifizetések a saját számláid között.
+  valuations:
+    names:
+      original_principal: Eredeti tőkeösszeg
+vi:
+  settings:
+    classifiers:
+      evaluation:
+        'on': bật
+        'off': tắt
+      category_training:
+        exclude_transfers: Loại trừ chuyển khoản
+        exclude_transfers_hint: Các khoản chuyển và thanh toán giữa các tài khoản của bạn.
+  valuations:
+    names:
+      original_principal: Số tiền gốc ban đầu
+uk:
+  settings:
+    classifiers:
+      evaluation:
+        'on': увімкнено
+        'off': вимкнено
+      category_training:
+        exclude_transfers: Виключити перекази
+        exclude_transfers_hint: Перекази та платежі між вашими рахунками.
+  valuations:
+    names:
+      original_principal: Початкова сума основного боргу

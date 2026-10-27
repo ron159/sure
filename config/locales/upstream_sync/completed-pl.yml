@@ -1,0 +1,767 @@
+---
+pl:
+  properties:
+    avm_providers:
+      chimnie: Chimnie
+    new:
+      avm_uk_only: "%{provider} obsługuje tylko nieruchomości mieszkalne zlokalizowane w Wielkiej Brytanii."
+      avm_uprn_label: UPRN
+      avm_uprn_placeholder: '100023336956'
+      avm_uprn_help: Unikalny numer referencyjny właściwości (do 12 cyfr) identyfikuje każdy adres w Wielkiej Brytanii. Znajdź go na stronie findmyaddress.co.uk GeoPlace lub zapytaj władze lokalne. %{provider} wykorzystuje go do bezpłatnej wyceny nieruchomości.
+      avm_county_label: Powiat (opcjonalnie)
+      avm_town_label: Miejscowość
+      avm_postcode_label: Kod pocztowy
+      avm_preview_uprn: UPRN
+      avm_preview_range: Zakres szacunkowy
+      avm_preview_confidence: Pewność
+      avm_confidence:
+        medium: Średni
+        low: Niski
+      avm_attribution_chimnie: Dane wyceny z Chimnie. Zawiera dane OS © Prawa autorskie Korony i prawa do baz danych, Dane Royal Mail © Royal Mail Prawa autorskie i prawa do baz danych oraz dane HM Land Registry © Prawa autorskie Korony i prawa do baz danych, licencjonowane na podstawie licencji Open Government License v3.0.
+    tabs:
+      overview:
+        refresh_valuation: Odśwież wycenę
+        valuation_source: Wyceniony przez %{provider}, ostatnia aktualizacja %{date}
+        link_valuation: Aktualizuj wartość automatycznie za pomocą %{provider}
+        link_valuation_description: Wartość tej właściwości jest aktualizowana wyłącznie ręcznie.
+    refresh_valuation:
+      queued: Rozpoczęło się odświeżanie wyceny. Nowa wartość pojawi się wkrótce.
+      not_linked: Ta nieruchomość nie jest powiązana z dostawcą wyceny.
+      not_configured: "%{provider} nie jest skonfigurowany. Dodaj jego klucz API w Ustawieniach → Self-Hosting, aby odświeżyć tę wycenę."
+    link_valuation:
+      linked: Połączono z %{provider} i zaktualizowano wartość właściwości.
+      link_failed: "%{provider} nie mógł wycenić tej właściwości, więc nie została połączona. Sprawdź, czy adres jest poprawny, a następnie spróbuj ponownie."
+      not_linkable: Tej usługi nie można połączyć z tym dostawcą. Sprawdź, czy jego adres jest kompletny i znajduje się w obsługiwanym kraju oraz czy waluta konta jest zgodna z dostawcą.
+  settings:
+    classifiers:
+      account:
+        account_field: Uwzględnij konto jako jeden token
+        account_field_hint: 'Konto, na którym znajduje się transakcja, stanowi dowód. Nigdy nie decyduje sam: transakcja wymaga znanego słowa lub sprzedawcy.'
+      amount:
+        amount_by_direction: Uwzględnij kierunek, wpływy i wypłaty pieniędzy
+        amount_by_direction_hint: Każda kategoria uczy się, w którą stronę trafiają jej pieniądze, a zwroty pieniędzy i zakupy w tym samym sklepie są oddzielone.
+        amount_field: Uwzględnij kwotę
+        amount_field_hint: Porównuje kwotę ze zwykłymi kwotami każdej kategorii w tej samej walucie, w skali logarytmicznej.
+      category_training:
+        categories_hint: Niesprawdzone kategorie wraz z ich podkategoriami są pomijane w szkoleniu, więc Bayes nigdy ich nie wybiera.
+        categories_some: "%{count} z kategorii %{total}"
+        skip_self_labels: Nie ucz się na podstawie własnych domysłów Bayes, dopóki nie zostaną potwierdzone lub nie miną tylu dni
+        skip_self_labels_hint: Potwierdzony oznacza, że zmieniłeś lub zablokowałeś. Błędne domysły nie są przekazywane i wzmacniane; jeden pozostawiony sam sobie na tak długo liczy się jako zaakceptowany.
+      add_rule:
+        success: Reguła %{name} została dodana na górze Twoich reguł.
+      classifier:
+        lock_results: Zablokuj kategorie ustawione przez klasyfikator
+        lock_results_hint: Zatrzymuje zmianę reguł zmieniających typy Bayes, chyba że klikniesz Zastosuj na regule. AI nigdy nie zmienia typów Bayes, niezależnie od tego, czy są one zablokowane, czy nie.
+        rule: Kategoryzuj za pomocą klasyfikatora
+        rule_hint: Reguła klasyfikatora kategorii, włączana i wyłączana wraz z nią w Regułach. Kategoryzuje transakcje bez kategorii w kolejności reguł po każdej synchronizacji; to, czego nie jest pewien, pozostawia się regule automatycznej kategoryzacji.
+        threshold: Próg
+        threshold_hint: Minimalna ocena wymagana dla Bayes w celu sklasyfikowania transakcji (0.05–0.99). Niższe progi umożliwiają klasyfikację większej liczby transakcji, ale powodują również więcej błędów.
+      clear_locks:
+        success: Blokady Bayes są usuwane. Może to zająć kilka chwil.
+      evaluation:
+        apply_best: Zastosuj te ustawienia
+        best: Najlepiej znalezione
+        best_changes: 'Najlepiej znalezione, zmienione w stosunku do Twojego:'
+        best_no_changes: Nic nie uzyskało lepszego wyniku niż Twoje ustawienia.
+        buttons_hint: 'Test moich ustawień ocenia Twoje ustawienia. Znajdź najlepsze ustawienia przeszukuje %{tuning} na miesiące przed tymi, które są pokazane, więc to, co znajdzie, jest oceniane w miesiącach, których nie widział. Ocenia na podstawie ROC-AUC: jak dobrze wyniki plasują transakcje w każdej kategorii nad resztą, przy dowolnym progu, zachowując zmianę tylko wtedy, gdy jest ogólnie wyższa i we wszystkich miesiącach %{tuning} z wyjątkiem jednego. Najpierw wybiera dane wejściowe (każdą kombinację tokena sprzedawcy, kwoty i konta, następnie ocenia sprzedawcę i konto osobno, następnie nazwę sprzedawcy i notatki w postaci słów), następnie próbuje zmieniać po kolei pozostałe ustawienia, a na końcu przechodzi do punktacji. Wartością domyślną są oryginalne klasyfikatory, z możliwością wyboru kategorii; Resetuj do ustawień domyślnych przełącza na nie i testuje je.'
+        categories_heading: Klasyfikator kategorii
+        change: "%{setting}: %{value}"
+        confusion: "%{actual} → %{predicted}"
+        confusions: 'Najczęstsze błędy: %{column} przy %{threshold}'
+        current: Moje ustawienia
+        defaults: Wartość domyślna
+        description: Każda kolumna jest oceniana w ostatnich miesiącach %{months} jako nowe transakcje, w każdym miesiącu analizowana jest historia poprzedzająca ją, a następnie porównywana z Twoimi kategoriami. Testowanie nie powoduje zmiany kategorii transakcji, a ustawienia klasyfikatora zmieniają się tylko po zastosowaniu lub zresetowaniu.
+        find_best: Znajdź najlepsze ustawienia
+        matcher_confusions: 'Najczęstsze błędy sprzedawców: %{column} przy %{similarity}'
+        matcher_description: 'Sprzedawcy, których dopasowujący wypełnia w tych samych miesiącach %{months}: transakcje %{count} ze sprzedawcą, każda dopasowana do historii przed miesiącem, z ukrytym sprzedawcą; prawy jest kupiec, którego ma. Punktowana jest każda granica i liczba sprzedawców; Najlepiej znaleziona jest ta z najlepszą komórką pod względem kosztu błędu, którą ustawia Apply. Testowanie nie wypełnia żadnych sprzedawców.'
+        merchants_heading: Dopasowanie sprzedawcy
+        no_confusions: Brak błędów na tym progu.
+        no_matcher_confusions: Brak błędów handlowych przy tym podobieństwie.
+        no_uncategorized: Przy tym progu nic nie pozostało bez kategorii.
+        no_unfilled: Nic nie pozostało bez kupca przy tym podobieństwie.
+        none: Jeszcze nie testowano.
+        ran_at: Wynik %{time} temu w transakcjach %{count} (%{months}).
+        reset: Zresetuj do ustawień domyślnych
+        reset_confirm: Zresetować wszystkie ustawienia klasyfikatora do wartości domyślnych i przetestować je?
+        right_wrong: Każda komórka jest dobra/niewłaściwa.
+        run: Przetestuj moje ustawienia
+        running: Testowanie… ta sekcja jest aktualizowana po zakończeniu.
+        short_history: Za mało historii, aby dostroić klasyfikator kategorii. Wymaga to około %{months} miesięcy skategoryzowanych transakcji, więc Apply na razie pozostawia swoje ustawienia w spokoju.
+        similarity: Podobieństwo
+        stale: Od czasu tego testu ustawienia uległy zmianie.
+        threshold: Próg
+        trying: Próbuję %{changes}…
+        uncategorized: 'Najpopularniejsze bez kategorii: %{column} i %{threshold}'
+        unfilled: 'Najczęściej niewypełnione: %{column} i %{similarity}'
+        weight: Błąd kosztuje
+        weight_hint: 'Wybiera zestaw Zastosuj: pogrubione komórki, w których liczba prawidłowych odpowiedzi minus liczba przypadająca na błąd jest najwyższa. Najlepiej znaleziony próg dla kategorii; granica, podobieństwo i liczba sprzedawców dla modułu dopasowującego.'
+        weight_option:
+          one: "%{count} poprawna odpowiedź"
+          other: "%{count} poprawne odpowiedzi"
+          few: "%{count} poprawne odpowiedzi"
+          many: "%{count} poprawnych odpowiedzi"
+      matcher:
+        lock_similar_merchants: Zablokuj kupców zestawów dopasowujących
+        lock_similar_merchants_hint: Zatrzymuje reguły, AI i synchronizuje ich zmianę, chyba że klikniesz Zastosuj na regule. Jego własne zamki nie liczą się jako potwierdzone (dostrajanie dopasowywania kupieckiego).
+        rule: Uzupełnij brakujących sprzedawców z niemal duplikatów
+        rule_hint: Reguła dopasowywania sprzedawców, włączana i wyłączana w Regułach. Według Twojej reguły transakcja bez sprzedawcy otrzymuje tę, która jest prawie duplikatem, jak „NETFLIX.COM 8812” i „Netflix com”. Transfery pominięte.
+        similar_threshold: Podobieństwo
+        similar_threshold_hint: Najniższe podobieństwo opisów, pomijając liczby i kody referencyjne (0,5–0,99). Niższe wypełnia więcej, z większą liczbą błędów. Funkcja Auto-tune Apply również to ustawia.
+      matcher_tuning:
+        similar_common_share: Odcięcie
+        similar_common_share_hint: Słowo lub ciąg 3 liter występujący w większej niż podany udział części transakcji źródłowych (0,01–1) oraz w co najmniej 50 z nich jest zbyt częsty, by je rozróżnić, jak „karta” lub „płatność”, dlatego jest pomijany. Wyższa wartość uwzględnia więcej słów. Przycisk Zastosuj w automatycznym dostrajaniu również ustawia tę wartość.
+        similar_min_neighbours: Sprzedawcy zgadzają się
+        similar_min_neighbours_hint: Ile prawie duplikatów musi mieć sprzedawca, przy czym żaden nie ma innego. 1 kopiuje pojedynczą transakcję, błędy też.
+        similar_min_neighbours_option:
+          one: "%{count} sprzedawca"
+          other: "%{count} sprzedawców"
+          few: "%{count} sprzedawców"
+          many: "%{count} sprzedawców"
+        similar_skip_self: Nie kopiuj od sprzedawców firmy dopasowującej, dopóki nie zostanie to potwierdzone lub nie będzie starsze niż tyle dni
+        similar_skip_self_hint: Potwierdzony oznacza, że zmieniłeś lub zablokowałeś. Niewłaściwa kopia nie jest rozpowszechniana; jeden pozostawiony sam sobie na tak długo liczy się jako zaakceptowany.
+      merchant:
+        merchant_field: Dołącz sprzedawcę jako jeden token, jeśli ustawiono
+        merchant_field_hint: Liczy się według tożsamości, więc sprzedawca o zmienionej nazwie zachowuje swoją historię.
+        merchant_name_words: Uwzględnij nazwę sprzedawcy w postaci słów
+        merchant_name_words_hint: Czytaj jak opis, tak jak oryginał, więc podobne nazwy mają wspólne dowody. Pokrywa się z tokenem poniżej.
+      run:
+        success: Bayes kategoryzuje transakcje bez kategorii. Może to zająć kilka chwil.
+      scoring:
+        complement: Użyj uzupełnienia naiwnego Bayes
+        complement_hint: Ocenia każdą kategorię według tego, jak słabo transakcja pasuje do pozostałych. Pomaga to przy kategoriach o bardzo różnych rozmiarach. Po wyłączeniu używany jest pierwotny model wielomianowy.
+        prior: Podaj, jak często używana jest każda kategoria
+        prior_hint: Preferuje najczęściej używane kategorie. Po wyłączeniu traktuje wszystkie kategorie jednakowo, jak w pierwotnym modelu.
+        separate_fields: Oceń sprzedawcę i konto oprócz słów
+        separate_fields_hint: Każdy ma swoją własną dystrybucję, więc długi opis nie przeważa nad nimi. Wymaga sprzedawcy lub konta; kwota jest zawsze naliczana samodzielnie.
+        smoothing: Wygładzanie
+        smoothing_hint: Dodano do każdego licznika, aby niewidoczne słowo nie wykluczyło kategorii (0,001–10). 1 jest oryginałem; mniej ufa temu, co widziano więcej.
+      show:
+        add_rule_body: W Twoich regułach nie ma reguły %{name}, więc nie ma co włączać. Dodać go na początek reguł?
+        add_rule_confirm: Dodaj regułę
+        add_rule_title: Dodać regułę %{name}?
+        account: Dostrajanie konta
+        amount: Strojenie kwoty
+        auto_tune: Automatyczne dostrajanie
+        category_training: Strojenie klasyfikatora kategorii
+        clear_locks: Przezroczysty Bayes zamki
+        clear_locks_confirm_body: Odblokowuje zablokowane kategorie Bayes i sprzedawców zablokowanych przez moduł dopasowujący, którzy nadal są tacy, jak ustalili, więc reguły i AI mogą je ponownie zmienić. Kategorie i sprzedawcy pozostają.
+        clear_locks_confirm_button: Usuń zamki
+        clear_locks_confirm_title: Wyczyścić blokady Bayes?
+        description: Klasyfikator kategorii Bayes uczy się na podstawie Twoich skategoryzowanych transakcji i kategoryzuje nowe przed jakimkolwiek dostawcą AI. Zmiany tych ustawień obowiązują od następnego uruchomienia kategoryzacji; transakcje już skategoryzowane zachowują swoje kategorie.
+        matcher: Dopasowujący
+        matcher_description: Uzupełnia brakujących sprzedawców z niemal duplikatów, zgodnie z regułą dopasowywania sprzedawców (po każdej synchronizacji) i przy uruchomieniu. Zmienia przechowywanych handlowców.
+        matcher_tuning: Dopasowywanie sprzedawcy
+        merchant: Strojenie sprzedawcy
+        run: Uruchom
+        scoring: Punktacja
+        title: Klasyfikator
+        training: Szkolenie
+        words: Strojenie transakcji
+      training:
+        max_training_transactions: Transakcje szkoleniowe
+        max_training_transactions_hint: 'Liczba najnowszych transakcji, których należy użyć (100–20 000): te podzielone na kategorie, z których uczy się klasyfikator, oraz te ze sprzedawcą, od którego kopiuje moduł dopasowujący.'
+      words:
+        bigrams: Uwzględnij pary słów
+        bigrams_hint: Sąsiednie słowa również się liczą, np. „płatność kartą”.
+        binary: Wyklucz powtarzające się słowa
+        binary_hint: Każde słowo liczy się raz na transakcję.
+        drop_codes: Wyklucz kody referencyjne
+        drop_codes_hint: Słowa łączące litery z co najmniej 2 cyframi, na przykład 2k4l19.
+        drop_numbers: Wyklucz numery
+        drop_numbers_hint: Numery sklepów, daty i kwoty znajdują się w opisie.
+        include_notes: Dołącz uwagi
+        include_notes_hint: Czyta notatki oraz nazwę.
+        keep_single_chars: Dołącz jednoznakowe słowa
+        keep_single_chars_hint: Pojedyncze litery i cyfry pozostałe po podziale, jak „s” w McDonaldzie.
+        spread_filter: Wyklucz słowa, których każda kategoria używa podobnie
+        spread_filter_hint: Nic nie mówią o kategorii. Liczba określa, jak daleko powyżej równego udziału musi znajdować się zastosowanie jednej kategorii.
+        word_split: Słowa składają się z
+        word_split_ascii: a–z i 0–9
+        word_split_hint: Każdy inny znak rozdziela słowa. Litery dowolnego pisma zachowują całość słów takich jak Geschäft lub Кофейня; w przypadku symboli wewnętrznych litery połączone jednym symbolem również pozostają jednym słowem, jak McDonald's, s/o i m&s (symbol na dowolnym końcu, jak w *netflix, jest nadal pomijany).
+        word_split_symbols: Litery, cyfry, symbole wewnętrzne
+        word_split_unicode: Litery i cyfry, dowolny napis
+    ai_prompts:
+      show:
+        insight_dig_in:
+          title: Wgląd w
+          subtitle: Pierwsza wiadomość na czacie, gdy zagłębisz się w wiedzę za pomocą AI
+          label: Wyszukaj wiadomość
+    preferences:
+      show:
+        default_account_order_hint: W trybie ręcznym przeciągnij konta na pasku bocznym, aby ustawić ich kolejność.
+        investment_contributions_as_spending: Policz inwestycje jako wydatki
+        investment_contributions_as_spending_hint: Pieniądze przeniesione na rachunki inwestycyjne liczą się jako wydatki w budżetach, raportach i na wykresie przepływów pieniężnych. Wyłącz, aby zamiast tego pokazywać, że zainwestowano.
+    securities:
+      show:
+        disable_mfa_password_label: Potwierdź hasłem
+        disable_mfa_password_placeholder: Wpisz hasło
+        mfa_sso_only: Uwierzytelnianiem dwuskładnikowym zarządza Twój dostawca tożsamości.
+    settings_nav:
+      classifier_label: Klasyfikator
+    hostings:
+      show:
+        instance_settings_restricted: Poświadczenia dostawcy, współdzielone ustawienia połączenia i synchronizacji AI dotyczą każdej rodziny w tej instancji, więc tylko superadministrator może je zmienić. To, którego asystenta używa Twoja rodzina, nadal zależy od rodziny. Osoba mająca dostęp do serwera może awansować użytkownika na superadministratora; przewodnik dotyczący samodzielnego hostingu Docker pokazuje to polecenie w uwagach do aktualizacji.
+      assistant_settings:
+        type_mcp_only: Brak w aplikacji (podłącz własnego agenta poprzez MCP)
+        mcp_only_help: Asystent w aplikacji jest wyłączony dla wszystkich osób w tym gospodarstwie domowym. Skróty AI dotyczące rachunków oraz teksty analiz pisane przez AI również przestają działać. MCP i kategoryzacja w tle pozostają dostępne; zewnętrznych agentów można podłączyć w Ustawieniach > MCP.
+      openai_settings:
+        ai_health_probe_timeout_label: Limit czasu kontroli stanu w sekundach (opcjonalnie)
+        ai_health_probe_timeout_help: 'Wartość domyślna: 5. Dotyczy tylko bieżących kontroli AI w Ustawieniach → Kondycja systemu, nigdy rzeczywistych połączeń AI. Podnieś go, jeśli kontrole PDF zgłaszają przekroczenie limitu czasu w przypadku modelu chmury. AI_HEALTH_PROBE_TIMEOUT zastępuje to pole.'
+      chimnie_settings:
+        title: Chimnie
+        description: Wprowadź swój klucz Chimnie API, aby wycenić nieruchomości mieszkalne w Wielkiej Brytanii według ich UPRN. Utwórz bezpłatny klucz na dashboard.chimnie.com (rejestracja wymaga firmowego lub niestandardowego adresu e-mail; adresy Gmail, Outlook i podobne nie są akceptowane). Wyceny UPRN są bezpłatne i odświeżane co miesiąc; Sure ogranicza je do 1000 żądań miesięcznie, co można zmienić za pomocą zmiennej środowiskowej CHIMNIE_MAX_REQUESTS_PER_MONTH.
+        env_configured_message: Pomyślnie skonfigurowano za pomocą zmiennej środowiskowej CHIMNIE_API_KEY.
+        label: Klucz API
+        placeholder: Wpisz tutaj swój klucz Chimnie API
+      sync_settings:
+        market_data_sync_label: Włącz codzienny import danych rynkowych
+        market_data_sync_description: Gdy jest to włączone, ceny papierów wartościowych są automatycznie importowane raz dziennie, od poniedziałku do piątku, o wyznaczonym czasie.
+        market_data_sync_time_label: Czas importu danych rynkowych (GG:MM)
+        market_data_sync_time_description: Wybierz porę importowania cen papierów wartościowych, na przykład krótko po zamknięciu głównej giełdy.
+  shared:
+    money_field:
+      above_max: Wprowadź kwotę maksymalnie %{max}.
+      below_min: Wprowadź kwotę co najmniej %{min}.
+      invalid_amount: Wprowadź prawidłową kwotę lub wyrażenie.
+      operator_add: Dodaj
+      operator_subtract: Odejmij
+      operator_multiply: Pomnóż
+      operator_divide: Podziel
+    require_non_guest: Goście nie mogą wykonać tej akcji
+    sidekiq_health_banner:
+      reasons:
+        ai_queues_not_polled: Żaden pracownik nie przetwarza kolejek AI (czat, wykrywanie sprzedawców, kategoryzacja). Sprawdź, czy proces roboczy ładuje plik config/sidekiq.yml.
+  loans:
+    form:
+      day_count_convention: Podstawa oprocentowania
+      day_count_convention_actual_365: Rzeczywiste/365
+      day_count_convention_actual_actual: Rzeczywista/rzeczywista
+      day_count_convention_hint: To określa, w jaki sposób wierzyciel oblicza każdy okres odsetkowy w odniesieniu do roku. Opcja Actual/365 wykorzystuje rzeczywistą liczbę dni w każdym miesiącu i jest standardem w przypadku kredytów hipotecznych w Wielkiej Brytanii i Australii. Opcja 30/360 używa stałej jednej dwunastej roku dla każdego miesiąca, tak jak to zawsze było w przypadku opcji Sure.
+      day_count_convention_thirty_360: 30/360 (płaska dwunastka)
+  breadcrumbs:
+    classifier: Klasyfikator
+  activerecord:
+    errors:
+      models:
+        goal:
+          attributes:
+            base:
+              missing_exchange_rate: Żaden kurs wymiany nie jest jeszcze dostępny dla jednego z kont tego celu, więc nie można go ukończyć.
+        rule:
+          split_not_alone: Reguła podziału nie może mieć innych akcji
+        rule/action:
+          attributes:
+            value:
+              invalid_config: musi być prawidłową konfiguracją podziału
+              invalid_split_count: musi mieć podziały pomiędzy %{min} i %{max}
+              split_name_required: 'split #%{index} brakuje nazwy'
+              split_name_too_long: 'podział #%{index} nazwa jest za długa (maks. 255 znaków)'
+              split_name_invalid: 'podział #%{index} nazwa zawiera nieprawidłowe znaki'
+              split_type_invalid: 'podział #%{index} musi być stały lub procentowy'
+              split_share_invalid: 'podział #%{index} udział musi być liczbą dodatnią'
+              split_category_invalid: 'podział #%{index} kategoria nie należy do tej rodziny'
+              split_merchant_invalid: 'podział #%{index} sprzedawca nie należy do tej rodziny'
+              split_tags_invalid: 'split #%{index} ma znacznik, który nie należy do tej rodziny'
+              percentages_must_total_100: wartości procentowe muszą sumować się do 100 (otrzymałem %{total})
+              fixed_requires_exact_amount_condition: Podziały na stałą kwotę wymagają warunku reguły odpowiadającego dokładnej kwocie transakcji (np. Kwota = 42,00), w przeciwnym razie udziały nie będą mogły w sposób wiarygodny sumować się do sumy każdej pasującej transakcji
+              fixed_shares_must_equal_condition_amount: udziały podzielone muszą sumować się do %{amount}, czyli dokładnej kwoty wymaganej przez warunek tej reguły
+        rule/condition:
+          attributes:
+            value:
+              regex_invalid: nie jest prawidłowym wyrażeniem regularnym
+              regex_too_complex: jest zbyt skomplikowany, aby można go było bezpiecznie uruchomić.
+              regex_too_long: jest za długi (maksymalna liczba znaków to %{count})
+              regex_backreference: nie może używać odwołań wstecznych (\1 do \9)
+  rules:
+    form:
+      stop_processing_label: Zatrzymaj przetwarzanie dalszych reguł
+      stop_processing_description: Reguły znajdujące się w dalszej części listy nie zmieniają transakcji, do których pasuje ta reguła.
+    condition_filters:
+      operators:
+        starts_with: Zaczyna się od
+        ends_with: Kończy się na
+        matches_regex: Pasuje do wyrażenia regularnego
+    notification_baseline_timed_out: Ta reguła pozostaje wyłączona. Sprawdzenie, które istniejące transakcje już do niej pasują, trwało zbyt długo. Włączenie reguły bez tego sprawdzenia spowoduje wysłanie wiadomości e-mail dla każdej pasującej transakcji. Uprość warunki, a następnie ponownie włącz regułę.
+    classifier_rules:
+      category_classifier: Klasyfikator kategorii
+      merchant_matcher: Dopasowanie sprzedawcy
+    rule:
+      stop_processing: Zatrzymaj
+      stop_processing_hint: Reguły znajdujące się dalej nie zmieniają transakcji zgodnych z tą regułą.
+    index:
+      order_hint: Reguły przebiegają od góry do dołu. Gdy reguła ustawi pole transakcji, reguły znajdujące się niżej nie powodują zmiany tego pola. Tagi są dodawane przez każdą pasującą regułę. Przeciągnij reguły, aby zmienić kolejność.
+      reorder_rule: Przenieś regułę %{name}. Naciśnij Enter lub Spację, aby go chwycić, a następnie użyj klawiszy strzałek, aby go przesunąć.
+    confirm:
+      rules_above_notice:
+        one: Najpierw wykonywana jest %{count} aktywna reguła powyżej, więc wynik jest taki sam jak przy pełnym uruchomieniu.
+        other: Najpierw wykonywane są %{count} aktywne reguły powyżej, więc wynik jest taki sam jak przy pełnym uruchomieniu.
+        few: Najpierw wykonywane są %{count} aktywne reguły powyżej, więc wynik jest taki sam jak przy pełnym uruchomieniu.
+        many: Najpierw wykonywanych jest %{count} aktywnych reguł powyżej, więc wynik jest taki sam jak przy pełnym uruchomieniu.
+    actions:
+      split:
+        type_fixed: Stała kwota
+        type_percentage: Procent
+        type_label: Typ dzielony
+        share_label: Podział kwoty lub procentu
+        category_label: Podzielona kategoria
+        merchant_label: Podział sprzedawcy
+        tags_label: Podziel znaczniki
+        remove_split: Usuń podział
+        hint: Stałe podziały są najpierw odejmowane jako dokładne kwoty. Dzielimy procenty, a potem dzielimy to, co zostało. Jeśli w każdym podziale używana jest stała kwota, dodaj także warunek odpowiadający dokładnej kwocie transakcji (np. Kwota = 42,00), ponieważ każda pasująca transakcja wymaga tej samej sumy, aby kwoty stałe się zsumowały. Reguła podziału nie może mieć innych akcji.
+        fixed_summary_label: naprawiono
+        summary:
+          one: "%{count} podział"
+          other: "%{count} podziały"
+          few: "%{count} podziały"
+          many: "%{count} podziałów"
+  binance_items:
+    select_accounts:
+      connection_unavailable: To połączenie Binance nie jest dostępne. Wybierz jedną w Ustawieniach dostawcy.
+      no_credentials_configured: Połącz Binance w Ustawieniach dostawcy przed dodaniem kont.
+      select_connection: Wybierz połączenie Binance w Ustawieniach dostawcy.
+  reports:
+    index:
+      sections_aria: Sekcje raportów
+    spending_vs_normal:
+      title: Wydatki a normalne
+      summary_html: "%{total} wydane w tym okresie. Normalny dla tak długiego okresu jest %{normal}, w oparciu o %{baseline_start} do %{baseline_end}."
+      summary_so_far_html: "%{total} wydane do tej pory. Normalny dla tak wielu dni jest %{normal}, w oparciu o %{baseline_start} do %{baseline_end}."
+      no_history_html: "%{total} wydane w tym okresie. Nie ma jeszcze wystarczająco dużo wcześniejszej historii, aby stwierdzić, co jest normalne."
+      no_history_short: Nie ma jeszcze wystarczającej wcześniejszej historii, z którą można ją porównać.
+      no_spending: Brak wydatków w tym okresie.
+      no_changes: Wydatki na poziomie normalnym w każdej kategorii.
+      treemap_title: Gdzie poszło
+      changes_title: Co się zmieniło
+      direct: "%{category} (bez podkategorii)"
+      tooltip:
+        path: "%{parent} › %{category}"
+        total: "%{category}: %{amount}"
+        normal: 'Normalny: %{amount}'
+        more: "%{amount} więcej niż normalnie (%{percent})"
+        less: "%{amount} mniej niż normalnie (%{percent})"
+        more_no_percent: "%{amount} więcej niż normalnie"
+        less_no_percent: "%{amount} mniej niż normalnie"
+        no_normal: Brak wcześniejszej historii do porównania z
+        open: Wybierz, aby zobaczyć te transakcje
+      legend:
+        less: 50–100% mniej
+        slightly_less: 15–50% mniej
+        normal: Informacje o normalnym
+        slightly_more: 15–50% więcej
+        more: 50–100% więcej
+        much_more: 100%+ więcej
+  account_order:
+    manual:
+      label: Instrukcja (przeciągnij, aby zmienić kolejność)
+      label_short: Instrukcja
+  providers:
+    property_valuation:
+      missing_fields_gb: Podaj nazwę, adres i kod pocztowy oraz numer UPRN nieruchomości.
+      entry_name: "%{provider} wycena"
+    chimnie:
+      errors:
+        invalid_uprn: UPRN to liczba składająca się z maksymalnie 12 cyfr. Sprawdź UPRN i spróbuj ponownie.
+        no_estimate: Chimnie nie posiada szacunkowej wartości dla tej właściwości.
+        not_found: Chimnie nie mógł znaleźć właściwości z tym UPRN.
+        unsupported_property: Chimnie wycenia tylko nieruchomości mieszkalne; ten UPRN należy do nieruchomości komercyjnej lub o mieszanym przeznaczeniu.
+        unauthorized: Chimnie odrzucił klucz API. Sprawdź klucz w Ustawieniach → Self-Hosting.
+        insufficient_balance: Saldo Twojego konta Chimnie jest zbyt niskie dla tego żądania.
+  recurring_transactions:
+    allocator:
+      entry_exhausted: pełna kwota tej transakcji została już zastosowana do innych należnych płatności
+      already_allocated: ta transakcja została już zastosowana do tego rachunku
+    new:
+      covered_title: Ta transakcja należy już do rachunku
+      covered_body: "%{name} już śledzi tę płatność, więc nowy rachunek będzie ją liczył dwukrotnie."
+      covered_open: Otwórz rachunek
+      covered_suggested_title: Sure zasugerował już rachunek za tę płatność
+      covered_suggested_body: "%{name} czeka na Twoje sugestie. Potwierdź, aby rozpocząć śledzenie, aby nowy rachunek nie liczył tej płatności podwójnie. Pasujące płatności są łączone automatycznie i możesz je powiązać z rachunku."
+      covered_confirm: Potwierdź rachunek
+      covered_create_anyway: Mimo to utwórz oddzielny rachunek
+      covered_income_title: Ten depozyt należy już do dochodu
+      covered_income_body: "%{name} już śledzi tę wpłatę, więc ponowne jej dodanie spowodowałoby jej podwójne policzenie."
+      covered_income_open: Otwarty dochód
+      covered_income_suggested_title: Sure już zasugerował ten dochód
+      covered_income_suggested_body: "%{name} czeka na Twoje sugestie. Dodaj go, aby rozpocząć śledzenie, aby ten depozyt nie był liczony dwukrotnie. Pasujące depozyty są łączone automatycznie i możesz je powiązać z przychodami."
+      covered_income_confirm: Dodaj przychód
+      covered_income_create_anyway: Mimo to dodaj osobny dochód
+    create:
+      category_invalid: Wybierz jedną z kategorii lub zostaw ją pustą
+    already_covered: Ta transakcja pasuje już do transakcji cyklicznej
+  transfers:
+    show:
+      investment_contribution_subtitle: Zalicz ten transfer jako wydatek w budżetach i raportach. Wyłącz tę opcję, jeśli konto maklerskie lub kryptowalutowe przelicza tylko pieniądze na inną walutę.
+      investment_contribution_title: Wkład inwestycyjny
+  transactions:
+    transaction_category:
+      set_on_outflow: Kategoria należy do strony wychodzącej tego przelewu i tylko tam można ją zmienić
+    show:
+      category_set_on_hidden_outflow: To jest strona przychodząca przelewu. Jego kategoria należy do strony wychodzącej, na koncie, do którego nie masz dostępu i tylko tam możesz ją zmienić.
+      category_set_on_outflow: To jest strona przychodząca przelewu. Jego kategoria należy do strony wychodzącej i można ją zmienić tylko tam, więc budżety liczą ją tylko raz.
+    search:
+      filters:
+        attachment: Załącznik
+    searches:
+      filters:
+        badge:
+          attachment_with: Z przystawką
+          attachment_without: Bez mocowania
+        attachment_filter:
+          with: Z przystawką
+          without: Bez mocowania
+  accounts:
+    sidebar:
+      reorder_account: Przesuń %{account}
+      reorder_hint: Przeciągnij, aby zmienić kolejność. Za pomocą klawiatury naciśnij Enter, a następnie klawisze strzałek.
+      sort_mode:
+        start: Sortuj konta
+        hint: Przeciągnij konta za ich uchwyt, aby zmienić ich kolejność.
+  admin:
+    system_health:
+      optional_services:
+        title: Usługi opcjonalne
+        description: Opcjonalne integracje operatorów. Nieskonfigurowane usługi mają charakter informacyjny. Te kontrole sprawdzają tylko ustawienia; nie testują łączności, nie wysyłają zdarzeń testowych ani nie zmieniają zgody na przetwarzanie danych. Rozwiń usługę, aby uzyskać szczegółowe informacje na temat konfiguracji.
+        missing_settings: 'Brakujące ustawienia: %{settings}'
+        statuses:
+          configured: Skonfigurowano
+          not_configured: Nie skonfigurowano
+          incomplete: Niekompletna konfiguracja
+          disabled: Wyłączone w tym procesie
+        notes:
+          environment_disabled: Załadowana integracja jest wyłączona dla tego środowiska Rails.
+          explicitly_disabled: SKYLIGHT_ENABLED jawnie wyłącza oprzyrządowanie.
+          self_hosted_checkout_disabled: Kasa subskrypcji i portal rozliczeniowy są wyłączone w trybie samodzielnego hostowania. Nadal można konfigurować webhooki Stripe; Identyfikatory ceny przy kasie nie są tutaj wymagane.
+          browser_analytics_disabled: Analityka przeglądarki jest wyłączona dla tego środowiska. Nie wyłącza to oddzielnie skonfigurowanego klienta serwera.
+          shared_feedback_configured: Opinia na własnym serwerze ma oddzielny projekt w pakiecie i jest włączana poprzez jego konfigurację. Nie wymaga operatora POSTHOG_KEY. Rezygnacja z przeglądarki i dostępność SDK nie są sprawdzane.
+          shared_feedback_disabled: Oddzielny, własny projekt opinii jest wyłączony ze względu na ustawienia opinii lub środowiska. Nie wyłącza to analiz prowadzonych przez operatora.
+          production_only: Integracja ta wykorzystywana jest wyłącznie na produkcji przy aktualnej konfiguracji aplikacji.
+        services:
+          langfuse:
+            title: Langfuse
+            description: Opcjonalne raportowanie śledzenia i oceny AI. W ramach tej kontroli nie są wysyłane żadne ślady ani żądania oceny.
+            guidance: Ustaw razem LANGFUSE_PUBLIC_KEY i LANGFUSE_SECRET_KEY. LANGFUSE_HOST jest opcjonalny. Po zmianie tych ustawień uruchom ponownie usługi, których to dotyczy.
+          sentry:
+            title: Sentry
+            description: Opcjonalne raportowanie błędów i wydajności. Bieżący inicjator umożliwia raportowanie tylko w środowisku produkcyjnym.
+            guidance: Ustaw SENTRY_DSN i zrestartuj odpowiednie usługi. Sprawdza to załadowaną konfigurację SDK bez przechwytywania błędu lub wysyłania zdarzenia.
+          skylight:
+            title: Skylight
+            description: Opcjonalne instrumentarium wydajności aplikacji. Obecność konfiguracji nie potwierdza, że ​​agent działa lub raportuje.
+            guidance: Ustaw SKYLIGHT_AUTHENTICATION i upewnij się, że Skylight jest załadowany w zamierzonym środowisku Rails. SKYLIGHT_ENABLED=false wyłącza oprzyrządowanie; sama flaga nie ładuje klejnotu. Uruchom ponownie po zmianach.
+          stripe:
+            title: Stripe
+            description: Opcjonalne webhooki do rozliczeń subskrypcji i płatności. Ten czek nie tworzy klienta Stripe, nie sprawdza poświadczeń ani nie wysyła żądań płatności.
+            guidance: Ustaw razem STRIPE_SECRET_KEY i STRIPE_WEBHOOK_SECRET. Zarządzana płatność za subskrypcję wymaga również STRIPE_MONTHLY_PRICE_ID i STRIPE_ANNUAL_PRICE_ID.
+          posthog:
+            title: PostHog
+            description: Opcjonalna analiza należąca do operatora, wykorzystująca konfigurację ładowaną podczas rozruchu. Skonfigurowane nie oznacza, że ​​użytkownik wyraził zgodę na analitykę.
+            guidance: Ustaw POSTHOG_KEY i niepusty POSTHOG_HOST lub pozostaw hosta nieskonfigurowanego, aby użyć wartości domyślnej. Analityka przeglądarki wymaga wersji produkcyjnej lub POSTHOG_DEVELOPMENT_ENABLED w fazie rozwoju. POSTHOG_FEEDBACK_ENABLED kontroluje oddzielne opinie hostowane przez operatora, a nie analizy operatora.
+          logtail:
+            title: Logtail
+            description: Opcjonalne przesyłanie dziennika produkcji. Gdy jest nieskonfigurowana, aplikacja kontynuuje logowanie na standardowe wyjście.
+            guidance: Ustaw razem LOGTAIL_API_KEY i LOGTAIL_INGESTING_HOST i zrestartuj odpowiednie usługi. W wyniku tej kontroli nie jest emitowany żaden dziennik testów.
+      configuration:
+        description: Konfiguracja widoczna dla tego procesu internetowego. Te sprawdzenia nie wysyłają e-maili, nie kontaktują się z dostawcami, ani nie przesyłają ani nie pobierają plików. Słowo "skonfigurowane" oznacza, że ustawienia są obecne, a nie że dostawa, dostęp do dostawców lub dostęp do przechowywania zostały zweryfikowane.
+        statuses:
+          configured: Skonfigurowano
+          not_configured: Nie skonfigurowano
+          incomplete: Niekompletna konfiguracja
+        settings_needed: Ustawienia do przejrzenia
+        unknown_provider: Nieznany wybór dostawcy
+        provider_statuses:
+          configured: Skonfigurowano
+          not_configured: Brakuje klucza API
+          invalid: Nieważny wybór
+        configure_providers: Otwórz ustawienia samodzielnego hostowania
+        storage_backend: 'Wybrana lokalizacja przechowywania: %{backend}'
+        storage_backends:
+          local: Dysk lokalny
+          test: Dysk testowy
+          amazon: Amazon S3
+          cloudflare: Cloudflare R2
+          generic_s3: Lokalizacja przechowywania kompatybilna z S3
+          google: Google Cloud Przechowywanie
+          other: Dostosowany lub nieznany backend
+        checks:
+          smtp:
+            title: E-mail (SMTP)
+            statuses:
+              configured: Ustawienia SMTP są obecne.
+              not_configured: SMTP nie jest skonfigurowany. Szyfrowanie haseł, zaproszenia oraz inne e-maile systemowe nie mogą być wysyłane przez SMTP.
+              incomplete: Brakuje niektórych ustawień e-maila lub są one niekompletne. E-maile systemowe lub zawarte w nich linki mogą nie działać.
+              disabled: W ustawieniach bieżącego programu do wysyłki e-maili dostawa e-maili jest wyłączona.
+              not_checked: Ten proces wykorzystuje metodę dostawy inną niż SMTP, na przykład wersję wstępną przeznaczoną do rozwoju. Dostawa za pomocą SMTP nie jest oceniana.
+            guidance: SMTP nie może być skonfigurowany w interfejsie administracyjnym. Ustaw zmienną środowiskową e-mail dla usług webowych oraz roboczych, a następnie zrestartuj obie. Dla bezautoryzowanego przekierowania można pominąć zarówno SMTP_USERNAME, jak i SMTP_PASSWORD.
+            issues:
+              address: SMTP_ADDRESS
+              port: SMTP_PORT (liczba od 1 do 65535)
+              sender: EMAIL_SENDER (zastąpi domyślne sender@sure.local)
+              app_domain: APP_DOMAIN (używane w linkach e-mailowych)
+              authentication: SMTP_USERNAME oraz SMTP_PASSWORD (można podać oba lub żaden z nich)
+          securities:
+            title: Ceny rynkowe
+            statuses:
+              configured: Wszyscy włączeni dostawcy cen rynkowych mają odpowiednią konfigurację.
+              not_configured: Włączeni dostawcy cen rynkowych nie posiadają kluczy API. Automatyczne wyszukiwanie papierów wartościowych oraz sprawdzanie cen nie jest możliwe za pośrednictwem tych dostawców.
+              incomplete: Przynajmniej jeden z włączonych dostawców cen rynkowych ma brakującą konfigurację lub niewłaściwy wybór. Papierom wartościowym przypisanym do tego dostawcy mogą nie trafiać aktualizacje cen.
+              disabled: Żaden dostawca cen rynkowych nie jest włączony. Automatyczne wyszukiwanie papierów wartościowych oraz sprawdzanie cen nie jest dostępne.
+            guidance: Wybierz dostawców i dodaj wszelkie wymagane klucze API w ustawieniach self-hosting, lub skonfiguruj je w środowisku implementacji. Ustawienia zastępujące z środowiska mają pierwszeństwo. Dostawcy publiczni nie wymagają klucza API.
+          exchange_rates:
+            title: Kursy walut
+            statuses:
+              configured: Wybrany dostawca kursów walut ma odpowiednie ustawienia.
+              not_configured: Nie skonfigurowano żadnego dostępnego dostawcy kursów walut. Automatyczne przeliczanie walut może być niedostępne, jeśli nie ma zapisanego kursu.
+            guidance: Wybierz dostawcę kursów walut i dodaj jego klucz API, jeśli jest to wymagane w ustawieniach self-hosting, lub skonfiguruj go w środowisku implementacji. Ustawienia zastępujące z klucza EXCHANGE_RATE_PROVIDER oraz klucza API dostawcy mają pierwszeństwo.
+            issues:
+              invalid_provider: Wybrany dostawca kursów walut nie został rozpoznany. Automatyczne wyszukiwanie kursów nie jest możliwe, dopóki nie zostanie wybrany obsługiwany dostawca.
+          storage:
+            title: Zapisywanie i przechowywanie plików
+            statuses:
+              configured: Dostępne są ustawienia przechowywania; dysk lokalny nie wymaga danych uwierzytelniających chmurowych.
+              not_configured: Wybrany backend przechowywania nie posiada odpowiadającej mu konfiguracji. Zapisywanie plików może być niedostępne.
+              incomplete: Brakuje niezbędnych ustawień przechowywania lub są one niekompletne. Zapisywanie lub pobieranie plików może nie działać.
+              not_checked: Ten backend wykorzystuje zewnętrzne mechanizmy wykrywania danych uwierzytelniających lub własną konfigurację. Jego dostęp nie może zostać określony na podstawie samych tych ustawień.
+            guidance: Sprawdź ACTIVE_STORAGE_SERVICE oraz ustawienia wdrożeniowe wybranego backendu. Dysk lokalny wymaga trwałego przechowywania udostępnianego zarówno usługom internetowym, jak i roboczym. Zmiana backendów nie przenosi istniejących plików; planuj wszelką migrację oddzielnie.
+            issues:
+              root: Korzeń przechowywania lokalnego
+              bucket: Bucket przechowywania
+              region: Region przechowywania
+              credentials: Klucz dostępu do przechowywania i tajny klucz (wymagane oba lub użycie zewnętrznego mechanizmu wykrywania danych uwierzytelniających)
+              endpoint: Koniec punktu dostępu do przechowywania (oraz CLOUDFLARE_ACCOUNT_ID dla wersji R2)
+      show:
+        tabs:
+          configuration: Konfiguracja
+  bills:
+    detail:
+      rule_detected: Zestawia transakcje oznaczone jako %{name}
+    match:
+      same_transfer: Przelew między tymi samymi rachunkami bankowymi
+  budgets:
+    available_cash:
+      currency_warning: Saldo dla %{currencies} nie zostało uwzględnione, ponieważ nie ma jeszcze dostępnej stopy wymiany dla %{currency}.
+  categories:
+    locked: Kategorie są zablokowane. Odblokuj je, aby dodać nową kategorię.
+    toggle_lock:
+      locked: Kategorie są zablokowane
+      unlocked: Kategorie zostały odblokowane
+    index:
+      lock_categories: Zamknięcie możliwości tworzenia kategorii
+      locked_message: Tworzenie kategorii jest zablokowane. Importy oraz synchronizacja z rachunkiem bankowym nadal mogą dodawać kategorie.
+      unlock_categories: Odblokowanie możliwości tworzenia kategorii
+  category:
+    dropdowns:
+      show:
+        assign_error: Kategoria została utworzona, ale nie można jej przypisać. Wybierz ponownie opcję „Utwórz”, aby spróbować ponownie.
+        back: Wstecz
+        create_error: Nie udało się utworzyć tej kategorii. Proszę spróbować ponownie.
+  chats:
+    ai_busy: Właśnie kończę zadanie w tle, a potem od razu zajmę się twoją wiadomością.
+    reservation:
+      ready_html: Odłożyłem niektóre zadania w tle, aby móc od razu zająć się twoją wiadomością. Wrócą po cichu %{countdown} s, więc pisz dalej!
+      busy: Właśnie kończę zadanie w tle, a potem jestem cały twój. Pisz dalej!
+  coinbase_items:
+    select_accounts:
+      connection_unavailable: To połączenie Coinbase nie jest dostępne. Wybierz jedno w Ustawieniach dostawcy.
+      no_credentials_configured: Połącz Coinbase w Ustawieniach dostawcy, zanim dodasz jego portfele.
+      select_connection: Wybierz połączenie Coinbase w Ustawieniach dostawcy.
+  credit_cards:
+    due:
+      in_days:
+        zero: W terminie dziś
+        one: Termin za %{count} dzień
+        other: Termin za %{count} dni
+        few: Termin za %{count} dni
+        many: Termin za %{count} dni
+      overdue:
+        one: "%{count} dzień po terminie"
+        other: "%{count} dni po terminie"
+        few: "%{count} dni po terminie"
+        many: "%{count} dni po terminie"
+    form:
+      due_day: Data wymagalności płatności
+      statement_close_day: Data zamknięcia wyciągu
+      statement_cycle_description: Dzień w miesiącu, w którym zamyka się wyciąg oraz dzień terminu spłaty. Po ustawieniu tych wartości karta zakładka Zestawienie pokazuje, jaka była kwota ostatniego wyciągu oraz ile pieniędzy jest gromadzonych na następny. Karta powiązana uzupełnia te dane automatycznie i zachowuje wartości ręcznie ustawione przez użytkownika.
+      sophtron_balance_sign_description: Używaj funkcji przejęcia kontroli wyłącznie wtedy, gdy Sophtron wykazuje niejednoznaczny znak. Tryb automatyczny nadal odwraca saldo na karcie kredytowej.
+      sophtron_balance_sign_label: Znaczenie salda w Sophtron
+    tabs:
+      overview:
+        above_minimum: Kwota na wyciągu z karty kredytowej wynosi %{balance} i przekracza minimalną spłatę %{minimum}. Spłata tylko minimalnej kwoty pozostawia zadłużenie oprocentowane według podanej rocznej stopy (APR).
+        closes_on: Kolejny wyciąg zostanie zamknięty po kwocie %{date}
+        credit_toward_next: Kredyt na następny wyciąg
+        due_on: Termin płatności %{date}
+        edit_card_details: Edytuj dane karty
+        since_last_statement: Od ostatniego wyciągu
+        statement_balance: Saldo wyciągu
+        multi_currency_unavailable: Ten wyciąg obejmuje wpisy zapisane w więcej niż jednej walucie, których nie można tutaj zsumować bez podania kursu dla każdej z nich. Saldo pozostawiono puste, zamiast je szacować.
+        no_cycle_description: Ustaw dzień zamknięcia wyciągu oraz termin spłaty rachunku – w tym zakładce zostanie pokazana kwota ostatniego wyciągu oraz kwota, która jest gromadzona na następny. Zazwyczaj karta powiązana uzupełnia te dane za Ciebie.
+        no_cycle_title: Nie ustawiono cyklu wyciągów
+        unknown: Nieznane
+    update:
+      sophtron_balance_sign_error: Nie udało się zastosować znaczenia salda Sophtron. Zachowano poprzedni ustawienie. Proszę spróbować ponownie.
+  demo_family_refresh_mailer:
+    completed:
+      subject: Uzupełnienie danych dema zakończone
+      activity_heading: Działalność w tym okresie
+      sessions_label: Unikalne sesje logowania dla poprzedniej rodziny demonstracyjnej
+      families_label: Utworzone nowe konta rodziny
+      period_heading: Okres sprawozdawczy (UTC)
+      from_label: 'Od:'
+      to_label: 'Do:'
+      time_format: "%b %-d, %Y w %H:%M:%S UTC"
+      family_heading: Poprzednia rodzina demonstracyjna
+      id_label: 'ID:'
+  goals:
+    currency_warning:
+      title: Niektóre saldo nie są uwzględniane
+      body:
+        one: Nie ma jeszcze dostępnych stawek wymiany dla %{from}, → i %{to}, dlatego saldo związane z %{from} nie jest wliczane do tej sumy.
+        other: Nie ma jeszcze dostępnych stawek wymiany z %{from} na %{to}, dlatego te saldo nie są wliczane do tej sumy.
+        many: Nie ma jeszcze dostępnych stawek wymiany z %{from} na %{to}, dlatego te saldo nie są wliczane do tej sumy.
+        few: Nie ma jeszcze dostępnych stawek wymiany z %{from} na %{to}, dlatego te saldo nie są wliczane do tej sumy.
+      settings_link: Ustawienia dostawcy stawek wymiany
+    consume:
+      goal_currency_hint: Wprowadź kwotę w polu %{currency}. W przypadku rachunku w innej walucie, kwota jest konwertowana według dzisiejszego kursu przed odliczeniem jej od odpowiedniego salda rachunku.
+      errors:
+        missing_exchange_rate: Dla waluty tego rachunku nie ma jeszcze dostępnego kursu wymiany, dlatego te wydatki nie mogą zostać zarejestrowane.
+    show:
+      funding_accounts:
+        converted: "≈ %{amount}"
+        rate_unavailable: Kurs wymiany nie jest jeszcze dostępny, dlatego ten rachunek nie jest uwzględniany.
+    goal_card:
+      partial_total: Niektóre salda nie są uwzględniane (kurs wymiany nie jest jeszcze dostępny)
+    form:
+      earmark:
+        converted: 'To przeznaczenie środków: ≈ {amount}.'
+      fields:
+        currency_conversion_hint: Rachunki mogą używać różnych walut. Łączne kwoty są konwertowane na %{currency}; przeznaczenia środków na poszczególnych rachunkach pozostają w walucie danego rachunku.
+  imports:
+    publish:
+      guest_new_categories_or_tags: Goście nie mogą tworzyć kategorii ani tagów. Przypisz je do istniejących lub pozostaw puste.
+    create:
+      missing_upload: Nie otrzymaliśmy Twojego pliku. Proszę spróbować go ponownie przesłać.
+  insights:
+    card:
+      dig_in: Zacznij analizę za pomocą AI
+    dig_in:
+      prompt: |-
+        Pomóż mi przeanalizować tę wiedzę.
+
+        Wiedza: %{title}
+        To odkryło Sure: %{body}
+        Okres: %{period}
+        Dane:
+        %{facts}
+
+        Co kryje się za tym i czy jest coś, co powinienem zrobić?
+  mfa:
+    local_password_required: Weryfikacja dwuetapowa wymaga lokalnego hasła. Twoje hasło jest zarządzane przez Twojego dostawcę usług tożsamości.
+    create:
+      invalid_password: Błędne hasło. Proszę spróbować ponownie.
+    disable:
+      invalid_password: Błędny hasło. Proszę spróbować ponownie.
+    new:
+      password_label: Potwierdź hasłem
+      password_placeholder: Wpisz hasło
+  pages:
+    dashboard:
+      customize:
+        start: Dostosuj
+        hide: Ukryj %{title}
+        hidden_title: Ukryte elementy interfejsu
+        hidden_description: Dodaj element interfejsu z powrotem na panel sterowania.
+        none_hidden: Wszystkie elementy interfejsu są widoczne. Ukryj jeden za pomocą przycisku oka.
+        all_hidden_title: Każdy widget jest ukryty
+        all_hidden_description: Dostosuj panel sterowania, aby ponownie dodać widżety.
+      cashflow_preview:
+        node_labels:
+          invested: Zainwestowane
+        group_by_label: Pokaż przepływy według
+        sort_label: Utwórz sortowanie przepływów
+        sort_auto: Automatycznie
+        sort_ascending: Najmniejsze najpierw
+        sort_descending: Największe najpierw
+      spending_trend:
+        filter_categories: Filtr kategorii (%{count})
+  plaid_items:
+    auto_link_opener:
+      create_failed: Nie udało nam się potwierdzić dodania tego połączenia. Załaduj stronę, aby to sprawdzić, zanim spróbujesz ponownie.
+    create:
+      already_connected: Masz już połączenie dla tej instytucji, dlatego to nie zostało dodane.
+      exchange_failed: Nie udało nam się dodać tego połączenia. Spróbuj ponownie, a jeśli problem się utrzyma, sprawdź logi serwera.
+      token_expired: To połączenie wygasło, zanim zostało dodane. Połącz się ponownie z tą instytucją.
+    duplicate_warning:
+      confirm: Potwierdź to połączenie
+      connected_by: Połączenie nawiązane za pomocą %{name}
+      eu_no_add_accounts: Plaid nie umożliwia dodawania rachunków do istniejącego połączenia w UE. Aby zmienić listę połączonych rachunków, usuń ten i dodaj go ponownie.
+      linked_on: Połączony z %{date}
+      manage_connection: Przejdź do rachunków
+      mask: "****%{mask}"
+      no_accounts: Na ten moment żaden rachunek bankowy nie został jeszcze zsynchronizowany z tej połączenia.
+      overlap:
+        all_connected:
+          one: Rachunki, które próbujesz dodać (%{count}), są już połączone. Ponowne dodanie spowoduje utworzenie duplikatów.
+          other: Rachunki, które próbujesz dodać (%{count}), są już połączone. Ponowne dodanie spowoduje utworzenie duplikatów.
+          few: Rachunki, które próbujesz dodać (%{count}), są już połączone. Ponowne dodanie spowoduje utworzenie duplikatów.
+          many: Rachunki, które próbujesz dodać (%{count}), są już połączone. Ponowne dodanie spowoduje utworzenie duplikatów.
+        different_login: Aby połączyć inny login %{institution}, wybierz ponownie opcję Nowy rachunek i zaloguj się przy użyciu tego logina poprzez Plaid.
+        more_accounts: Aby dodać więcej rachunków do tego połączenia, zamknij obecne i wybierz opcję Dodaj rachunki w połączeniu %{institution}.
+        others_connected:
+          one: Sure posiada już ten rachunek dzięki połączeniu %{name}, więc dodanie Twojego rachunku spowoduje jedynie utworzenie duplikatu.
+          other: Sure posiada już te rachunki dzięki połączeniu %{name}, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+          many: Sure posiada już te rachunki dzięki połączeniu %{name}, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+          few: Sure posiada już te rachunki dzięki połączeniu %{name}, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+        others_connected_several:
+          one: Sure posiada już ten rachunek dzięki połączeniom innych użytkowników, więc dodanie Twojego rachunku spowoduje jedynie utworzenie duplikatu.
+          other: Sure posiada już te rachunki dzięki połączeniom innych użytkowników, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+          many: Sure posiada już te rachunki dzięki połączeniom innych użytkowników, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+          few: Sure posiada już te rachunki dzięki połączeniom innych użytkowników, więc dodanie Twoich rachunków spowoduje jedynie utworzenie duplikatów.
+        none_connected: Żaden z rachunków bankowych, które próbowałeś dodać, nie jest jeszcze podłączony, więc prawdopodobnie używasz innego konta logowania. Dodanie go zostanie zaliczone jedynie jako kolejne połączenie typu Plaid.
+        some_connected:
+          connected:
+            one: Pozostałe rachunki (%{count}) są już połączone. Dodanie tego połączenia utworzy duplikaty i będzie liczone jako kolejne połączenie Plaid.
+            other: Pozostałe rachunki (%{count}) są już połączone. Dodanie tego połączenia utworzy duplikaty i będzie liczone jako kolejne połączenie Plaid.
+            few: Pozostałe rachunki (%{count}) są już połączone. Dodanie tego połączenia utworzy duplikaty i będzie liczone jako kolejne połączenie Plaid.
+            many: Pozostałe rachunki (%{count}) są już połączone. Dodanie tego połączenia utworzy duplikaty i będzie liczone jako kolejne połączenie Plaid.
+          unconnected:
+            one: 'Rachunki, które próbujesz dodać, nie są jeszcze połączone: %{count}.'
+            other: 'Rachunki, które próbujesz dodać, nie są jeszcze połączone: %{count}.'
+            few: 'Rachunki, które próbujesz dodać, nie są jeszcze połączone: %{count}.'
+            many: 'Rachunki, które próbujesz dodać, nie są jeszcze połączone: %{count}.'
+        unknown:
+          one: Nie można sprawdzić tych rachunków w kontekście istniejących połączeń. Jeśli są to te same rachunki, dodanie tego połączenia spowoduje ich duplikację i zostanie zaliczone jako kolejne połączenie Plaid.
+          other: Te rachunki bankowe nie mogą zostać sprawdzone w odniesieniu do istniejących połączeń, które masz z nimi. Jeśli są to te same rachunki, dodanie tego połączenia spowoduje ich duplikację i zostanie zaliczone jako kolejne połączenie typu Plaid.
+          many: Te rachunki bankowe nie mogą zostać sprawdzone w odniesieniu do istniejących połączeń, które masz z nimi. Jeśli są to te same rachunki, dodanie tego połączenia spowoduje ich duplikację i zostanie zaliczone jako kolejne połączenie typu Plaid.
+          few: Te rachunki bankowe nie mogą zostać sprawdzone w odniesieniu do istniejących połączeń, które masz z nimi. Jeśli są to te same rachunki, dodanie tego połączenia spowoduje ich duplikację i zostanie zaliczone jako kolejne połączenie typu Plaid.
+      title:
+        one: Masz już %{count} połączenie z tą instytucją
+        other: Masz już %{count} połączenia z tą instytucją
+        few: Masz już %{count} połączenia z tą instytucją
+        many: Masz już %{count} połączeń z tą instytucją
+      title_all_connected: Już nawiązałeś to połączenie
+      title_others_connected:
+        one: Ten rachunek bankowy jest już podłączony
+        other: Te rachunki bankowe są już podłączone
+        many: Te rachunki bankowe są już podłączone
+        few: Te rachunki bankowe są już podłączone
+      update_existing: Zaktualizuj istniejące połączenie
+  plans:
+    goals_card:
+      currency_warning:
+        one: "%{count} cel pomija salda w %{currencies} (brak kursu wymiany)."
+        other: "%{count} cele pomijają salda w %{currencies} (brak kursu wymiany)."
+        few: "%{count} cele pomijają salda w %{currencies} (brak kursu wymiany)."
+        many: "%{count} celów pomija salda w %{currencies} (brak kursu wymiany)."
+  recurring_allocations:
+    entry_exhausted: Cała kwota tej transakcji została już odliczona od innych należności.
+  valuations:
+    names:
+      current_account_value: Bieżąca wartość rachunku
+      current_balance: Bieżące saldo
+      current_loan_balance: Obecne saldo kredytu
+      current_market_value: Obecna wartość rynkowa
+      manual_balance_update: Ręczna aktualizacja salda
+      manual_principal_update: Ręczna aktualizacja kapitału kredytu
+      manual_value_update: Ręczna aktualizacja wartości
+      opening_account_value: Wartość przy otwarciu rachunku bankowego
+      opening_balance: Początkowe saldo
+      original_purchase_price: Początkowa cena zakupu
