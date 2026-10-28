@@ -25,6 +25,25 @@ class Icost::ReconcilerTest < ActiveSupport::TestCase
     end
   end
 
+  test "does not repeat source archive bytes in the record query" do
+    batch = prepare(row, row("类型" => "收入", "金额" => "30"))
+
+    queries = capture_sql_queries do
+      assert_difference("Entry.count", 2) { batch.process!(user: @user) }
+    end
+
+    record_query = queries.find do |sql|
+      sql.include?('FROM "icost_records"') && sql.include?('INNER JOIN "icost_imports"')
+    end
+    assert record_query, "Expected the owner-scoped reconciliation query"
+    refute record_query.include?('"icost_imports"."source_bytes"'), "Record query must not repeat source archive bytes"
+
+    archive_queries = queries.select { |sql| sql.start_with?("SELECT") && sql.include?('FROM "icost_imports"') }
+    assert archive_queries.any?, "Expected source archive metadata to be loaded"
+    refute archive_queries.any? { |sql| sql.include?('"icost_imports".*') || sql.include?('"icost_imports"."source_bytes"') },
+      "Reloading a locked record must not fetch its source file bytes"
+  end
+
   test "invalid rows do not prevent normal rows from posting" do
     batch = prepare(row, row("金额" => "-0.00001"), row("类型" => "退款入账", "金额" => "4"))
     assert_difference("Entry.count", 1) { batch.process!(user: @user) }

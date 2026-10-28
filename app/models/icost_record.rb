@@ -4,7 +4,8 @@ class IcostRecord < ApplicationRecord
   ResolutionError = Class.new(StandardError)
   DISPLAY_STATUSES = %w[ready published duplicate needs_review entry_missing].freeze
 
-  belongs_to :icost_import
+  # Row locks reload this association; row processing only needs archive metadata.
+  belongs_to :icost_import, -> { select(IcostImport.column_names - [ "source_bytes" ]) }
   belongs_to :family
   belongs_to :entry, optional: true
   belongs_to :counterpart_entry, class_name: "Entry", optional: true

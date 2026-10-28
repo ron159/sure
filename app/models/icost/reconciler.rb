@@ -13,7 +13,8 @@ module Icost
     def call
       IcostImport.authorize!(@family, @user)
       @family.with_lock do
-        records = IcostRecord.owned_by(@user).includes(:icost_import, :entry, :counterpart_entry)
+        # Joining source archives repeats their file bytes for every record.
+        records = IcostRecord.owned_by(@user).preload(:icost_import, :entry, :counterpart_entry)
           .order("icost_imports.created_at", :source_row, :id).to_a
         @native_entries = @family.entries.where(account_id: writable_accounts.select(:id), entryable_type: "Transaction")
           .where("idempotency_key LIKE 'icost:%'").includes(:account, :entryable).to_a
