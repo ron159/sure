@@ -77,9 +77,9 @@ class IcostRecord < ApplicationRecord
     raise ResolutionError, "invalid_resolution"
   end
 
-  def publish!(user:)
+  def publish!(user:, materialize_balances: true)
     authorize!(user)
-    family.with_lock { perform_publish!(user) }
+    family.with_lock { perform_publish!(user, materialize_balances: materialize_balances) }
   end
 
   def ledger_date
@@ -174,7 +174,7 @@ class IcostRecord < ApplicationRecord
   end
 
   private
-    def perform_publish!(user)
+    def perform_publish!(user, materialize_balances:)
       with_lock(requires_new: true) do
         return self if status == "published"
         raise ResolutionError, "review_required" unless status == "ready" && issues.empty?
@@ -189,9 +189,9 @@ class IcostRecord < ApplicationRecord
           return self
         end
         if transaction_type == "转账"
-          publish_transfer!(user)
+          publish_transfer!(user, materialize_balances: materialize_balances)
         else
-          publish_transaction!(user)
+          publish_transaction!(user, materialize_balances: materialize_balances)
         end
         update!(status: "published")
       end
@@ -261,7 +261,7 @@ class IcostRecord < ApplicationRecord
         !IcostRecord.where(entry_id: candidate.id).exists?
     end
 
-    def publish_transaction!(user)
+    def publish_transaction!(user, materialize_balances:)
       raise ResolutionError, "unsupported_type" unless %w[支出 收入].include?(transaction_type)
       account = resolution["account_id"].present? ? writable_account!(user, resolution["account_id"]) : matching_account(user)
       raise ResolutionError, "account_required" unless account
@@ -275,10 +275,10 @@ class IcostRecord < ApplicationRecord
             "deduplication_occurrence" => resolution["deduplication_occurrence"] }.compact }))
       # Only local ledger materialization. Importing a local file must not trigger
       # enrichment, provider requests, inferred transfer matching or FX lookups.
-      Balance::Materializer.new(account, strategy: :forward).materialize_balances
+      Balance::Materializer.new(account, strategy: :forward).materialize_balances if materialize_balances
     end
 
-    def publish_transfer!(user)
+    def publish_transfer!(user, materialize_balances:)
       raise ResolutionError, "review_required" unless resolution.values_at("from_account_id", "to_account_id").all?(&:present?)
       from = writable_account!(user, resolution["from_account_id"])
       to = writable_account!(user, resolution["to_account_id"])
@@ -291,7 +291,9 @@ class IcostRecord < ApplicationRecord
       self.entry = transfer.outflow_transaction.entry
       self.counterpart_entry = transfer.inflow_transaction.entry
       [ entry, counterpart_entry ].each { |leg| leg.update!(notes: note, import_locked: true) }
-      [ from, to ].each { |account| Balance::Materializer.new(account, strategy: :forward).materialize_balances }
+      if materialize_balances
+        [ from, to ].each { |account| Balance::Materializer.new(account, strategy: :forward).materialize_balances }
+      end
     end
 
     def resolve_category!

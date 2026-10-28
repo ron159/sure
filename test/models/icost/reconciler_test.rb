@@ -52,6 +52,30 @@ class Icost::ReconcilerTest < ActiveSupport::TestCase
     assert_includes batch.records.find_by!(source_row: 4).issues, "refund_link_required"
   end
 
+  test "materializes each affected account once for transactions and transfers" do
+    from = accounts(:depository)
+    to = accounts(:other_asset)
+    batch = prepare(row("账户1" => from.name), row("类型" => "收入", "金额" => "30", "账户1" => from.name),
+      row("类型" => "转账", "金额" => "12.34", "账户1" => from.name, "账户2" => to.name))
+    batch.records.order(:source_row).last.resolve!(user: @user, attributes: { from_account_id: from.id, to_account_id: to.id })
+
+    Balance::Materializer.any_instance.unstub(:materialize_balances)
+    Balance::Materializer.any_instance.expects(:materialize_balances).twice
+    assert_difference("Entry.count", 4) { batch.process!(user: @user) }
+    assert_no_difference("Entry.count") { batch.process!(user: @user) }
+  end
+
+  test "rolls back entries and accounts if the final balance rebuild fails" do
+    batch = prepare(row, row("类型" => "收入", "金额" => "30"))
+    Balance::Materializer.any_instance.unstub(:materialize_balances)
+    Balance::Materializer.any_instance.expects(:materialize_balances).raises("Synthetic balance rebuild failure")
+
+    assert_no_difference [ "Account.count", "Entry.count" ] do
+      assert_raises(RuntimeError) { batch.process!(user: @user) }
+    end
+    assert_equal [ "needs_review" ], batch.records.distinct.pluck(:status)
+  end
+
   test "a row exceeding a database index limit does not roll back other rows" do
     large_category = Array.new(120) { SecureRandom.hex(32) }.join
     batch = prepare(row("一级分类" => large_category), row, row("金额" => "-7.5"))
@@ -62,14 +86,17 @@ class Icost::ReconcilerTest < ActiveSupport::TestCase
 
   test "new account balance reflects imported cashflow without fabricating an opening valuation" do
     Balance::Materializer.any_instance.unstub(:materialize_balances)
-    batch = prepare(row, row("类型" => "收入", "金额" => "30"))
+    batch = prepare(row, row("类型" => "收入", "金额" => "30"), row("账户1" => "Another imported wallet", "金额" => "-7.5"))
     assert_no_difference "Valuation.count" do
       batch.process!(user: @user)
     end
-    account = batch.records.first.entry.account.reload
+    account = batch.records.order(:source_row).first.entry.account.reload
     assert_equal BigDecimal("17.66"), account.balance
     assert_equal BigDecimal("17.66"), account.cash_balance
     assert_equal BigDecimal("17.66"), account.balances.order(:date).last.end_balance
+    other = batch.records.order(:source_row).last.entry.account.reload
+    assert_equal BigDecimal("-7.5"), other.balance
+    assert_equal BigDecimal("-7.5"), other.balances.order(:date).last.end_balance
   end
 
   test "repairs missing published entries and then safely replays" do

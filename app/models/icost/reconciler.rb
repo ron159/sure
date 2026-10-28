@@ -6,6 +6,7 @@ module Icost
       @user = user
       @family = user.family
       @accounts = {}
+      @accounts_to_materialize = {}
       @import_id = import_id
       @recover_all = recover_all
     end
@@ -24,6 +25,10 @@ module Icost
           canonical = rows.find(&:linked_entries_present?) || rows.first
           process(canonical)
           rows.reject { |record| record == canonical }.each { |record| mark_duplicate(record, canonical) }
+        end
+        # Entries and balances commit together after one rebuild per account.
+        @accounts_to_materialize.each_value do |account|
+          Balance::Materializer.new(account, strategy: :forward).materialize_balances
         end
       end
     end
@@ -91,7 +96,15 @@ module Icost
           end
           record.status = record.issues.empty? ? "ready" : "needs_review"
           record.save!
-          record.publish!(user: @user) if record.status == "ready"
+          if record.status == "ready"
+            record.publish!(user: @user, materialize_balances: false)
+            if record.status == "published"
+              [ record.entry, record.counterpart_entry ].compact.each do |entry|
+                account = entry.account
+                @accounts_to_materialize[account.id] = account
+              end
+            end
+          end
           @native_entries << record.entry if record.entry
         end
       rescue IcostRecord::ResolutionError, ActiveRecord::RecordInvalid => error
