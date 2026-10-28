@@ -3,6 +3,8 @@ require "test_helper"
 class TradeRepublicHelperTest < ActionView::TestCase
   KEY = "settings.providers.trade_republic_panel.session_expires_in".freeze
 
+  setup { I18n.backend.eager_load! }
+
   test "the expiry shows how long the login lasts and when it ends" do
     expires_at = 5.hours.from_now
 
