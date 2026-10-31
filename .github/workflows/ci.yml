@@ -79,6 +79,9 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Check API guide references
+        run: ruby test/support/verify_api_endpoint_consistency.rb
+
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
@@ -176,9 +179,13 @@ jobs:
           printf '%s\n' "${files[@]}"
           bin/rails test "${files[@]}"
 
-  test_system:
+  test_system_shard:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
 
     env:
       PLAID_CLIENT_ID: foo
@@ -232,12 +239,37 @@ jobs:
           bin/rails db:seed
 
       - name: System tests
-        run: DISABLE_PARALLELIZATION=true bin/rails test:system
+        env:
+          DISABLE_PARALLELIZATION: "true"
+          SYSTEM_TEST_SHARD: ${{ matrix.shard }}
+        run: |
+          # Explicit file paths skip Rails' automatic test:prepare hook.
+          bin/rails test:prepare
+          ruby <<'RUBY'
+          files = Dir.glob("test/system/**/*_test.rb").sort
+          shard = Integer(ENV.fetch("SYSTEM_TEST_SHARD"))
+          selected = files.each_with_index.select { |_, index| index % 3 == shard }.map(&:first)
+          abort "System test shard is empty" if selected.empty?
+          puts "System test shard #{shard + 1}/3: #{selected.length} files"
+          $stdout.flush
+          exec("bin/rails", "test", *selected)
+          RUBY
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: failure()
         with:
-          name: screenshots
+          name: screenshots-${{ matrix.shard }}
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  # Preserve the existing required check while every isolated shard must pass.
+  test_system:
+    if: always()
+    needs: test_system_shard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all system test shards
+        env:
+          SHARD_RESULT: ${{ needs.test_system_shard.result }}
+        run: test "$SHARD_RESULT" = success
